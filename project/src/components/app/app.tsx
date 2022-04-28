@@ -16,7 +16,7 @@ function App() {
         <Route exact path={AppRoute.CART} >
           <Cart />
         </Route>
-        <Route exact path={AppRoute.PRODUCT} >
+        <Route exact path={AppRoute.GUITARS} >
           <Product />
         </Route>
         <Route >
