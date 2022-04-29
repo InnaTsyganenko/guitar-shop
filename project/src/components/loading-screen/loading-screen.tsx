@@ -1,11 +1,15 @@
 import React from 'react';
 
-function Loading() {
+function LoadingScreen() {
   return (
-    <div style={{height: '100%'}}>
-      <p>Loading...</p>
+    <div className="wrapper">
+      <main className="page-content">
+        <div className="container">
+          <h2>Loading...</h2>
+        </div>
+      </main>
     </div>
   );
 }
 
-export default Loading;
+export default LoadingScreen;

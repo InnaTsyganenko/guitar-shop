@@ -3,12 +3,16 @@ import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Footer from '../footer/footer';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import { useSelector } from 'react-redux';
+import { useAppSelector, useAppDispatch } from '../../hooks/';
 import { getGuitars } from '../../store/guitars-data/selectors';
+import { getIdGuitar } from '../../store/action';
 
 function Catalog(): JSX.Element {
 
-  const guitars = useSelector(getGuitars);
+  const guitars: Array<any> = useAppSelector(getGuitars);
+  console.log(guitars[0]);
+
+  const dispatch = useAppDispatch();
 
   return (
     <div className="wrapper">
@@ -40,22 +44,22 @@ function Catalog(): JSX.Element {
                   <label htmlFor="acoustic">Акустические гитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="electric" name="electric" checked />
+                  <input className="visually-hidden" type="checkbox" id="electric" name="electric" defaultChecked />
                   <label htmlFor="electric">Электрогитары</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="ukulele" name="ukulele" checked />
+                  <input className="visually-hidden" type="checkbox" id="ukulele" name="ukulele" defaultChecked />
                   <label htmlFor="ukulele">Укулеле</label>
                 </div>
               </fieldset>
               <fieldset className="catalog-filter__block">
                 <legend className="catalog-filter__block-title">Количество струн</legend>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="4-strings" name="4-strings" checked />
+                  <input className="visually-hidden" type="checkbox" id="4-strings" name="4-strings" defaultChecked />
                   <label htmlFor="4-strings">4</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
-                  <input className="visually-hidden" type="checkbox" id="6-strings" name="6-strings" checked />
+                  <input className="visually-hidden" type="checkbox" id="6-strings" name="6-strings" defaultChecked />
                   <label htmlFor="6-strings">6</label>
                 </div>
                 <div className="form-checkbox catalog-filter__block-item">
@@ -80,9 +84,10 @@ function Catalog(): JSX.Element {
                 <button className="catalog-sort__order-button catalog-sort__order-button--down" aria-label="По убыванию"></button>
               </div>
             </div>
-            {guitars.map((guitar) => (
-              <div className="cards catalog__cards" key={guitar.id}>
-                <div className="product-card"><img src={guitar.previewImg} srcSet="img/content/catalog-product-0@2x.jpg 2x" width="75" height="190" alt={guitar.name} />
+            <div className="cards catalog__cards">
+              {guitars.map((guitar) => (
+                <div className="product-card" key={guitar.id}>
+                  <img src={guitar.previewImg} srcSet={`${guitar.previewImg} 2x`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
                   <div className="product-card__info">
                     <div className="rate product-card__rate">
                       <svg width="12" height="11" aria-hidden="true">
@@ -108,12 +113,20 @@ function Catalog(): JSX.Element {
                     </p>
                   </div>
                   <div className="product-card__buttons">
-                    <Link className="button button--mini" to={AppRoute.GUITARS} aria-label="Корзина">Подробнее</Link>
+                    <Link
+                      className="button button--mini"
+                      to={AppRoute.GUITARS}
+                      aria-label="Корзина"
+                      onClick={() => {
+                        dispatch(getIdGuitar(guitar.id));
+                      }}
+                    >Подробнее
+                    </Link>
                     <a className="button button--red button--mini button--add-to-cart" href="##" onClick={(evt) => evt.preventDefault()}>Купить</a>
                   </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
             <div className="pagination page-content__pagination">
               <ul className="pagination__list">
                 <li className="pagination__page pagination__page--active"><a className="link pagination__page-link" href="1">1</a>

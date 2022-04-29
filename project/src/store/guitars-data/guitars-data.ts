@@ -1,11 +1,13 @@
 import { createReducer } from '@reduxjs/toolkit';
+import { GuitarsData } from '../../types/state';
 import { loadGuitars, loadGuitarById } from '../action';
 
-const initialState = {
+const initialState: GuitarsData = {
   guitars: [],
   guitarById: {},
   isDataLoaded: false,
 };
+
 
 const guitarsData = createReducer(initialState, (builder) => {
   builder

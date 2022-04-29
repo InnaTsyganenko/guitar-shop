@@ -3,27 +3,23 @@ import { guitarsData } from './guitars-data/guitars-data';
 import { guitarsOperations } from './guitars-operations/guitars-operations';
 import { persistReducer } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
-
-export const NameSpace = {
-  DATA: 'DATA',
-  GUITARS: 'GUITARS',
-};
+import { NameSpace } from '../const';
 
 const rootPersistConfig = {
   key: 'root',
   storage,
-  blacklist: ['GUITARS'],
+  blacklist: ['guitars'],
 };
 
 const guitarsPersistConfig = {
-  key: 'GUITARS',
+  key: 'guitars',
   storage,
   whitelist: ['pickedId'],
 };
 
 const rootReducer = combineReducers({
-  [NameSpace.DATA]: guitarsData,
-  [NameSpace.GUITARS]: persistReducer(guitarsPersistConfig, guitarsOperations),
+  [NameSpace.data]: guitarsData.reducer,
+  [NameSpace.guitars]: persistReducer(guitarsPersistConfig, guitarsOperations),
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);

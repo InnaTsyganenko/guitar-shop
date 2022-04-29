@@ -12,3 +12,8 @@ export const APIRoute = {
   COUPONS: '/coupons',
   ORDERS: '/orders',
 };
+
+export enum NameSpace {
+  data = 'DATA',
+  guitars = 'GUITARS',
+}
