@@ -1,5 +1,5 @@
 import { store } from '../store/index.js';
-import { Guitars, GuitarById, PickedId } from './guitars.js';
+import { Guitars, GuitarById, CurrentPageCatalog, PickedId } from './guitars.js';
 
 export type GuitarsData = {
   guitars: Guitars,
@@ -9,6 +9,7 @@ export type GuitarsData = {
 
 export type GuitarsOperations = {
   pickedId: PickedId,
+  currentPageCatalog: CurrentPageCatalog,
 };
 
 export type State = ReturnType<typeof store.getState>;

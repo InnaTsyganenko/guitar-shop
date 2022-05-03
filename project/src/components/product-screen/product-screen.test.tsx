@@ -1,8 +1,8 @@
 import {render, screen} from '@testing-library/react';
-import Catalog from './catalog';
+import Product from './product-screen';
 
 test('Renders app-component', () => {
-  render(<Catalog />);
+  render(<Product />);
   const textElement = screen.getByText(/Hello, world!/i);
   expect(textElement).toBeInTheDocument();
 });

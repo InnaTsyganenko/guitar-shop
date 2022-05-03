@@ -30,7 +30,7 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
   'data/fetchGuitarById',
   async (pickedId, {dispatch, extra: api}) => {
     try {
-      const {data} = await api.get<GuitarById>(`${APIRoute.GUITAR_BY_ID}${pickedId}`);
+      const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}`);
       dispatch(loadGuitarById(data));
     } catch (error) {
       errorHandle(error);

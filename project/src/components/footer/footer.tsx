@@ -1,11 +1,15 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks';
+import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 function Footer(): JSX.Element {
+  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+
   return (
     <footer className="footer">
       <div className="footer__container container">
-        <Link className="footer__logo logo" to={AppRoute.Catalog}>
+        <Link className="footer__logo logo" to={`${AppRoute.Catalog}${currentPageCatalog}`}>
           <img className="logo__img" width="70" height="70" src="../img/svg/logo.svg" alt="Логотип" />
         </Link>
         <div className="socials footer__socials">

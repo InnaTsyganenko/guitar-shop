@@ -7,6 +7,7 @@ import { useState, useEffect } from 'react';
 import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
+import { toast } from 'react-toastify';
 
 function Product(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -22,9 +23,9 @@ function Product(): JSX.Element {
         .then(() => {
           setIsLoaded(true);
         },
-        (error: any) => {
+        (err) => {
           setIsLoaded(true);
-          setError(error);
+          setError(err);
         });
     };
 
@@ -32,14 +33,13 @@ function Product(): JSX.Element {
   }, [dispatch, pickedId]);
 
   const guitar = useAppSelector(getGuitarById);
-  console.log(guitar);
 
   if (error) {
     return (
       <div className="wrapper">
         <main className="page-content">
           <div className="container">
-            <p>Load</p>
+            {toast(error)}
           </div>
         </main>
       </div>);
@@ -52,11 +52,11 @@ function Product(): JSX.Element {
         <main className="page-content">
           <div className="container">
             <h1 className="page-content__title title title--bigger">{guitar.name}</h1>
-            <Breadcrumbs />
+            <Breadcrumbs guitarName={guitar.name} />
             <div className="product-container">
-              <img className="product-container__img" src="img/content/catalog-product-2.jpg" srcSet="img/content/catalog-product-2@2x.jpg 2x" width="90" height="235" alt="" />
+              <img className="product-container__img" src={guitar.previewImg} srcSet="img/content/catalog-product-2@2x.jpg 2x" width="90" height="235" alt="" />
               <div className="product-container__info-wrapper">
-                <h2 className="product-container__title title title--big title--uppercase">СURT Z30 Plus</h2>
+                <h2 className="product-container__title title title--big title--uppercase">{guitar.name}</h2>
                 <div className="rate product-container__rating">
                   <svg width="14" height="14" aria-hidden="true">
                     <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>

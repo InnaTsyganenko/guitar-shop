@@ -1,16 +1,19 @@
 import {Route, Routes} from 'react-router-dom';
 import {AppRoute} from '../../const';
 import MainScreen from '../main-screen/main-screen';
-import CatalogScreen from '../catalog/catalog';
-import Cart from '../cart/cart';
-import Product from '../product/product';
+import CatalogScreen from '../catalog-screen/catalog-screen';
+import Cart from '../cart-screen/cart-screen';
+import Product from '../product-screen/product-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingScreen from '../loading-screen/loading-screen';
-import {useAppSelector} from '../../hooks';
-import {getLoadedDataStatus} from '../../store/guitars-data/selectors';
+import { useAppSelector } from '../../hooks';
+import { getLoadedDataStatus } from '../../store/guitars-data/selectors';
+import { getCurrentPageCatalog, getPickedId } from '../../store/guitars-operations/selectors';
 
 function App(): JSX.Element {
   const isDataLoaded = useAppSelector(getLoadedDataStatus);
+  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+  const pickedId = useAppSelector(getPickedId);
 
   if (!isDataLoaded) {
     return (
@@ -21,20 +24,20 @@ function App(): JSX.Element {
   return (
     <Routes>
       <Route
-        path={AppRoute.Root}
-        element={<MainScreen />}
+        path={`${AppRoute.Catalog}${currentPageCatalog}`}
+        element={<CatalogScreen />}
       />
       <Route
-        path={AppRoute.Catalog}
-        element={<CatalogScreen />}
+        path={`${AppRoute.Guitars}${pickedId}`}
+        element={<Product />}
       />
       <Route
         path={AppRoute.Cart}
         element={<Cart />}
       />
       <Route
-        path={AppRoute.Guitars}
-        element={<Product />}
+        path={AppRoute.Root}
+        element={<MainScreen />}
       />
       <Route
         path="*"

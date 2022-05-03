@@ -1,7 +1,11 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
+import { useAppSelector } from '../../hooks';
+import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 function Header(): JSX.Element {
+  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+
   return (
     <header className="header" id="header">
       <div className="container header__wrapper">
@@ -11,7 +15,12 @@ function Header(): JSX.Element {
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li>
-              <a className={window.location.pathname === AppRoute.Catalog ? 'link main-nav__link link--current' : 'link main-nav__link'} href={AppRoute.Catalog}>Каталог</a>
+              <a className={window.location.pathname.includes(AppRoute.Catalog) ?
+                'link main-nav__link link--current' :
+                'link main-nav__link'}
+              href={`${AppRoute.Catalog}${currentPageCatalog}`}
+              >Каталог
+              </a>
             </li>
             <li>
               <a className="link main-nav__link" href="##" onClick={(evt) => evt.preventDefault()}>Где купить?</a>

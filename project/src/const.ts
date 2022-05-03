@@ -1,22 +1,26 @@
+export const GUITARS_COUNT_FOR_RENDER = 9;
+export const DEFAULT_PAGE_CATALOG = 1;
+export const STEP_FOR_PAGINATION = 1;
+
 export enum AppRoute {
   Root = '/',
-  Catalog = '/catalog',
+  Catalog = '/catalog/page_',
   Cart = '/cart',
-  Guitars = '/guitars'
+  Guitars = '/guitars/'
 }
 
-export const APIRoute = {
-  Guitars: '/guitars',
-  GUITAR_BY_ID: '/guitars/',
-  GUITAR_BY_ID_COMMENTS: '/comments',
-  COMMENTS: '/comments',
-  COUPONS: '/coupons',
-  ORDERS: '/orders',
-};
+export enum APIRoute {
+  Guitars = '/guitars',
+  GuitarById = '/guitars/',
+  Comments = '/comments',
+  NewComment = '/comments',
+  Coupons = '/coupons',
+  Orders = '/orders',
+}
 
 export enum NameSpace {
   data = 'DATA',
-  guitars = 'Guitars',
+  guitars = 'GUITARS',
 }
 
 export enum HTTP_CODE {
