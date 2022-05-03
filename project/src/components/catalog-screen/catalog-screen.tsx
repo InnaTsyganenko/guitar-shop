@@ -6,28 +6,55 @@ import { AppRoute, DEFAULT_PAGE_CATALOG, GUITARS_COUNT_FOR_RENDER } from '../../
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars } from '../../store/guitars-data/selectors';
 import { getIdGuitar } from '../../store/guitars-operations/guitars-operations';
-import { getPickedId } from '../../store/guitars-operations/selectors';
 import CatalogPagination from '../catalog-pagination/catalog-pagination';
 import CatalogFilterAndSort from '../catalog-filter-and-sort/catalog-filter-and-sort';
 import { useState } from 'react';
+import { fetchGuitarsAction } from '../../store/api-actions';
+import { useEffect } from 'react';
+import { toast } from 'react-toastify';
+import LoadingScreen from '../loading-screen/loading-screen';
+import { getGuitarsTotalCount } from '../../store/guitars-data/selectors';
 
 function Catalog(): JSX.Element {
-
-  const guitars = useAppSelector(getGuitars);
-  const pickedId = useAppSelector(getPickedId);
+  const [error, setError] = useState(null);
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [page, setPage] = useState(DEFAULT_PAGE_CATALOG);
 
   const dispatch = useAppDispatch();
 
-  const [page, setPage] = useState(DEFAULT_PAGE_CATALOG);
-  const totalPages = Math.ceil(guitars.length / GUITARS_COUNT_FOR_RENDER);
   const handlePages = (updatePage: number) => setPage(updatePage);
-  let renderedGuitarCount = 0;
 
-  if (page !== DEFAULT_PAGE_CATALOG) {
-    renderedGuitarCount = (renderedGuitarCount + GUITARS_COUNT_FOR_RENDER);
-  }
+  useEffect(() => {
+    const fetchData = async () => {
+      await dispatch(fetchGuitarsAction(page))
+        .then(() => {
+          setIsLoaded(true);
+        },
+        (err) => {
+          setIsLoaded(true);
+          setError(err);
+        });
+    };
 
-  console.log(page);
+    fetchData();
+  }, [dispatch, page]);
+
+  const guitarsTotalCount = useAppSelector(getGuitarsTotalCount);
+  const guitars = useAppSelector(getGuitars);
+  const totalPages = Math.ceil(guitarsTotalCount / GUITARS_COUNT_FOR_RENDER);
+
+  if (error) {
+    return (
+      <div className="wrapper">
+        <main className="page-content">
+          <div className="container">
+            {toast(error)}
+          </div>
+        </main>
+      </div>);
+  } else if (!isLoaded) {
+    return <LoadingScreen />;
+  } else {
 
   return (
     <div className="wrapper">
@@ -39,9 +66,9 @@ function Catalog(): JSX.Element {
           <div className="catalog">
             <CatalogFilterAndSort />
             <div className="cards catalog__cards">
-              {guitars.slice(renderedGuitarCount, renderedGuitarCount + GUITARS_COUNT_FOR_RENDER).map((guitar) => (
+              {guitars.map((guitar) => (
                 <div className="product-card" key={guitar.id}>
-                  <img src={guitar.previewImg} srcSet="img/content/catalog-product-2@2x.jpg 2x" width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
+                  <img src={guitar.previewImg} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
                   <div className="product-card__info">
                     <div className="rate product-card__rate">
                       <svg width="12" height="11" aria-hidden="true">
@@ -73,7 +100,7 @@ function Catalog(): JSX.Element {
                       onClick={() => {
                         dispatch(getIdGuitar(guitar.id));
                       }}
-                      to={`${AppRoute.Guitars}${pickedId}`}
+                      to={`${AppRoute.Guitars}${guitar.id}`}
                     >Подробнее
                     </Link>
                     <a className="button button--red button--mini button--add-to-cart" href="##" onClick={(evt) => evt.preventDefault()}>Купить</a>
@@ -91,7 +118,7 @@ function Catalog(): JSX.Element {
       </main>
       <Footer />
     </div>
-  );
+  )};
 }
 
 

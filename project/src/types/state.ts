@@ -1,7 +1,8 @@
 import { store } from '../store/index.js';
-import { Guitars, GuitarById, CurrentPageCatalog, PickedId } from './guitars.js';
+import { Guitars, GuitarById, CurrentPageCatalog, PickedId, GuitarsTotalCount } from './guitars.js';
 
 export type GuitarsData = {
+  guitarsTotalCount: GuitarsTotalCount,
   guitars: Guitars,
   guitarById: GuitarById,
   isDataLoaded: boolean,

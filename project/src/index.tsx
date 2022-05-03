@@ -12,7 +12,7 @@ import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import browserHistory from './browser-history';
 
-store.dispatch(fetchGuitarsAction());
+// store.dispatch(fetchGuitarsAction(1));
 
 const persistor = persistStore(store);
 

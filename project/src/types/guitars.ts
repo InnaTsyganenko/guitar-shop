@@ -10,6 +10,8 @@ export type Guitar = {
   price: number;
 };
 
+export type GuitarsTotalCount = number;
+
 export type Guitars = Guitar[];
 
 export type GuitarById = Guitar;

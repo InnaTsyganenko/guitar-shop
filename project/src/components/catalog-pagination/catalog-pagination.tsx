@@ -15,15 +15,15 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const countPages = [1];
+  const countPages = [DEFAULT_PAGE_CATALOG];
 
   while (countPages.length < totalPages) {
-    countPages.push(countPages.length + 1);
+    countPages.push(countPages.length + DEFAULT_PAGE_CATALOG);
   }
 
-  console.log(page);
-  console.log();
-
+  if (countPages.length === 1) {
+    return <div></div>;
+  } else {
   return (
     <div className="pagination page-content__pagination">
       <ul className="pagination__list">
@@ -75,7 +75,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
         )}
       </ul>
     </div>
-  );
+  )};
 }
 
 export default CatalogPagination;
