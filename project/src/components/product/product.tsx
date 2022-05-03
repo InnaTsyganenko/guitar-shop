@@ -4,7 +4,7 @@ import Footer from '../footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getPickedId } from '../../store/guitars-operations/selectors';
 import { useState, useEffect } from 'react';
-import { fetchGuitarById } from '../../store/api-actions';
+import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 
@@ -18,11 +18,11 @@ function Product(): JSX.Element {
 
   useEffect(() => {
     const fetchData = async () => {
-      await dispatch(fetchGuitarById(pickedId))
+      await dispatch(fetchGuitarByIdAction(pickedId))
         .then(() => {
           setIsLoaded(true);
         },
-        (error) => {
+        (error: any) => {
           setIsLoaded(true);
           setError(error);
         });
@@ -32,6 +32,7 @@ function Product(): JSX.Element {
   }, [dispatch, pickedId]);
 
   const guitar = useAppSelector(getGuitarById);
+  console.log(guitar);
 
   if (error) {
     return (

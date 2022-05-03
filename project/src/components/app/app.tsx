@@ -1,5 +1,6 @@
 import {Route, Routes} from 'react-router-dom';
 import {AppRoute} from '../../const';
+import MainScreen from '../main-screen/main-screen';
 import CatalogScreen from '../catalog/catalog';
 import Cart from '../cart/cart';
 import Product from '../product/product';
@@ -20,15 +21,19 @@ function App(): JSX.Element {
   return (
     <Routes>
       <Route
-        path={AppRoute.ROOT}
+        path={AppRoute.Root}
+        element={<MainScreen />}
+      />
+      <Route
+        path={AppRoute.Catalog}
         element={<CatalogScreen />}
       />
       <Route
-        path={AppRoute.CART}
+        path={AppRoute.Cart}
         element={<Cart />}
       />
       <Route
-        path={AppRoute.GUITARS}
+        path={AppRoute.Guitars}
         element={<Product />}
       />
       <Route

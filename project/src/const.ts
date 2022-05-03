@@ -1,11 +1,12 @@
-export const AppRoute = {
-  ROOT: '/',
-  CART: '/cart',
-  GUITARS: '/guitars/',
-};
+export enum AppRoute {
+  Root = '/',
+  Catalog = '/catalog',
+  Cart = '/cart',
+  Guitars = '/guitars'
+}
 
 export const APIRoute = {
-  GUITARS: '/guitars',
+  Guitars: '/guitars',
   GUITAR_BY_ID: '/guitars/',
   GUITAR_BY_ID_COMMENTS: '/comments',
   COMMENTS: '/comments',
@@ -15,5 +16,10 @@ export const APIRoute = {
 
 export enum NameSpace {
   data = 'DATA',
-  guitars = 'GUITARS',
+  guitars = 'Guitars',
+}
+
+export enum HTTP_CODE {
+  BAD_REQUEST = 400,
+  NOT_FOUND = 404,
 }

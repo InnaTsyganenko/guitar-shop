@@ -5,12 +5,11 @@ import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks/';
 import { getGuitars } from '../../store/guitars-data/selectors';
-import { getIdGuitar } from '../../store/action';
+import { getIdGuitar } from '../../store/guitars-operations/guitars-operations';
 
 function Catalog(): JSX.Element {
 
-  const guitars: Array<any> = useAppSelector(getGuitars);
-  console.log(guitars[0]);
+  const guitars = useAppSelector(getGuitars);
 
   const dispatch = useAppDispatch();
 
@@ -115,10 +114,11 @@ function Catalog(): JSX.Element {
                   <div className="product-card__buttons">
                     <Link
                       className="button button--mini"
-                      to={AppRoute.GUITARS}
+                      to={AppRoute.Guitars}
                       aria-label="Корзина"
                       onClick={() => {
                         dispatch(getIdGuitar(guitar.id));
+                        console.log(guitar.id);
                       }}
                     >Подробнее
                     </Link>

@@ -1,16 +1,19 @@
-import { createReducer } from '@reduxjs/toolkit';
-import { getIdGuitar } from '../action';
+import {createSlice} from '@reduxjs/toolkit';
 import { GuitarsOperations } from '../../types/state';
+import { NameSpace } from '../../const';
 
 const initialState: GuitarsOperations = {
-  pickedId: '0',
+  pickedId: 0,
 };
 
-const guitarsOperations = createReducer(initialState, (builder) => {
-  builder
-    .addCase(getIdGuitar, (state, action) => {
+export const guitarsOperations = createSlice({
+  name: NameSpace.data,
+  initialState,
+  reducers: {
+    getIdGuitar: (state, action) => {
       state.pickedId = action.payload;
-    });
+    },
+  },
 });
 
-export {guitarsOperations};
+export const {getIdGuitar} = guitarsOperations.actions;

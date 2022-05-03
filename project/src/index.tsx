@@ -7,12 +7,12 @@ import persistStore from 'redux-persist/es/persistStore';
 import App from './components/app/app';
 import HistoryRouter from '../src/components/history-route/history-route';
 import { store } from './store';
-import { fetchGuitarList } from './store/api-actions';
+import { fetchGuitarsAction } from './store/api-actions';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import browserHistory from './browser-history';
 
-store.dispatch(fetchGuitarList());
+store.dispatch(fetchGuitarsAction());
 
 const persistor = persistStore(store);
 

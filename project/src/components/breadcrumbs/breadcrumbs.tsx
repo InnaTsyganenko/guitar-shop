@@ -9,12 +9,12 @@ function Breadcrumbs(): JSX.Element {
   return (
     <ul className="breadcrumbs page-content__breadcrumbs">
       <li className="breadcrumbs__item">
-        <a className="link" href="##" onClick={(evt) => evt.preventDefault()}>Главная</a>
+        <Link className="link" to={AppRoute.Root}>Главная</Link>
       </li>
       <li className="breadcrumbs__item">
-        <Link className="link" to={AppRoute.ROOT}>Каталог</Link>
+        <Link className="link" to={AppRoute.Catalog}>Каталог</Link>
       </li>
-      {window.location.pathname === AppRoute.GUITARS ?
+      {window.location.pathname === AppRoute.Guitars ?
         <li className="breadcrumbs__item"><a className="link" href="##">Товар</a></li> : ''}
     </ul>
   );

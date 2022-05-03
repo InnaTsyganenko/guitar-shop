@@ -19,7 +19,7 @@ const guitarsPersistConfig = {
 
 const rootReducer = combineReducers({
   [NameSpace.data]: guitarsData.reducer,
-  [NameSpace.guitars]: persistReducer(guitarsPersistConfig, guitarsOperations),
+  [NameSpace.guitars]: persistReducer(guitarsPersistConfig, guitarsOperations.reducer),
 });
 
 export default persistReducer(rootPersistConfig, rootReducer);
