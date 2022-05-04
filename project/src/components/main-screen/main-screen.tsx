@@ -7,7 +7,7 @@ function MainScreen(): JSX.Element {
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
   return (
-    <main className="container main-index"><img src="img/svg/logo.svg" width="300" alt="Логотип проекта" style={{background: 'black'}}/>
+    <main className="container main-index"><img src="/img/svg/logo.svg" width="300" alt="Логотип проекта" style={{background: 'black'}}/>
       <h1>Список страниц</h1>
       <ol>
         <li><Link className="link" to={`${AppRoute.Catalog}${currentPageCatalog}`}>Каталог</Link></li>

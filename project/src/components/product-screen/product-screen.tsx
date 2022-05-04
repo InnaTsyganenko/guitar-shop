@@ -8,12 +8,19 @@ import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { toast } from 'react-toastify';
+import { CardGuitarTabs } from '../../const';
 
 function Product(): JSX.Element {
+  interface Props{
+    activeTab: any,
+    setActiveTab: (toggle: any) => void
+  }
+
   const dispatch = useAppDispatch();
 
-  const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [error, setError] = useState(null);
+  const [activeTab, setActiveTab] = useState<any>(false);
 
   const pickedId = useAppSelector(getPickedId);
 
@@ -34,6 +41,14 @@ function Product(): JSX.Element {
 
   const guitar = useAppSelector(getGuitarById);
 
+  function toggleActiveItem(activeState: any) {
+    setActiveTab({
+      activeTab: {
+        [activeState]: true,
+      },
+    });
+  }
+console.log(CardGuitarTabs);
   if (error) {
     return (
       <div className="wrapper">
@@ -54,28 +69,41 @@ function Product(): JSX.Element {
             <h1 className="page-content__title title title--bigger">{guitar.name}</h1>
             <Breadcrumbs guitarName={guitar.name} />
             <div className="product-container">
-              <img className="product-container__img" src={guitar.previewImg} srcSet="img/content/catalog-product-2@2x.jpg 2x" width="90" height="235" alt="" />
+              <img className="product-container__img" src={`/${guitar.previewImg}`} width="220" height="252" alt={`Фото гитары ${guitar.name}`} />
               <div className="product-container__info-wrapper">
                 <h2 className="product-container__title title title--big title--uppercase">{guitar.name}</h2>
                 <div className="rate product-container__rating">
                   <svg width="14" height="14" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="14" height="14" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="14" height="14" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="14" height="14" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="14" height="14" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
                   </svg>
                   <p className="visually-hidden">Оценка: Хорошо</p>
                 </div>
-                <div className="tabs"><a className="button button--medium tabs__button" href="#characteristics">Характеристики</a><a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
+                <div className="tabs">
+                  {Object.entries(CardGuitarTabs).map((tab) => (
+                    <a key={tab}
+                      className="button button--medium tabs__button"
+                      onClick={(evt) => {
+                        evt.preventDefault();
+                        console.log(tab);
+                        toggleActiveItem(tab);
+                      }}
+                      href="#characteristics"
+                    >{tab.values}
+                    </a>
+                  ))}
+                  <a className="button button--black-border button--medium tabs__button" href="#description">Описание</a>
                   <div className="tabs__content" id="characteristics">
                     <table className="tabs__table">
                       <tbody>
@@ -110,19 +138,19 @@ function Product(): JSX.Element {
                 </div>
                 <div className="rate review__rating-panel">
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
                   </svg>
                   <p className="visually-hidden">Оценка: Хорошо</p>
                 </div>
@@ -139,19 +167,19 @@ function Product(): JSX.Element {
                 </div>
                 <div className="rate review__rating-panel">
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
                   </svg>
                   <p className="visually-hidden">Оценка: Хорошо</p>
                 </div>
@@ -168,19 +196,19 @@ function Product(): JSX.Element {
                 </div>
                 <div className="rate review__rating-panel">
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-full-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
                   </svg>
                   <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="img/sprite_auto.svg#icon-star"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
                   </svg>
                   <p className="visually-hidden">Оценка: Хорошо</p>
                 </div>

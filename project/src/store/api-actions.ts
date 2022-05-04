@@ -3,7 +3,7 @@ import {createAsyncThunk} from '@reduxjs/toolkit';
 import { loadGuitars, loadGuitarById, getTotalCountGuitars } from './guitars-data/guitars-data';
 import { APIRoute } from '../const';
 import {AppDispatch, State} from '../types/state.js';
-import {Guitars, PickedId, GuitarById, CurrentPageCatalog} from '../types/guitars';
+import { PickedId, GuitarById, CurrentPageCatalog } from '../types/guitars';
 import {errorHandle} from '../services/error-handle';
 import { GUITARS_COUNT_FOR_RENDER } from '../const';
 
