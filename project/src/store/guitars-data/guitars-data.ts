@@ -1,4 +1,4 @@
-import { Guitar, GuitarsTotalCount } from './../../types/guitars';
+import { Guitar } from './../../types/guitars';
 import {createSlice} from '@reduxjs/toolkit';
 import { GuitarsData } from '../../types/state';
 import { NameSpace } from '../../const';

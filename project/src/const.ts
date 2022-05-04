@@ -1,6 +1,7 @@
 export const GUITARS_COUNT_FOR_RENDER = 9;
 export const DEFAULT_PAGE_CATALOG = 1;
-export const STEP_FOR_PAGINATION = 1;
+export const STEP_ONE = 1;
+export const COUNT_RATING_STARS = 5;
 
 export enum AppRoute {
   Root = '/',
