@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import {GuitarName} from '../../types/guitars';
+import { GuitarName } from '../../types/guitars';
 import { useAppSelector } from '../../hooks';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 

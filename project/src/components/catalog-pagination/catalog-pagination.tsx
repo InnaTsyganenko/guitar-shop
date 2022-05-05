@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
-import { getCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
+import { setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 import { AppRoute, DEFAULT_PAGE_CATALOG, STEP_ONE } from '../../const';
 
 type CatalogPaginatioProps = PropsWithChildren<{
@@ -33,7 +33,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
                 className="link pagination__page-link"
                 onClick={() => {
                   handlePagination(page - STEP_ONE);
-                  dispatch(getCurrentPageCatalog(page - STEP_ONE));
+                  dispatch(setCurrentPageCatalog(page - STEP_ONE));
                 }}
                 to={`${AppRoute.Catalog}${page - STEP_ONE}`}
               >Назад
@@ -52,7 +52,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
                 className="link pagination__page-link"
                 onClick={() => {
                   handlePagination(item);
-                  dispatch(getCurrentPageCatalog(item));
+                  dispatch(setCurrentPageCatalog(item));
                 }}
                 to={`${AppRoute.Catalog}${item}`}
               >{item}
@@ -66,7 +66,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
                 className="link pagination__page-link"
                 onClick={() => {
                   handlePagination(page + STEP_ONE);
-                  dispatch(getCurrentPageCatalog(page + STEP_ONE));
+                  dispatch(setCurrentPageCatalog(page + STEP_ONE));
                 }}
                 to={`${AppRoute.Catalog}${page + STEP_ONE}`}
               >Далее

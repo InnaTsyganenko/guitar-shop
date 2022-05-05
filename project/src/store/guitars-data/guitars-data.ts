@@ -1,5 +1,5 @@
 import { Guitar } from './../../types/guitars';
-import {createSlice} from '@reduxjs/toolkit';
+import { createSlice } from '@reduxjs/toolkit';
 import { GuitarsData } from '../../types/state';
 import { NameSpace } from '../../const';
 
@@ -7,6 +7,7 @@ const initialState: GuitarsData = {
   guitarsTotalCount: 0,
   guitars: [],
   guitarById: {} as Guitar,
+  guitarComments: [],
   isDataLoaded: false,
 };
 
@@ -24,7 +25,10 @@ export const guitarsData = createSlice({
     loadGuitarById: (state, action) => {
       state.guitarById = action.payload;
     },
+    loadGuitarComments: (state, action) => {
+      state.guitarComments = action.payload;
+    },
   },
 });
 
-export const {loadGuitars, loadGuitarById, getTotalCountGuitars} = guitarsData.actions;
+export const {loadGuitars, loadGuitarById, getTotalCountGuitars, loadGuitarComments} = guitarsData.actions;

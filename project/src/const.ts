@@ -33,3 +33,9 @@ export enum CardGuitarTabs {
   characteristics = 'Характеристики',
   description = 'Описание',
 }
+
+export const TypeofGuitar: object = {
+  electric: 'Электрогитара',
+  acoustic: 'Акустическая гитара',
+  ukulele: 'Укулеле',
+};

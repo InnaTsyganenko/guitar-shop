@@ -1,10 +1,10 @@
-import {AxiosInstance} from 'axios';
-import {createAsyncThunk} from '@reduxjs/toolkit';
-import { loadGuitars, loadGuitarById, getTotalCountGuitars } from './guitars-data/guitars-data';
+import { AxiosInstance } from 'axios';
+import { createAsyncThunk } from '@reduxjs/toolkit';
+import { loadGuitars, loadGuitarById, getTotalCountGuitars, loadGuitarComments } from './guitars-data/guitars-data';
 import { APIRoute } from '../const';
-import {AppDispatch, State} from '../types/state.js';
+import { AppDispatch, State } from '../types/state.js';
 import { PickedId, GuitarById, CurrentPageCatalog } from '../types/guitars';
-import {errorHandle} from '../services/error-handle';
+import { errorHandle  } from '../services/error-handle';
 import { GUITARS_COUNT_FOR_RENDER } from '../const';
 
 export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
@@ -33,8 +33,25 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
   'data/fetchGuitarById',
   async (pickedId, {dispatch, extra: api}) => {
     try {
-      const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}`);
+      const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}?_embed=comments`);
       dispatch(loadGuitarById(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const fetchGuitarCommentsAction = createAsyncThunk<void, PickedId, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/fetchGuitarComments',
+  async (pickedId, {dispatch, extra: api}) => {
+    try {
+      const {data} = await api.get<JSON>(`${APIRoute.GuitarById}${pickedId}/comments`);
+
+      dispatch(loadGuitarComments(data));
     } catch (error) {
       errorHandle(error);
     }

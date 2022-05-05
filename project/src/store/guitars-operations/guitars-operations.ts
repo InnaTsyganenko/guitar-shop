@@ -12,7 +12,7 @@ export const guitarsOperations = createSlice({
   name: NameSpace.guitars,
   initialState,
   reducers: {
-    getCurrentPageCatalog: (state, action) => {
+    setCurrentPageCatalog: (state, action) => {
       state.currentPageCatalog = action.payload;
     },
     getIdGuitar: (state, action) => {
@@ -21,4 +21,4 @@ export const guitarsOperations = createSlice({
   },
 });
 
-export const { getCurrentPageCatalog, getIdGuitar } = guitarsOperations.actions;
+export const { setCurrentPageCatalog, getIdGuitar } = guitarsOperations.actions;

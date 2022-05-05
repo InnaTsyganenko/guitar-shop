@@ -1,5 +1,6 @@
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
+import Rating from '../rating/rating';
 import Footer from '../footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getPickedId } from '../../store/guitars-operations/selectors';
@@ -8,7 +9,8 @@ import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { toast } from 'react-toastify';
-import { CardGuitarTabs, COUNT_RATING_STARS, STEP_ONE } from '../../const';
+import { CardGuitarTabs, TypeofGuitar } from '../../const';
+import ProductReviews from '../product-reviews/product-reviews';
 
 function Product(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -36,18 +38,6 @@ function Product(): JSX.Element {
 
   const guitar = useAppSelector(getGuitarById);
 
-  const countFullStars = [];
-
-  while (countFullStars.length < Math.round(guitar.rating)) {
-    countFullStars.push(countFullStars.length + STEP_ONE);
-  }
-
-  const countEmptyStars = [];
-
-  while (countEmptyStars.length < (COUNT_RATING_STARS - Math.round(guitar.rating))) {
-    countEmptyStars.push(countEmptyStars.length + STEP_ONE);
-  }
-
   if (error) {
     return (
       <div className="wrapper">
@@ -72,17 +62,7 @@ function Product(): JSX.Element {
               <div className="product-container__info-wrapper">
                 <h2 className="product-container__title title title--big title--uppercase">{guitar.name}</h2>
                 <div className="rate product-container__rating">
-                  {countFullStars.map((item) => (
-                    <svg key={item} width="14" height="14" aria-hidden="true">
-                      <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                    </svg>
-                  ))}
-                  {countEmptyStars.map((item) => (
-                    <svg key={item} width="14" height="14" aria-hidden="true">
-                      <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
-                    </svg>
-                  ))}
-                  <p className="visually-hidden">Оценка: Хорошо</p>
+                  <Rating rating={guitar.rating} />
                 </div>
                 <div className="tabs">
                   {Object.entries(CardGuitarTabs).map(([key, value]) => (
@@ -110,7 +90,7 @@ function Product(): JSX.Element {
                         </tr>
                         <tr className="tabs__table-row">
                           <td className="tabs__title">Тип:</td>
-                          <td className="tabs__value">Электрогитара</td>
+                          <td className="tabs__value">{TypeofGuitar[guitar.type as keyof object]}</td>
                         </tr>
                         <tr className="tabs__table-row">
                           <td className="tabs__title">Количество струн:</td>
@@ -131,97 +111,7 @@ function Product(): JSX.Element {
                 <p className="product-container__price-info product-container__price-info--value">{guitar.price} ₽</p><a className="button button--red button--big product-container__button" href="##" onClick={(evt) => evt.preventDefault()}>Добавить в корзину</a>
               </div>
             </div>
-            <section className="reviews">
-              <h3 className="reviews__title title title--bigger">Отзывы</h3><a className="button button--red-border button--big reviews__sumbit-button" href="##" onClick={(evt) => evt.preventDefault()}>Оставить отзыв</a>
-              <div className="review">
-                <div className="review__wrapper">
-                  <h4 className="review__title review__title--author title title--lesser">Иванов Максим</h4><span className="review__date">12 декабря</span>
-                </div>
-                <div className="rate review__rating-panel">
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
-                  </svg>
-                  <p className="visually-hidden">Оценка: Хорошо</p>
-                </div>
-                <h4 className="review__title title title--lesser">Достоинства:</h4>
-                <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-                <h4 className="review__title title title--lesser">Недостатки:</h4>
-                <p className="review__value">Тугие колонки</p>
-                <h4 className="review__title title title--lesser">Комментарий:</h4>
-                <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня.</p>
-              </div>
-              <div className="review">
-                <div className="review__wrapper">
-                  <h4 className="review__title review__title--author title title--lesser">Перова Ольга</h4><span className="review__date">12 декабря</span>
-                </div>
-                <div className="rate review__rating-panel">
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
-                  </svg>
-                  <p className="visually-hidden">Оценка: Хорошо</p>
-                </div>
-                <h4 className="review__title title title--lesser">Достоинства:</h4>
-                <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-                <h4 className="review__title title title--lesser">Недостатки:</h4>
-                <p className="review__value">Тугие колонки</p>
-                <h4 className="review__title title title--lesser">Комментарий:</h4>
-                <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-              </div>
-              <div className="review">
-                <div className="review__wrapper">
-                  <h4 className="review__title review__title--author title title--lesser">Преображенская  Ксения</h4><span className="review__date">12 декабря</span>
-                </div>
-                <div className="rate review__rating-panel">
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-                  </svg>
-                  <svg width="16" height="16" aria-hidden="true">
-                    <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
-                  </svg>
-                  <p className="visually-hidden">Оценка: Хорошо</p>
-                </div>
-                <h4 className="review__title title title--lesser">Достоинства:</h4>
-                <p className="review__value">Хороший корпус, чистый звук, стурны хорошего качества</p>
-                <h4 className="review__title title title--lesser">Недостатки:</h4>
-                <p className="review__value">Тугие колонки</p>
-                <h4 className="review__title title title--lesser">Комментарий:</h4>
-                <p className="review__value">У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. У гитары отличный цвет, хороше дерево. Тяжелая, в компдлекте неть чехла и ремня. </p>
-              </div>
-              <button className="button button--medium reviews__more-button">Показать еще отзывы</button><a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>
-            </section>
+            <ProductReviews reviews={guitar.comments} />
           </div>
         </main>
         <Footer />
