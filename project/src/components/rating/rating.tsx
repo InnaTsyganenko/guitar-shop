@@ -1,5 +1,5 @@
 import { PropsWithChildren } from 'react';
-import { AppRoute } from '../../const';
+import { AppRoute, ValueofRating } from '../../const';
 import { RatingCount } from '../../types/guitars';
 import { countFullStars, countEmptyStars } from '../../utils';
 
@@ -8,7 +8,7 @@ type RatingProps = PropsWithChildren<{
 }>;
 
 function Rating(props: RatingProps): JSX.Element {
-  const {rating} = props;
+  const { rating } = props;
 
   return (
     <>
@@ -22,7 +22,7 @@ function Rating(props: RatingProps): JSX.Element {
           <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
         </svg>
       ))}
-      <p className="visually-hidden">Оценка: Хорошо</p>
+      <p className="visually-hidden">{`Оценка: ${ValueofRating[Math.ceil(rating) as keyof object]}`}</p>
       {window.location.pathname.includes(AppRoute.Catalog)
         ? <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>9</p>
         : ''}

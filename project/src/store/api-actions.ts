@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { loadGuitars, loadGuitarById, getTotalCountGuitars, loadGuitarComments } from './guitars-data/guitars-data';
+import { loadGuitars, loadGuitarById, getTotalCountGuitars } from './guitars-data/guitars-data';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
 import { PickedId, GuitarById, CurrentPageCatalog } from '../types/guitars';
@@ -35,23 +35,6 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
     try {
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}?_embed=comments`);
       dispatch(loadGuitarById(data));
-    } catch (error) {
-      errorHandle(error);
-    }
-  },
-);
-
-export const fetchGuitarCommentsAction = createAsyncThunk<void, PickedId, {
-  dispatch: AppDispatch,
-  state: State,
-  extra: AxiosInstance
-}>(
-  'data/fetchGuitarComments',
-  async (pickedId, {dispatch, extra: api}) => {
-    try {
-      const {data} = await api.get<JSON>(`${APIRoute.GuitarById}${pickedId}/comments`);
-
-      dispatch(loadGuitarComments(data));
     } catch (error) {
       errorHandle(error);
     }
