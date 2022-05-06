@@ -71,7 +71,7 @@ function Catalog(): JSX.Element {
                     <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
                     <div className="product-card__info">
                       <div className="rate product-card__rate">
-                        <Rating rating={guitar.rating} />
+                        <Rating rating={guitar.rating} commentsLength={guitar.comments.length} />
                       </div>
                       <p className="product-card__title">{guitar.name}</p>
                       <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽

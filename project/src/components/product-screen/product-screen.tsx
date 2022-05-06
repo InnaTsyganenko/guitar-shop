@@ -1,6 +1,7 @@
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Rating from '../rating/rating';
+import ProductReviews from '../product-reviews/product-reviews';
 import Footer from '../footer/footer';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getPickedId } from '../../store/guitars-operations/selectors';
@@ -10,7 +11,6 @@ import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { toast } from 'react-toastify';
 import { CardGuitarTabs, TypeofGuitar } from '../../const';
-import ProductReviews from '../product-reviews/product-reviews';
 
 function Product(): JSX.Element {
   const dispatch = useAppDispatch();

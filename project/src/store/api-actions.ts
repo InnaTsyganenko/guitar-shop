@@ -15,10 +15,11 @@ export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
   'data/fetchGuitars',
   async (currentPageCatalog, {dispatch, extra: api}) => {
     try {
-      const result = await api.get<JSON>(`${APIRoute.Guitars}?_start=${currentPageCatalog * GUITARS_COUNT_FOR_RENDER - GUITARS_COUNT_FOR_RENDER}&_limit=${GUITARS_COUNT_FOR_RENDER}`);
+      const response = await api.get<JSON>(`${APIRoute.Guitars}?_start=${currentPageCatalog * GUITARS_COUNT_FOR_RENDER - GUITARS_COUNT_FOR_RENDER}&_limit=${GUITARS_COUNT_FOR_RENDER}&_embed=comments`);
 
-      dispatch(getTotalCountGuitars(result.headers['x-total-count']));
-      dispatch(loadGuitars(result.data));
+      dispatch(getTotalCountGuitars(response.headers['x-total-count']));
+      dispatch(loadGuitars(response.data));
+
     } catch (error) {
       errorHandle(error);
     }

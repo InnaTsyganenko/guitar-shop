@@ -38,3 +38,5 @@ export type PickedId = number;
 export type GuitarName = string;
 
 export type RatingCount = number;
+
+export type CommentsLength = number;

@@ -1,3 +1,4 @@
+/* eslint-disable curly */
 import { PropsWithChildren, useState } from 'react';
 import { SHOW_COMMENTS_QUANTITY } from '../../const';
 import { GuitarComments } from '../../types/guitars';
@@ -13,30 +14,90 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
 
   const optionsForReviewDate: object = { day: 'numeric', month: 'long' };
 
-  function loadContent() {
-    const total = 100;
+  // function loadContent() {
+  //   const total = 100;
 
-    if(countComment < total) {
-      setCountCommentForDisplay(countComment + SHOW_COMMENTS_QUANTITY);
-    }
+  //   if(countComment < total) {
+  //     setCountCommentForDisplay(countComment + SHOW_COMMENTS_QUANTITY);
+  //   }
+  // }
+
+  // const onScrollList = (event: any) => {
+  //   const scrollBottom = event.target.scrollTop + event.target.offsetHeight === event.target.scrollHeight;
+
+  //   if (scrollBottom) {
+  //     loadContent();
+  //   }
+  // };
+
+
+  // Добавим функцию throttle:
+  function throttle(callee: any, timeout: any) {
+    let timer: any = null;
+
+    return function perform(...args: any) {
+      if (timer) return;
+
+      timer = setTimeout(() => {
+        callee(...args);
+
+        clearTimeout(timer);
+        timer = null;
+      }, timeout);
+    };
   }
 
-  const onScrollList = (event: any) => {
-    const scrollBottom = event.target.scrollTop + event.target.offsetHeight === event.target.scrollHeight;
+  // И теперь назначим обработчиком событий
+  // слегка приторможенную функцию:
 
-    if (scrollBottom) {
-      loadContent();
+
+  let isAllReviews = true;
+
+  console.log(countComment <= reviews.length);
+
+  if (reviews.length <= countComment) {
+    isAllReviews = false;
+  }
+
+  const checkPosition = () => {
+    // Нам потребуется знать высоту документа и высоту экрана:
+    const height = document.body.offsetHeight;
+    const screenHeight = window.innerHeight;
+
+    // Они могут отличаться: если на странице много контента,
+    // высота документа будет больше высоты экрана (отсюда и скролл).
+
+    // Записываем, сколько пикселей пользователь уже проскроллил:
+    const scrolled = window.scrollY;
+
+    // Обозначим порог, по приближении к которому
+    // будем вызывать какое-то действие.
+    // В нашем случае — четверть экрана до конца страницы:
+    const threshold = height - screenHeight / 4;
+
+    // Отслеживаем, где находится низ экрана относительно страницы:
+    const position = scrolled + screenHeight;
+    console.log(position >= threshold);
+
+    console.log(countComment <= reviews.length);
+    console.log(position);
+    console.log(threshold);
+
+    if (position >= threshold && isAllReviews) {
+      setCountCommentForDisplay(countComment + SHOW_COMMENTS_QUANTITY);
     }
   };
+
+  (() => {
+    window.addEventListener('scroll', throttle(checkPosition, 150));
+    window.addEventListener('resize', throttle(checkPosition, 150));
+  })();
 
   if (reviews.length === 0) {
     return <div></div>;
   } else {
     return (
-      <section
-        className="reviews scrollable"
-        onScroll={(event) => onScrollList(event)}
-      >
+      <section className="reviews" >
         <h3 className="reviews__title title title--bigger">Отзывы</h3><a className="button button--red-border button--big reviews__sumbit-button" href="##" onClick={(evt) => evt.preventDefault()}>Оставить отзыв</a>
         {reviews.slice(0, countComment).map((review) => (
           <div className="review" key={review.id}>
@@ -57,7 +118,8 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
 
         {reviews.length <= countComment
           ? ''
-          : <button
+          :
+          <button
             className="button button--medium reviews__more-button"
             onClick={() => setCountCommentForDisplay(countComment + SHOW_COMMENTS_QUANTITY)}
           >Показать еще отзывы
