@@ -11,7 +11,6 @@ function MainScreen(): JSX.Element {
       <h1>Список страниц</h1>
       <ol>
         <li><Link className="link" to={`${AppRoute.Catalog}${currentPageCatalog}`}>Каталог</Link></li>
-        <li><Link className="link" to={AppRoute.Cart}>Корзина</Link></li>
       </ol>
     </main>
   );

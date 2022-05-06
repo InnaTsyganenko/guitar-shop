@@ -17,3 +17,18 @@ export const countEmptyStars = (rating: number) => {
 
   return arrayEmptyStars;
 };
+
+export function throttle(callee: any, timeout: number) {
+  let timer: any = null;
+
+  return function perform(...args: any) {
+    if (timer) {return;}
+
+    timer = setTimeout(() => {
+      callee(...args);
+
+      clearTimeout(timer);
+      timer = null;
+    }, timeout);
+  };
+}
