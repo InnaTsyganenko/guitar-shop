@@ -11,7 +11,7 @@ export type Guitar = {
   comments: [];
 };
 
-export type GuitarComment = {
+export type CommentGet = {
   id: string;
   userName: string;
   advantage: string;
@@ -22,6 +22,14 @@ export type GuitarComment = {
   guitarId: number;
 };
 
+export type CommentPost = {
+  guitarId: number;
+  userName: string;
+  advantage: string;
+  disadvantage: string;
+  comment: string;
+  rating: number;
+};
 
 export type GuitarsTotalCount = number;
 
@@ -29,7 +37,7 @@ export type Guitars = Guitar[];
 
 export type GuitarById = Guitar;
 
-export type GuitarComments = GuitarComment[];
+export type GuitarComments = CommentGet[];
 
 export type CurrentPageCatalog = number;
 
@@ -40,3 +48,5 @@ export type GuitarName = string;
 export type RatingCount = number;
 
 export type CommentsLength = number;
+
+export type ReviewNewPushed = boolean;

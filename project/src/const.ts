@@ -15,7 +15,6 @@ export enum APIRoute {
   Guitars = '/guitars',
   GuitarById = '/guitars/',
   Comments = '/comments',
-  NewComment = '/comments',
   Coupons = '/coupons',
   Orders = '/orders',
 }
@@ -42,9 +41,9 @@ export const TypeofGuitar: object = {
 };
 
 export const ValueofRating: object = {
-  1: 'Очень плохо',
+  1: 'Ужасно',
   2: 'Плохо',
-  3: 'Удовлетворительно',
+  3: 'Нормально',
   4: 'Хорошо',
   5: 'Отлично',
 };

@@ -9,6 +9,7 @@ const initialState: GuitarsData = {
   guitarById: {} as Guitar,
   guitarComments: [],
   isDataLoaded: false,
+  isReviewNewPushed: false,
 };
 
 export const guitarsData = createSlice({
@@ -25,10 +26,10 @@ export const guitarsData = createSlice({
     loadGuitarById: (state, action) => {
       state.guitarById = action.payload;
     },
-    loadGuitarComments: (state, action) => {
-      state.guitarComments = action.payload;
+    setIsReviewNewPushed: (state) => {
+      state.isReviewNewPushed = true;
     },
   },
 });
 
-export const {loadGuitars, loadGuitarById, getTotalCountGuitars, loadGuitarComments} = guitarsData.actions;
+export const {loadGuitars, loadGuitarById, getTotalCountGuitars, setIsReviewNewPushed} = guitarsData.actions;

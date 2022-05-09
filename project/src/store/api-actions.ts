@@ -1,9 +1,9 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { loadGuitars, loadGuitarById, getTotalCountGuitars } from './guitars-data/guitars-data';
+import { loadGuitars, loadGuitarById, getTotalCountGuitars, setIsReviewNewPushed } from './guitars-data/guitars-data';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
-import { PickedId, GuitarById, CurrentPageCatalog } from '../types/guitars';
+import { PickedId, GuitarById, CurrentPageCatalog, CommentPost } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
 import { GUITARS_COUNT_FOR_RENDER } from '../const';
 
@@ -31,11 +31,27 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
   state: State,
   extra: AxiosInstance
 }>(
-  'data/fetchGuitarById',
+  'data/fetchGuitarByIdAction',
   async (pickedId, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}?_embed=comments`);
       dispatch(loadGuitarById(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const pushReviewAction = createAsyncThunk<void, CommentPost, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'data/pushReviewAction',
+  async ({guitarId, userName, advantage, disadvantage, comment, rating}, {dispatch, extra: api}) => {
+    try {
+      await api.post<GuitarById>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});
+      dispatch(setIsReviewNewPushed());
     } catch (error) {
       errorHandle(error);
     }

@@ -18,7 +18,7 @@ export const countEmptyStars = (rating: number) => {
   return arrayEmptyStars;
 };
 
-export function throttle(callee: any, timeout: number) {
+export function throttle(callee: any, timeout: any) {
   let timer: any = null;
 
   return function perform(...args: any) {
