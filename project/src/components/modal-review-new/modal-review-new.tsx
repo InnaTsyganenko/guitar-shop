@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import { PropsWithChildren, useState, useEffect } from 'react';
 import { ValueofRating } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
@@ -6,12 +6,11 @@ import { pushReviewAction } from '../../store/api-actions';
 import { getGuitarById } from '../../store/guitars-data/selectors';
 
 type ModalReviewPostProps = PropsWithChildren<{
-  isModalReviewNewOpened: boolean;
   onModalReviewNewCloseClick: () => void;
 }>;
 
 function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
-  const { isModalReviewNewOpened, onModalReviewNewCloseClick } = props;
+  const { onModalReviewNewCloseClick } = props;
 
   const dispatch = useAppDispatch();
 
@@ -26,25 +25,25 @@ function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
     rating: 0,
   });
 
-  const handleInputRatingChange = (evt: any) => {
+  const handleInputRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
-      rating: parseInt(evt.target.value),
+      rating: parseInt(evt.target.value, 10),
     });
-  }
+  };
 
   useEffect(() => {
-    const isEscEvent = (evt: any) => {
+    const isEscEvent = (evt: KeyboardEvent) => {
       if (evt.key === ('Escape' || 'Esc')){
         onModalReviewNewCloseClick();
       }
-    }
-    window.addEventListener('keydown', isEscEvent)
-  return () => window.removeEventListener('keydown', isEscEvent)
-},[onModalReviewNewCloseClick])
+    };
+    window.addEventListener('keydown', isEscEvent);
+    return () => window.removeEventListener('keydown', isEscEvent);
+  },[onModalReviewNewCloseClick]);
 
   return (
-    <div style={{position:"relative", width:"550px", height:"610px", marginBottom:"50px"}}>
+    <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--review modal-for-ui-kit">
         <div className="modal__wrapper">
           <div className="modal__overlay" data-close-modal onClick={() => onModalReviewNewCloseClick()}></div>
@@ -79,7 +78,7 @@ function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
                   <div className="rate rate--reverse">
                     {Object.entries(ValueofRating).reverse().map((value, key) => (
                       <React.Fragment key={value[0]}>
-                        <input key={value[1]}
+                        <input
                           className="visually-hidden"
                           id={`star-${value[0]}`}
                           name="rate"
@@ -87,7 +86,7 @@ function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
                           value={value[0]}
                           onChange={(evt) => handleInputRatingChange(evt)}
                         />
-                        <label key={key} className="rate__label" htmlFor={`star-${value[0]}`} title={value[1] as keyof object}></label>
+                        <label className="rate__label" htmlFor={`star-${value[0]}`} title={value[1] as keyof object}></label>
                       </React.Fragment>
                     ))}
                     <p className="rate__message">Поставьте оценку</p>
@@ -125,7 +124,8 @@ function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
                 autoComplete="off"
                 onChange={(event) => state.comment = event.target.value}
                 required
-              ></textarea>
+              >
+              </textarea>
               <p className="form-review__warning">Заполните поле</p>
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>

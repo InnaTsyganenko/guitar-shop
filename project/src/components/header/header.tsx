@@ -15,12 +15,12 @@ function Header(): JSX.Element {
         <nav className="main-nav">
           <ul className="main-nav__list">
             <li>
-              <a className={window.location.pathname.includes(AppRoute.Catalog) ?
+              <Link className={window.location.pathname.includes(AppRoute.Catalog) ?
                 'link main-nav__link link--current' :
                 'link main-nav__link'}
-              href={`${AppRoute.Catalog}${currentPageCatalog}`}
+              to={`${AppRoute.Catalog}${currentPageCatalog}`}
               >Каталог
-              </a>
+              </Link>
             </li>
             <li>
               <a className="link main-nav__link" href="##" onClick={(evt) => evt.preventDefault()}>Где купить?</a>
@@ -57,7 +57,7 @@ function Header(): JSX.Element {
         <Link className="header__cart-link" to={AppRoute.Cart} aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
             <use xlinkHref="../img/sprite_auto.svg#icon-basket"></use>
-          </svg><span className="visually-hidden">Перейти в корзину</span><span className="header__cart-count">2</span>
+          </svg><span className="visually-hidden">Перейти в корзину</span><span className="header__cart-count">1</span>
         </Link>
       </div>
     </header>

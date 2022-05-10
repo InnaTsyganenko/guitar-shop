@@ -1,15 +1,16 @@
 import { PropsWithChildren } from 'react';
-import { AppRoute, ValueofRating } from '../../const';
+import { ValueofRating } from '../../const';
 import { RatingCount, CommentsLength } from '../../types/guitars';
 import { countFullStars, countEmptyStars } from '../../utils';
 
 type RatingProps = PropsWithChildren<{
   rating: RatingCount;
   commentsLength: CommentsLength;
+  isRatingWithCountReviews: boolean,
 }>;
 
 function Rating(props: RatingProps): JSX.Element {
-  const { rating, commentsLength } = props;
+  const { rating, commentsLength, isRatingWithCountReviews } = props;
 
   return (
     <>
@@ -24,7 +25,7 @@ function Rating(props: RatingProps): JSX.Element {
         </svg>
       ))}
       <p className="visually-hidden">{`Оценка: ${ValueofRating[Math.ceil(rating) as keyof object]}`}</p>
-      {window.location.pathname.includes(AppRoute.Catalog)
+      {isRatingWithCountReviews
         ? <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{commentsLength}</p>
         : ''}
     </>
@@ -33,6 +34,7 @@ function Rating(props: RatingProps): JSX.Element {
 
 Rating.defaultProps = {
   commentsLength: 0,
+  isRatingWithCountReviews: false,
 };
 
 export default Rating;

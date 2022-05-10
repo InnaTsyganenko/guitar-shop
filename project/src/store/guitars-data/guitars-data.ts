@@ -26,10 +26,10 @@ export const guitarsData = createSlice({
     loadGuitarById: (state, action) => {
       state.guitarById = action.payload;
     },
-    setIsReviewNewPushed: (state) => {
-      state.isReviewNewPushed = true;
+    setIsReviewNewPush: (state, action) => {
+      state.isReviewNewPushed = action.payload;
     },
   },
 });
 
-export const {loadGuitars, loadGuitarById, getTotalCountGuitars, setIsReviewNewPushed} = guitarsData.actions;
+export const {loadGuitars, loadGuitarById, getTotalCountGuitars, setIsReviewNewPush} = guitarsData.actions;

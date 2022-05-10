@@ -28,7 +28,6 @@ function Product(): JSX.Element {
           setIsLoaded(true);
         },
         (err) => {
-          setIsLoaded(true);
           setError(err);
         });
     };
@@ -62,7 +61,11 @@ function Product(): JSX.Element {
               <div className="product-container__info-wrapper">
                 <h2 className="product-container__title title title--big title--uppercase">{guitar.name}</h2>
                 <div className="rate product-container__rating">
-                  <Rating rating={guitar.rating} />
+                  <Rating
+                    rating={guitar.rating}
+                    commentsLength={guitar.comments.length}
+                    isRatingWithCountReviews
+                  />
                 </div>
                 <div className="tabs">
                   {Object.entries(CardGuitarTabs).map(([key, value]) => (

@@ -48,5 +48,3 @@ export type GuitarName = string;
 export type RatingCount = number;
 
 export type CommentsLength = number;
-
-export type ReviewNewPushed = boolean;

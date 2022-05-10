@@ -23,10 +23,15 @@ function Breadcrumbs(props: BreadcrumbsProps): JSX.Element {
         <Link className="link" to={`${AppRoute.Catalog}${currentPageCatalog}`}>Каталог</Link>
       </li>
       {(window.location.pathname.includes(AppRoute.Guitars)) ?
-        <li className="breadcrumbs__item"><a className="link" href="##">{guitarName}</a></li> : ''}
+        <li className="breadcrumbs__item">
+          <Link className="link" to="##">{guitarName}</Link>
+        </li> : ''}
+      {(window.location.pathname.includes(AppRoute.Cart)) ?
+        <li className="breadcrumbs__item">
+          <Link className="link" to="##">Корзина</Link>
+        </li> : ''}
     </ul>
   );
 }
-
 
 export default Breadcrumbs;
