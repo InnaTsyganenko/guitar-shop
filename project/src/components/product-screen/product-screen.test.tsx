@@ -1,8 +1,30 @@
-import {render, screen} from '@testing-library/react';
-import Product from './product-screen';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import { createMemoryHistory } from 'history';
+import HistoryRouter from '../history-route/history-route';
+import ProductScreen from './product-screen';
 
-test('Renders app-component', () => {
-  render(<Product />);
-  const textElement = screen.getByText(/Hello, world!/i);
-  expect(textElement).toBeInTheDocument();
+const mockStore = configureMockStore();
+
+const store = mockStore({
+  DATA: {isDataLoaded: true},
+  GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
+
+describe('Component: ProductScreen', () => {
+  it('should render correctly', () => {
+    const history = createMemoryHistory();
+
+    render(
+      <Provider store={store}>
+        <HistoryRouter history={history}>
+          <ProductScreen />
+        </HistoryRouter>
+      </Provider>,
+    );
+
+    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+  });
+});
+

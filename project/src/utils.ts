@@ -2,7 +2,7 @@
 import { STEP_ONE, COUNT_RATING_STARS } from './const';
 
 export const countFullStars = (rating: number) => {
-  const arrayFullStars = [];
+  const arrayFullStars: number[] = [];
   while (arrayFullStars.length < Math.round(rating)) {
     arrayFullStars.push(arrayFullStars.length + STEP_ONE);
   }
@@ -11,7 +11,7 @@ export const countFullStars = (rating: number) => {
 };
 
 export const countEmptyStars = (rating: number) => {
-  const arrayEmptyStars = [];
+  const arrayEmptyStars: number[] = [];
   while (arrayEmptyStars.length < (COUNT_RATING_STARS - Math.round(rating))) {
     arrayEmptyStars.push(arrayEmptyStars.length + STEP_ONE);
   }

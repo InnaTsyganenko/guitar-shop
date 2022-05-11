@@ -16,7 +16,7 @@ import { getIdGuitar, setCurrentPageCatalog } from '../../store/guitars-operatio
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
 
-function Catalog(): JSX.Element {
+function CatalogScreen(): JSX.Element {
   const [error, setError] = useState(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
@@ -110,4 +110,4 @@ function Catalog(): JSX.Element {
 }
 
 
-export default Catalog;
+export default CatalogScreen;

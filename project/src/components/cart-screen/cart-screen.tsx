@@ -2,7 +2,7 @@ import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Footer from '../footer/footer';
 
-function Cart(): JSX.Element {
+function CartScreen(): JSX.Element {
   return (
     <div className="wrapper">
       <Header />
@@ -66,4 +66,4 @@ function Cart(): JSX.Element {
   );
 }
 
-export default Cart;
+export default CartScreen;

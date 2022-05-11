@@ -1,0 +1,21 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Component: NotFoundScreen should render correctly 1`] = `
+<div>
+  <div
+    class="wrapper"
+  >
+    <main
+      class="page-content"
+    >
+      <div
+        class="container"
+      >
+        <h2>
+          Loading...
+        </h2>
+      </div>
+    </main>
+  </div>
+</div>
+`;

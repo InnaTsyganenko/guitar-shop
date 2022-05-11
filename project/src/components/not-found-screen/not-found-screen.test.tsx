@@ -1,8 +1,22 @@
-import {render, screen} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
+import { createMemoryHistory } from 'history';
+import HistoryRouter from '../history-route/history-route';
 import NotFoundScreen from './not-found-screen';
 
-test('Renders app-component', () => {
-  render(<NotFoundScreen />);
-  const textElement = screen.getByText(/404/i);
-  expect(textElement).toBeInTheDocument();
+describe('Component: NotFoundScreen', () => {
+  it('should render correctly', () => {
+    const history = createMemoryHistory();
+
+    render(
+      <HistoryRouter history={history}>
+        <NotFoundScreen />
+      </HistoryRouter>,
+    );
+
+    const headerElement = screen.getByText('404. Page not found.');
+    const linkElement = screen.getByText('Вернуться на главную');
+
+    expect(headerElement).toBeInTheDocument();
+    expect(linkElement).toBeInTheDocument();
+  });
 });

@@ -2,8 +2,8 @@ import {Route, Routes} from 'react-router-dom';
 import {AppRoute} from '../../const';
 import MainScreen from '../main-screen/main-screen';
 import CatalogScreen from '../catalog-screen/catalog-screen';
-import Cart from '../cart-screen/cart-screen';
-import Product from '../product-screen/product-screen';
+import CartScreen from '../cart-screen/cart-screen';
+import ProductScreen from '../product-screen/product-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { useAppSelector } from '../../hooks';
@@ -29,11 +29,11 @@ function App(): JSX.Element {
       />
       <Route
         path={`${AppRoute.Guitars}${pickedId}`}
-        element={<Product />}
+        element={<ProductScreen />}
       />
       <Route
         path={AppRoute.Cart}
-        element={<Cart />}
+        element={<CartScreen />}
       />
       <Route
         path={AppRoute.Root}

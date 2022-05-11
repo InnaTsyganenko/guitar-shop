@@ -1,8 +1,29 @@
-import {render, screen} from '@testing-library/react';
-import Catalog from './catalog-screen';
+import { render, screen } from '@testing-library/react';
+import { Provider } from 'react-redux';
+import { configureMockStore } from '@jedmao/redux-mock-store';
+import { createMemoryHistory } from 'history';
+import HistoryRouter from '../history-route/history-route';
+import CatalogScreen from './catalog-screen';
 
-test('Renders app-component', () => {
-  render(<Catalog />);
-  const textElement = screen.getByText(/Hello, world!/i);
-  expect(textElement).toBeInTheDocument();
+const mockStore = configureMockStore();
+
+const store = mockStore({
+  DATA: {isDataLoaded: true},
+  GUITARS: {pickedId: 1, currentPageCatalog: 1},
+});
+
+describe('Component: CatalogScreen', () => {
+  it('should render correctly', () => {
+    const history = createMemoryHistory();
+
+    render(
+      <Provider store={store}>
+        <HistoryRouter history={history}>
+          <CatalogScreen />
+        </HistoryRouter>
+      </Provider>,
+    );
+
+    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+  });
 });

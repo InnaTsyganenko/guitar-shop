@@ -1,20 +1,18 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
-import HistoryRouter from '../history-route/history-route';
 import LoadingScreen from './loading-screen';
+import HistoryRouter from '../history-route/history-route';
 
 describe('Component: NotFoundScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 
-    render(
+    const {container} = render(
       <HistoryRouter history={history}>
         <LoadingScreen />
       </HistoryRouter>,
     );
 
-    const textElement = screen.getByText('Loading...');
-
-    expect(textElement).toBeInTheDocument();
+    expect(container).toMatchSnapshot();
   });
 });

@@ -12,7 +12,7 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { toast } from 'react-toastify';
 import { CardGuitarTabs, TypeofGuitar } from '../../const';
 
-function Product(): JSX.Element {
+function ProductScreen(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -122,4 +122,4 @@ function Product(): JSX.Element {
     );
   }
 }
-export default Product;
+export default ProductScreen;

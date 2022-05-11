@@ -6,7 +6,7 @@ export const COUNT_RATING_STARS = 5;
 
 export enum AppRoute {
   Root = '/',
-  Catalog = '/catalog/page_',
+  Catalog = '/guitars/page_',
   Cart = '/cart',
   Guitars = '/guitars/'
 }
