@@ -1,8 +1,8 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { SHOW_COMMENTS_QUANTITY } from '../../const';
-import { throttle } from '../../utils';
-import { GuitarComments } from '../../types/guitars';
+import { throttle } from '../../utils/utils';
+import { Guitar, GuitarComments } from '../../types/guitars';
 import Rating from '../rating/rating';
 import ModalReviewNew from '../modal-review-new/modal-review-new';
 import ModalReviewThanks from '../modal-review-thanks/modal-review-thanks';
@@ -10,11 +10,12 @@ import { getIsReviewNewPushed } from '../../store/guitars-data/selectors';
 import { setIsReviewNewPush } from '../../store/guitars-data/guitars-data';
 
 type ProductReviewsProps = PropsWithChildren<{
+  currentGuitar: Guitar;
   reviews: GuitarComments;
 }>;
 
 function ProductReviews(props: ProductReviewsProps): JSX.Element {
-  const { reviews } = props;
+  const { currentGuitar, reviews } = props;
   const [quantityComment, setQuantityCommentForDisplay] = useState(SHOW_COMMENTS_QUANTITY);
   const [isModalReviewNewOpened, setModalReviewNewOpened] = useState(false);
 
@@ -101,6 +102,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
 
       {isModalReviewNewOpened &&
         <ModalReviewNew
+          guitar={currentGuitar}
           onModalReviewNewCloseClick={handleReviewNewBtnClick}
         />}
 

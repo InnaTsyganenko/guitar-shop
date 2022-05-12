@@ -4,8 +4,11 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import ProductReviews from './product-reviews';
+import thunk from 'redux-thunk';
+import { makeFakeGuitar } from '../../utils/mock';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
   DATA: {isDataLoaded: true},
@@ -15,11 +18,12 @@ const store = mockStore({
 describe('Component: ProductReviews', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
+    const guitar = makeFakeGuitar();
 
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ProductReviews reviews={[]} />
+          <ProductReviews currentGuitar={guitar} reviews={[]} />
         </HistoryRouter>
       </Provider>,
     );

@@ -31,7 +31,7 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
   state: State,
   extra: AxiosInstance
 }>(
-  'data/fetchGuitarByIdAction',
+  'data/fetchGuitarById',
   async (pickedId, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}?_embed=comments`);
@@ -47,7 +47,7 @@ export const pushReviewAction = createAsyncThunk<void, CommentPost, {
   state: State,
   extra: AxiosInstance
 }>(
-  'data/pushReviewAction',
+  'data/pushReview',
   async ({guitarId, userName, advantage, disadvantage, comment, rating}, {dispatch, extra: api}) => {
     try {
       await api.post<GuitarById>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});

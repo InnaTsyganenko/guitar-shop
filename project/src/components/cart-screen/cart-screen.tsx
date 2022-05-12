@@ -10,7 +10,7 @@ function CartScreen(): JSX.Element {
         <div className="container">
           <h1 className="page-content__title title title--bigger">Товар</h1>
           <h1 className="title title--bigger page-content__title">Корзина</h1>
-          <Breadcrumbs guitarName={''} />
+          <Breadcrumbs guitarId={0} guitarName={''} />
           <div className="cart">
             <div className="cart-item">
               <button className="cart-item__close-button button-cross" type="button" aria-label="Удалить" onClick={(evt) => evt.preventDefault()}><span className="button-cross__icon"></span><span className="cart-item__close-button-interactive-area"></span>

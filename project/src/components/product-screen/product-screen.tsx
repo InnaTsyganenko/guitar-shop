@@ -55,7 +55,7 @@ function ProductScreen(): JSX.Element {
         <main className="page-content">
           <div className="container">
             <h1 className="page-content__title title title--bigger">{guitar.name}</h1>
-            <Breadcrumbs guitarName={guitar.name} />
+            <Breadcrumbs guitarId={pickedId} guitarName={guitar.name} />
             <div className="product-container">
               <img className="product-container__img" src={`/${guitar.previewImg}`} width="220" height="252" alt={`Фото гитары ${guitar.name}`} />
               <div className="product-container__info-wrapper">
@@ -114,7 +114,7 @@ function ProductScreen(): JSX.Element {
                 <p className="product-container__price-info product-container__price-info--value">{guitar.price} ₽</p><a className="button button--red button--big product-container__button" href="##" onClick={(evt) => evt.preventDefault()}>Добавить в корзину</a>
               </div>
             </div>
-            <ProductReviews reviews={guitar.comments} />
+            <ProductReviews currentGuitar={guitar} reviews={guitar.comments} />
           </div>
         </main>
         <Footer />
@@ -122,4 +122,5 @@ function ProductScreen(): JSX.Element {
     );
   }
 }
+
 export default ProductScreen;

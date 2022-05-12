@@ -1,16 +1,17 @@
 import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import { GuitarName } from '../../types/guitars';
+import { GuitarName, PickedId } from '../../types/guitars';
 import { useAppSelector } from '../../hooks';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 type BreadcrumbsProps = PropsWithChildren<{
+  guitarId: PickedId;
   guitarName: GuitarName;
 }>;
 
 function Breadcrumbs(props: BreadcrumbsProps): JSX.Element {
-  const {guitarName} = props;
+  const { guitarId, guitarName } = props;
 
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
@@ -22,7 +23,7 @@ function Breadcrumbs(props: BreadcrumbsProps): JSX.Element {
       <li className="breadcrumbs__item">
         <Link className="link" to={`${AppRoute.Catalog}${currentPageCatalog}`}>Каталог</Link>
       </li>
-      {(window.location.pathname.includes(AppRoute.Guitars)) ?
+      {(window.location.pathname === (`${AppRoute.Guitars}${guitarId}`)) ?
         <li className="breadcrumbs__item">
           <Link className="link" to="##">{guitarName}</Link>
         </li> : ''}

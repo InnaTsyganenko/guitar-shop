@@ -1,7 +1,7 @@
 import { PropsWithChildren } from 'react';
 import { ValueofRating } from '../../const';
 import { RatingCount, CommentsLength } from '../../types/guitars';
-import { countFullStars, countEmptyStars } from '../../utils';
+import { countFullStars, countEmptyStars } from '../../utils/utils';
 
 type RatingProps = PropsWithChildren<{
   rating: RatingCount;

@@ -1,5 +1,5 @@
-import {Route, Routes} from 'react-router-dom';
-import {AppRoute} from '../../const';
+import { Route, Routes } from 'react-router-dom';
+import { AppRoute } from '../../const';
 import MainScreen from '../main-screen/main-screen';
 import CatalogScreen from '../catalog-screen/catalog-screen';
 import CartScreen from '../cart-screen/cart-screen';

@@ -1,20 +1,19 @@
 import React, { ChangeEvent } from 'react';
 import { PropsWithChildren, useState, useEffect } from 'react';
 import { ValueofRating } from '../../const';
-import { useAppSelector, useAppDispatch } from '../../hooks';
+import { useAppDispatch } from '../../hooks';
 import { pushReviewAction } from '../../store/api-actions';
-import { getGuitarById } from '../../store/guitars-data/selectors';
+import { Guitar } from '../../types/guitars';
 
-type ModalReviewPostProps = PropsWithChildren<{
+type ModalReviewNewProps = PropsWithChildren<{
+  guitar: Guitar;
   onModalReviewNewCloseClick: () => void;
 }>;
 
-function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
-  const { onModalReviewNewCloseClick } = props;
+function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
+  const { guitar, onModalReviewNewCloseClick } = props;
 
   const dispatch = useAppDispatch();
-
-  const guitar = useAppSelector(getGuitarById);
 
   const [state, setState] = useState({
     guitarId: guitar.id,
@@ -138,4 +137,4 @@ function ModalReviewPost(props: ModalReviewPostProps): JSX.Element {
   );
 }
 
-export default ModalReviewPost;
+export default ModalReviewNew;

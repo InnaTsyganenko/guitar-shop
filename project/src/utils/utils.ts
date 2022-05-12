@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { STEP_ONE, COUNT_RATING_STARS } from './const';
+import { STEP_ONE, COUNT_RATING_STARS } from '../const';
 
 export const countFullStars = (rating: number) => {
   const arrayFullStars: number[] = [];

@@ -61,7 +61,7 @@ function CatalogScreen(): JSX.Element {
         <main className="page-content">
           <div className="container">
             <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
-            <Breadcrumbs guitarName={''} />
+            <Breadcrumbs guitarId={0} guitarName={''} />
             <div className="catalog">
               <CatalogFilterAndSort />
               <div className="cards catalog__cards">

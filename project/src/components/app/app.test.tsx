@@ -24,26 +24,22 @@ const fakeApp = (
 );
 
 describe('Application Routing', () => {
-  // it('should render "CatalogScreen" when user navigate to "/guitars/page_1"', () => {
-  //   history.push(`${AppRoute.Catalog}1`);
+  it('should render "CatalogScreen" when user navigate to "/guitars/page_1"', () => {
+    history.push(`${AppRoute.Catalog}1`);
 
-  //   render(fakeApp);
+    render(fakeApp);
 
-  //   expect(screen.getByText(/Каталог гитар/i)).toBeInTheDocument();
-  //   // expect(screen.getByText(/Хотите узнать свой результат\? Представьтесь!/i)).toBeInTheDocument();
-  //   // expect(screen.getByLabelText(/Логин/i)).toBeInTheDocument();
-  //   // expect(screen.getByLabelText(/Пароль/i)).toBeInTheDocument();
-  // });
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+  });
 
-  // it('should render "ProductScreen" when user navigate to "/guitars/1"', () => {
-  //   const pickedId = 1;
-  //   history.push(`${AppRoute.Guitars}${pickedId}`);
+  it('should render "ProductScreen" when user navigate to "/guitars/1"', () => {
+    const pickedId = 1;
+    history.push(`${AppRoute.Guitars}${pickedId}`);
 
-  //   render(fakeApp);
+    render(fakeApp);
 
-  //   expect(screen.getByText(/Цена:/i)).toBeInTheDocument();
-  //   expect(screen.getByText(/Добавить в корзину/i)).toBeInTheDocument();
-  // });
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+  });
 
   it('should render "CartScreen" when user navigate to "/cart"', () => {
     history.push(AppRoute.Cart);

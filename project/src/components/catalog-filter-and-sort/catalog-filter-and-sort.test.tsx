@@ -4,8 +4,10 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import CatalogFilterAndSort from './catalog-filter-and-sort';
+import thunk from 'redux-thunk';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
   DATA: {isDataLoaded: true},

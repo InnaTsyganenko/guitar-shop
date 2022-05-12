@@ -22,7 +22,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
   }
 
   if (countPages.length === DEFAULT_PAGE_CATALOG) {
-    return <div></div>;
+    return <div data-testid="div"></div>;
   } else {
     return (
       <div className="pagination page-content__pagination">

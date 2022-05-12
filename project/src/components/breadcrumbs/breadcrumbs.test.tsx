@@ -5,8 +5,11 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import Breadcrumbs from './breadcrumbs';
+import thunk from 'redux-thunk';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+const history = createMemoryHistory();
 
 const store = mockStore({
   DATA: {isDataLoaded: true},
@@ -15,12 +18,11 @@ const store = mockStore({
 
 describe('Component: Breadcrumbs', () => {
   it('should render correctly', () => {
-    const history = createMemoryHistory();
 
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <Breadcrumbs guitarName={''} />
+          <Breadcrumbs guitarId={1} guitarName={''} />
         </HistoryRouter>
       </Provider>,
     );

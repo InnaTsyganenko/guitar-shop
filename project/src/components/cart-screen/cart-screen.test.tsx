@@ -4,8 +4,11 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import CartScreen from './cart-screen';
+import thunk from 'redux-thunk';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+const history = createMemoryHistory();
 
 const store = mockStore({
   DATA: {isDataLoaded: true},
@@ -14,8 +17,6 @@ const store = mockStore({
 
 describe('Component: CartScreen', () => {
   it('should render correctly', () => {
-    const history = createMemoryHistory();
-
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
