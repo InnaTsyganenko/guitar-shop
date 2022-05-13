@@ -1,8 +1,13 @@
-export const GUITARS_COUNT_FOR_RENDER = 9;
-export const DEFAULT_PAGE_CATALOG = 1;
 export const STEP_ONE = 1;
-export const SHOW_COMMENTS_QUANTITY = 3;
-export const COUNT_RATING_STARS = 5;
+export const DEFAULT_CATALOG_PAGE = 1;
+export const GUITARS_QUANTITY_FOR_DISPLAY = 9;
+export const COMMENTS_QUANTITY_FOR_DISPLAY = 3;
+export const TOTAL_RATING_UNITS = 5;
+
+export enum ValuesForInitialState {
+  InitialPickedId = 0,
+  InitialTotalCountGuitars = 0,
+}
 
 export enum AppRoute {
   Root = '/',
@@ -34,16 +39,16 @@ export enum CardGuitarTabs {
   description = 'Описание',
 }
 
-export const TypeofGuitar: object = {
-  electric: 'Электрогитара',
-  acoustic: 'Акустическая гитара',
-  ukulele: 'Укулеле',
-};
+export enum TypeofGuitar {
+  electric = 'Электрогитара',
+  acoustic = 'Акустическая гитара',
+  ukulele = 'Укулеле',
+}
 
-export const ValueofRating: object = {
+export const ValueofRating = {
   1: 'Ужасно',
   2: 'Плохо',
   3: 'Нормально',
   4: 'Хорошо',
   5: 'Отлично',
-};
+} as const;

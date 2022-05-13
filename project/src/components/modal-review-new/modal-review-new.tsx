@@ -2,7 +2,7 @@ import React, { ChangeEvent } from 'react';
 import { PropsWithChildren, useState, useEffect } from 'react';
 import { ValueofRating } from '../../const';
 import { useAppDispatch } from '../../hooks';
-import { pushReviewAction } from '../../store/api-actions';
+import { pushCommentAction } from '../../store/api-actions';
 import { Guitar } from '../../types/guitars';
 
 type ModalReviewNewProps = PropsWithChildren<{
@@ -24,7 +24,7 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
     rating: 0,
   });
 
-  const handleInputRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  const onInputRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
       rating: parseInt(evt.target.value, 10),
@@ -55,7 +55,7 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
               action="#"
               onSubmit={(evt) => {
                 evt.preventDefault();
-                dispatch(pushReviewAction(state));
+                dispatch(pushCommentAction(state));
                 onModalReviewNewCloseClick();
               }}
             >
@@ -83,7 +83,7 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
                           name="rate"
                           type="radio"
                           value={value[0]}
-                          onChange={(evt) => handleInputRatingChange(evt)}
+                          onChange={(evt) => onInputRatingChange(evt)}
                         />
                         <label className="rate__label" htmlFor={`star-${value[0]}`} title={value[1] as keyof object}></label>
                       </React.Fragment>

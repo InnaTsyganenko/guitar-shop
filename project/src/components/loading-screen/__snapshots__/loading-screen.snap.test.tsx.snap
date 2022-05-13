@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Component: NotFoundScreen should render correctly 1`] = `
+exports[`Component: LoadingScreen should render correctly 1`] = `
 <div>
   <div
     class="wrapper"

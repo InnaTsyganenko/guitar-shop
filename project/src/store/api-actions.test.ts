@@ -4,7 +4,7 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {createAPI} from '../services/api';
-import { fetchGuitarsAction, fetchGuitarByIdAction, pushReviewAction } from './api-actions';
+import { fetchGuitarsAction, fetchGuitarByIdAction, pushCommentAction } from './api-actions';
 import {APIRoute} from '../const';
 import {State} from '../types/state';
 
@@ -58,10 +58,10 @@ describe('Async actions', () => {
       .onPost(APIRoute.Comments)
       .reply(200, fakeComment);
 
-    await store.dispatch(pushReviewAction(fakeComment));
+    await store.dispatch(pushCommentAction(fakeComment));
 
     const actions = store.getActions().map(({type}) => type);
 
-    expect(actions).toContain('data/pushReview/pending');
+    expect(actions).toContain('data/pushComment/pending');
   });
 });

@@ -1,6 +1,6 @@
 import { Guitar, Guitars, CommentGet, CommentPost } from '../types/guitars';
 
-export const makeFakeCommentGet = (): CommentGet => ({
+const makeFakeCommentGet = (): CommentGet => ({
   id: 'string',
   userName: 'string',
   advantage: 'string',

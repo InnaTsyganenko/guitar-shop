@@ -1,8 +1,8 @@
+import storage from 'redux-persist/lib/storage';
 import { combineReducers } from 'redux';
 import { guitarsData } from './guitars-data/guitars-data';
 import { guitarsOperations } from './guitars-operations/guitars-operations';
 import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
 import { NameSpace } from '../const';
 
 const rootPersistConfig = {

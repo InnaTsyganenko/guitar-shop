@@ -2,37 +2,37 @@ import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
 import { useAppDispatch } from '../../hooks';
 import { setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
-import { AppRoute, DEFAULT_PAGE_CATALOG, STEP_ONE } from '../../const';
+import { AppRoute, DEFAULT_CATALOG_PAGE, STEP_ONE } from '../../const';
 
 type CatalogPaginatioProps = PropsWithChildren<{
   page: number;
   totalPages: number;
-  handlePagination: (page: number) => void;
+  onPaginationClick: (page: number) => void;
 }>;
 
 function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
-  const {page, totalPages, handlePagination} = props;
+  const {page, totalPages, onPaginationClick} = props;
 
   const dispatch = useAppDispatch();
 
-  const countPages = [DEFAULT_PAGE_CATALOG];
+  const countPages = [DEFAULT_CATALOG_PAGE];
 
   while (countPages.length < totalPages) {
-    countPages.push(countPages.length + DEFAULT_PAGE_CATALOG);
+    countPages.push(countPages.length + DEFAULT_CATALOG_PAGE);
   }
 
-  if (countPages.length === DEFAULT_PAGE_CATALOG) {
+  if (countPages.length === DEFAULT_CATALOG_PAGE) {
     return <div data-testid="div"></div>;
   } else {
     return (
       <div className="pagination page-content__pagination">
         <ul className="pagination__list">
-          {(window.location.pathname !== `${AppRoute.Catalog}${DEFAULT_PAGE_CATALOG}`) && (
+          {(window.location.pathname !== `${AppRoute.Catalog}${DEFAULT_CATALOG_PAGE}`) && (
             <li className="pagination__page pagination__page--prev" id="prev">
               <Link
                 className="link pagination__page-link"
                 onClick={() => {
-                  handlePagination(page - STEP_ONE);
+                  onPaginationClick(page - STEP_ONE);
                   dispatch(setCurrentPageCatalog(page - STEP_ONE));
                 }}
                 to={`${AppRoute.Catalog}${page - STEP_ONE}`}
@@ -51,7 +51,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
               <Link
                 className="link pagination__page-link"
                 onClick={() => {
-                  handlePagination(item);
+                  onPaginationClick(item);
                   dispatch(setCurrentPageCatalog(item));
                 }}
                 to={`${AppRoute.Catalog}${item}`}
@@ -65,7 +65,7 @@ function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
               <Link
                 className="link pagination__page-link"
                 onClick={() => {
-                  handlePagination(page + STEP_ONE);
+                  onPaginationClick(page + STEP_ONE);
                   dispatch(setCurrentPageCatalog(page + STEP_ONE));
                 }}
                 to={`${AppRoute.Catalog}${page + STEP_ONE}`}

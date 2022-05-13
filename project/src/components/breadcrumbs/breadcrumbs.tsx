@@ -4,6 +4,7 @@ import { AppRoute } from '../../const';
 import { GuitarName, PickedId } from '../../types/guitars';
 import { useAppSelector } from '../../hooks';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
+import browserHistory from '../../browser-history';
 
 type BreadcrumbsProps = PropsWithChildren<{
   guitarId: PickedId;
@@ -23,11 +24,11 @@ function Breadcrumbs(props: BreadcrumbsProps): JSX.Element {
       <li className="breadcrumbs__item">
         <Link className="link" to={`${AppRoute.Catalog}${currentPageCatalog}`}>Каталог</Link>
       </li>
-      {(window.location.pathname === (`${AppRoute.Guitars}${guitarId}`)) ?
+      {(browserHistory.location.pathname === (`${AppRoute.Guitars}${guitarId}`)) ?
         <li className="breadcrumbs__item">
           <Link className="link" to="##">{guitarName}</Link>
         </li> : ''}
-      {(window.location.pathname.includes(AppRoute.Cart)) ?
+      {(browserHistory.location.pathname.includes(AppRoute.Cart)) ?
         <li className="breadcrumbs__item">
           <Link className="link" to="##">Корзина</Link>
         </li> : ''}

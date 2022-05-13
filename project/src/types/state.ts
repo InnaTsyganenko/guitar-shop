@@ -7,7 +7,7 @@ export type GuitarsData = {
   guitarById: GuitarById,
   isDataLoaded: boolean,
   guitarComments: GuitarComments,
-  isReviewNewPushed: boolean,
+  isNewCommentPushed: boolean,
 };
 
 export type GuitarsOperations = {

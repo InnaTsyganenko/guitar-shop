@@ -12,14 +12,14 @@ const store = mockStore({
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
-describe('Component: CatalogFilterAndSort', () => {
+describe('Component: ModalReviewThanks', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ModalReviewThanks onModalReviewThanksCloseClick={jest.fn()} />
+          <ModalReviewThanks onModalThanksCloseClick={jest.fn()} />
         </HistoryRouter>
       </Provider>,
     );

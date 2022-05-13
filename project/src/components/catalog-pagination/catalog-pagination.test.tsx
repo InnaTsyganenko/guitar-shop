@@ -23,7 +23,7 @@ describe('Component: CatalogPagination', () => {
           <CatalogPagination
             page={1}
             totalPages={3}
-            handlePagination={jest.fn()}
+            onPaginationClick={jest.fn()}
           />
         </HistoryRouter>
       </Provider>);

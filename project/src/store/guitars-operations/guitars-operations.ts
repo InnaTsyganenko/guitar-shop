@@ -1,11 +1,11 @@
-import { DEFAULT_PAGE_CATALOG } from './../../const';
+import { ValuesForInitialState, DEFAULT_CATALOG_PAGE } from './../../const';
 import {createSlice} from '@reduxjs/toolkit';
 import { GuitarsOperations } from '../../types/state';
 import { NameSpace } from '../../const';
 
 const initialState: GuitarsOperations = {
-  pickedId: 0,
-  currentPageCatalog: DEFAULT_PAGE_CATALOG,
+  pickedId: ValuesForInitialState.InitialTotalCountGuitars,
+  currentPageCatalog: DEFAULT_CATALOG_PAGE,
 };
 
 export const guitarsOperations = createSlice({

@@ -1,21 +1,19 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { STEP_ONE, COUNT_RATING_STARS } from '../const';
+import { STEP_ONE, TOTAL_RATING_UNITS } from '../const';
 
 export const countFullStars = (rating: number) => {
   const arrayFullStars: number[] = [];
   while (arrayFullStars.length < Math.round(rating)) {
     arrayFullStars.push(arrayFullStars.length + STEP_ONE);
   }
-
   return arrayFullStars;
 };
 
 export const countEmptyStars = (rating: number) => {
   const arrayEmptyStars: number[] = [];
-  while (arrayEmptyStars.length < (COUNT_RATING_STARS - Math.round(rating))) {
+  while (arrayEmptyStars.length < (TOTAL_RATING_UNITS - Math.round(rating))) {
     arrayEmptyStars.push(arrayEmptyStars.length + STEP_ONE);
   }
-
   return arrayEmptyStars;
 };
 

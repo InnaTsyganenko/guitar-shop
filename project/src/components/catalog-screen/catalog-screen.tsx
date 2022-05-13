@@ -1,5 +1,4 @@
-import { useState } from 'react';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import Header from '../header/header';
@@ -9,9 +8,9 @@ import Rating from '../rating/rating';
 import CatalogPagination from '../catalog-pagination/catalog-pagination';
 import Footer from '../footer/footer';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { AppRoute, GUITARS_COUNT_FOR_RENDER } from '../../const';
+import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getGuitars, getGuitarsTotalCount } from '../../store/guitars-data/selectors';
+import { getGuitars, getTotalCountGuitars } from '../../store/guitars-data/selectors';
 import { getIdGuitar, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
@@ -22,7 +21,7 @@ function CatalogScreen(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const handlePages = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
+  const onChangePage = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
   useEffect(() => {
@@ -39,9 +38,9 @@ function CatalogScreen(): JSX.Element {
     fetchData();
   }, [dispatch, currentPageCatalog]);
 
-  const guitarsTotalCount = useAppSelector(getGuitarsTotalCount);
+  const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const guitars = useAppSelector(getGuitars);
-  const totalPages = Math.ceil(guitarsTotalCount / GUITARS_COUNT_FOR_RENDER);
+  const totalPages = Math.ceil(guitarsTotalCount / GUITARS_QUANTITY_FOR_DISPLAY);
 
   if (error) {
     return (
@@ -98,7 +97,7 @@ function CatalogScreen(): JSX.Element {
               <CatalogPagination
                 page={currentPageCatalog}
                 totalPages={totalPages}
-                handlePagination={handlePages}
+                onPaginationClick={onChangePage}
               />
             </div>
           </div>

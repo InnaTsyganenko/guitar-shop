@@ -1,27 +1,27 @@
 import { PropsWithChildren, useEffect } from 'react';
 
 type ModalReviewThanksProps = PropsWithChildren<{
-  onModalReviewThanksCloseClick: () => void;
+  onModalThanksCloseClick: () => void;
 }>;
 
 function ModalReviewThanks(props: ModalReviewThanksProps): JSX.Element {
-  const { onModalReviewThanksCloseClick } = props;
+  const { onModalThanksCloseClick } = props;
 
   useEffect(() => {
     const isEscEvent = (evt: KeyboardEvent) => {
       if (evt.key === ('Escape' || 'Esc')){
-        onModalReviewThanksCloseClick();
+        onModalThanksCloseClick();
       }
     };
     window.addEventListener('keydown', isEscEvent);
     return () => window.removeEventListener('keydown', isEscEvent);
-  },[onModalReviewThanksCloseClick]);
+  },[onModalThanksCloseClick]);
 
   return (
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--success modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal onClick={() => onModalReviewThanksCloseClick()} />
+          <div className="modal__overlay" data-close-modal onClick={() => onModalThanksCloseClick()} />
           <div className="modal__content">
             <svg className="modal__icon" width={26} height={20} aria-hidden="true">
               <use xlinkHref="#icon-success" />
@@ -30,11 +30,11 @@ function ModalReviewThanks(props: ModalReviewThanksProps): JSX.Element {
             <div className="modal__button-container modal__button-container--review">
               <button
                 className="button button--small modal__button modal__button--review"
-                onClick={() => onModalReviewThanksCloseClick()}
+                onClick={() => onModalThanksCloseClick()}
               >К покупкам!
               </button>
             </div>
-            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть" onClick={() => onModalReviewThanksCloseClick()}><span className="button-cross__icon" /><span className="modal__close-btn-interactive-area" />
+            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть" onClick={() => onModalThanksCloseClick()}><span className="button-cross__icon" /><span className="modal__close-btn-interactive-area" />
             </button>
           </div>
         </div>

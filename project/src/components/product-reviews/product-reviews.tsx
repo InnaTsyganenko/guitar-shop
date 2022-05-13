@@ -1,13 +1,13 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { SHOW_COMMENTS_QUANTITY } from '../../const';
+import { COMMENTS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { throttle } from '../../utils/utils';
 import { Guitar, GuitarComments } from '../../types/guitars';
 import Rating from '../rating/rating';
 import ModalReviewNew from '../modal-review-new/modal-review-new';
 import ModalReviewThanks from '../modal-review-thanks/modal-review-thanks';
 import { getIsReviewNewPushed } from '../../store/guitars-data/selectors';
-import { setIsReviewNewPush } from '../../store/guitars-data/guitars-data';
+import { setIsNewCommentPush } from '../../store/guitars-data/guitars-data';
 
 type ProductReviewsProps = PropsWithChildren<{
   currentGuitar: Guitar;
@@ -16,17 +16,17 @@ type ProductReviewsProps = PropsWithChildren<{
 
 function ProductReviews(props: ProductReviewsProps): JSX.Element {
   const { currentGuitar, reviews } = props;
-  const [quantityComment, setQuantityCommentForDisplay] = useState(SHOW_COMMENTS_QUANTITY);
+  const [quantityComment, setQuantityCommentForDisplay] = useState(COMMENTS_QUANTITY_FOR_DISPLAY);
   const [isModalReviewNewOpened, setModalReviewNewOpened] = useState(false);
 
   const dispatch = useAppDispatch();
 
-  const handleReviewNewBtnClick = () => {
+  const onReviewNewBtnClick = () => {
     setModalReviewNewOpened(!isModalReviewNewOpened);
   };
 
-  const handleReviewThanksCloseClick = () => {
-    dispatch(setIsReviewNewPush(false));
+  const onModalThanksCloseClick = () => {
+    dispatch(setIsNewCommentPush(false));
   };
 
   const sortReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
@@ -42,7 +42,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
       const position = scrolled + screenHeight;
 
       if ((position >= threshold) && (quantityComment <= reviews.length)) {
-        setQuantityCommentForDisplay(quantityComment + SHOW_COMMENTS_QUANTITY);
+        setQuantityCommentForDisplay(quantityComment + COMMENTS_QUANTITY_FOR_DISPLAY);
       }
     };
 
@@ -57,7 +57,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
     };
   }, [quantityComment, reviews.length]);
 
-  const isReviewNewPushed = useAppSelector(getIsReviewNewPushed);
+  const isNewCommentPushed = useAppSelector(getIsReviewNewPushed);
 
   return (
     <section className="reviews">
@@ -66,7 +66,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
         className="button button--red-border button--big reviews__sumbit-button" href="##"
         onClick={(evt) => {
           evt.preventDefault();
-          handleReviewNewBtnClick();
+          onReviewNewBtnClick();
         }}
       >Оставить отзыв
       </a>
@@ -92,7 +92,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
         :
         <button
           className="button button--medium reviews__more-button"
-          onClick={() => setQuantityCommentForDisplay(quantityComment + SHOW_COMMENTS_QUANTITY)}
+          onClick={() => setQuantityCommentForDisplay(quantityComment + COMMENTS_QUANTITY_FOR_DISPLAY)}
         >Показать еще отзывы
         </button>}
       {reviews.length === 0
@@ -103,12 +103,12 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
       {isModalReviewNewOpened &&
         <ModalReviewNew
           guitar={currentGuitar}
-          onModalReviewNewCloseClick={handleReviewNewBtnClick}
+          onModalReviewNewCloseClick={onReviewNewBtnClick}
         />}
 
-      {isReviewNewPushed &&
+      {isNewCommentPushed &&
         <ModalReviewThanks
-          onModalReviewThanksCloseClick={handleReviewThanksCloseClick}
+          onModalThanksCloseClick={onModalThanksCloseClick}
         />}
 
     </section>

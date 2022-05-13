@@ -3,7 +3,7 @@ import { createMemoryHistory } from 'history';
 import LoadingScreen from './loading-screen';
 import HistoryRouter from '../history-route/history-route';
 
-describe('Component: NotFoundScreen', () => {
+describe('Component: LoadingScreen', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 

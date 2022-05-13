@@ -7,11 +7,11 @@ import ProductScreen from '../product-screen/product-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { useAppSelector } from '../../hooks';
-import { getLoadedDataStatus } from '../../store/guitars-data/selectors';
+import { getStatusLoadedData } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog, getPickedId } from '../../store/guitars-operations/selectors';
 
 function App(): JSX.Element {
-  const isDataLoaded = useAppSelector(getLoadedDataStatus);
+  const isDataLoaded = useAppSelector(getStatusLoadedData);
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
   const pickedId = useAppSelector(getPickedId);
 

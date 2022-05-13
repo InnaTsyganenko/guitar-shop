@@ -1,15 +1,14 @@
-
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import persistStore from 'redux-persist/es/persistStore';
-import App from './components/app/app';
 import HistoryRouter from '../src/components/history-route/history-route';
-import { store } from './store';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { store } from './store';
 import browserHistory from './browser-history';
+import App from './components/app/app';
 
 const persistor = persistStore(store);
 

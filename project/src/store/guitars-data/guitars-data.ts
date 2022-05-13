@@ -1,22 +1,22 @@
 import { Guitar } from './../../types/guitars';
 import { createSlice } from '@reduxjs/toolkit';
 import { GuitarsData } from '../../types/state';
-import { NameSpace } from '../../const';
+import { NameSpace, ValuesForInitialState } from '../../const';
 
 const initialState: GuitarsData = {
-  guitarsTotalCount: 0,
+  guitarsTotalCount: ValuesForInitialState.InitialTotalCountGuitars,
   guitars: [],
   guitarById: {} as Guitar,
   guitarComments: [],
   isDataLoaded: false,
-  isReviewNewPushed: false,
+  isNewCommentPushed: false,
 };
 
 export const guitarsData = createSlice({
   name: NameSpace.data,
   initialState,
   reducers: {
-    getTotalCountGuitars: (state, action) => {
+    setTotalCountGuitarsFromResponse: (state, action) => {
       state.guitarsTotalCount = action.payload;
     },
     loadGuitars: (state, action) => {
@@ -26,10 +26,10 @@ export const guitarsData = createSlice({
     loadGuitarById: (state, action) => {
       state.guitarById = action.payload;
     },
-    setIsReviewNewPush: (state, action) => {
-      state.isReviewNewPushed = action.payload;
+    setIsNewCommentPush: (state, action) => {
+      state.isNewCommentPushed = action.payload;
     },
   },
 });
 
-export const {loadGuitars, loadGuitarById, getTotalCountGuitars, setIsReviewNewPush} = guitarsData.actions;
+export const { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush } = guitarsData.actions;

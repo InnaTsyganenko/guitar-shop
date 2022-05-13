@@ -14,7 +14,7 @@ const store = mockStore({
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
-describe('Component: ProductReviews', () => {
+describe('Component: Rating', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 
