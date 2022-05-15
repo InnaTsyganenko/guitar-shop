@@ -13,6 +13,7 @@ export type GuitarsData = {
 export type GuitarsOperations = {
   pickedId: PickedId,
   currentPageCatalog: CurrentPageCatalog,
+  isModalClose: boolean,
 };
 
 export type State = ReturnType<typeof store.getState>;

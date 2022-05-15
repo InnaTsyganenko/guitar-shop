@@ -1,10 +1,11 @@
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Footer from '../footer/footer';
+import Wrapper from '../wrapper/wrapper';
 
 function CartScreen(): JSX.Element {
   return (
-    <div className="wrapper">
+    <Wrapper>
       <Header />
       <main className="page-content">
         <div className="container">
@@ -62,7 +63,7 @@ function CartScreen(): JSX.Element {
         </div>
       </main>
       <Footer />
-    </div>
+    </Wrapper>
   );
 }
 

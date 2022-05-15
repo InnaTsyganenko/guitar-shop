@@ -6,6 +6,7 @@ import { NameSpace } from '../../const';
 const initialState: GuitarsOperations = {
   pickedId: ValuesForInitialState.InitialTotalCountGuitars,
   currentPageCatalog: DEFAULT_CATALOG_PAGE,
+  isModalClose: true,
 };
 
 export const guitarsOperations = createSlice({
@@ -18,7 +19,10 @@ export const guitarsOperations = createSlice({
     getIdGuitar: (state, action) => {
       state.pickedId = action.payload;
     },
+    setModalWindowState: (state, action) => {
+      state.isModalClose = action.payload;
+    },
   },
 });
 
-export const { setCurrentPageCatalog, getIdGuitar } = guitarsOperations.actions;
+export const { setCurrentPageCatalog, getIdGuitar, setModalWindowState } = guitarsOperations.actions;

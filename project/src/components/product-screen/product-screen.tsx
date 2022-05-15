@@ -11,6 +11,7 @@ import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { toast } from 'react-toastify';
 import { CardGuitarTabs, TypeofGuitar } from '../../const';
+import Wrapper from '../wrapper/wrapper';
 
 function ProductScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -39,18 +40,18 @@ function ProductScreen(): JSX.Element {
 
   if (error) {
     return (
-      <div className="wrapper">
+      <Wrapper>
         <main className="page-content">
           <div className="container">
             {toast(error)}
           </div>
         </main>
-      </div>);
+      </Wrapper>);
   } else if (!isLoaded) {
     return <LoadingScreen />;
   } else {
     return (
-      <div className="wrapper">
+      <Wrapper>
         <Header />
         <main className="page-content">
           <div className="container">
@@ -118,7 +119,7 @@ function ProductScreen(): JSX.Element {
           </div>
         </main>
         <Footer />
-      </div>
+      </Wrapper>
     );
   }
 }

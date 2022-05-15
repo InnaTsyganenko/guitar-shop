@@ -4,6 +4,7 @@ exports[`Component: LoadingScreen should render correctly 1`] = `
 <div>
   <div
     class="wrapper"
+    data-testid="wrapper"
   >
     <main
       class="page-content"

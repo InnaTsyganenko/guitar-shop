@@ -14,6 +14,7 @@ import { getGuitars, getTotalCountGuitars } from '../../store/guitars-data/selec
 import { getIdGuitar, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
+import Wrapper from '../wrapper/wrapper';
 
 function CatalogScreen(): JSX.Element {
   const [error, setError] = useState(null);
@@ -21,7 +22,7 @@ function CatalogScreen(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const onChangePage = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
+  const handlePaginationBtnClick = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
   useEffect(() => {
@@ -44,18 +45,18 @@ function CatalogScreen(): JSX.Element {
 
   if (error) {
     return (
-      <div className="wrapper">
+      <Wrapper>
         <main className="page-content">
           <div className="container">
             {toast(error)}
           </div>
         </main>
-      </div>);
+      </Wrapper>);
   } else if (!isLoaded) {
     return <LoadingScreen />;
   } else {
     return (
-      <div className="wrapper">
+      <Wrapper>
         <Header />
         <main className="page-content">
           <div className="container">
@@ -97,16 +98,15 @@ function CatalogScreen(): JSX.Element {
               <CatalogPagination
                 page={currentPageCatalog}
                 totalPages={totalPages}
-                onPaginationClick={onChangePage}
+                onPaginationClick={handlePaginationBtnClick}
               />
             </div>
           </div>
         </main>
         <Footer />
-      </div>
+      </Wrapper>
     );
   }
 }
-
 
 export default CatalogScreen;

@@ -1,12 +1,14 @@
+import Wrapper from '../wrapper/wrapper';
+
 function LoadingScreen() {
   return (
-    <div className="wrapper">
+    <Wrapper>
       <main className="page-content">
         <div className="container">
           <h2>Loading...</h2>
         </div>
       </main>
-    </div>
+    </Wrapper>
   );
 }
 

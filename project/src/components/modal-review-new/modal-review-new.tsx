@@ -4,6 +4,7 @@ import { ValueofRating } from '../../const';
 import { useAppDispatch } from '../../hooks';
 import { pushCommentAction } from '../../store/api-actions';
 import { Guitar } from '../../types/guitars';
+import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
 
 type ModalReviewNewProps = PropsWithChildren<{
   guitar: Guitar;
@@ -24,7 +25,7 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
     rating: 0,
   });
 
-  const onInputRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
+  const handleInputRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
     setState({
       ...state,
       rating: parseInt(evt.target.value, 10),
@@ -35,17 +36,24 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
     const isEscEvent = (evt: KeyboardEvent) => {
       if (evt.key === ('Escape' || 'Esc')){
         onModalReviewNewCloseClick();
+        dispatch(setModalWindowState(true));
       }
     };
     window.addEventListener('keydown', isEscEvent);
     return () => window.removeEventListener('keydown', isEscEvent);
-  },[onModalReviewNewCloseClick]);
+  },[dispatch, onModalReviewNewCloseClick]);
 
   return (
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--review modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal onClick={() => onModalReviewNewCloseClick()}></div>
+          <div className="modal__overlay" data-close-modal
+            onClick={() => {
+              onModalReviewNewCloseClick();
+              dispatch(setModalWindowState(true));
+            }}
+          >
+          </div>
           <div className="modal__content">
             <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
             <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
@@ -57,6 +65,7 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
                 evt.preventDefault();
                 dispatch(pushCommentAction(state));
                 onModalReviewNewCloseClick();
+                setModalWindowState(true);
               }}
             >
               <div className="form-review__wrapper">
@@ -83,7 +92,8 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
                           name="rate"
                           type="radio"
                           value={value[0]}
-                          onChange={(evt) => onInputRatingChange(evt)}
+                          onChange={(evt) => handleInputRatingChange(evt)}
+                          required
                         />
                         <label className="rate__label" htmlFor={`star-${value[0]}`} title={value[1] as keyof object}></label>
                       </React.Fragment>
@@ -128,7 +138,12 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
               <p className="form-review__warning">Заполните поле</p>
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>
-            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть" onClick={() => onModalReviewNewCloseClick()}><span className="button-cross__icon"></span><span className="modal__close-btn-interactive-area"></span>
+            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть"
+              onClick={() => {
+                onModalReviewNewCloseClick();
+                dispatch(setModalWindowState(true));
+              }}
+            ><span className="button-cross__icon"></span><span className="modal__close-btn-interactive-area"></span>
             </button>
           </div>
         </div>

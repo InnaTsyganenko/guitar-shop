@@ -8,6 +8,7 @@ import ModalReviewNew from '../modal-review-new/modal-review-new';
 import ModalReviewThanks from '../modal-review-thanks/modal-review-thanks';
 import { getIsReviewNewPushed } from '../../store/guitars-data/selectors';
 import { setIsNewCommentPush } from '../../store/guitars-data/guitars-data';
+import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
 
 type ProductReviewsProps = PropsWithChildren<{
   currentGuitar: Guitar;
@@ -21,12 +22,14 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const onReviewNewBtnClick = () => {
+  const handleReviewNewBtnClick = () => {
     setModalReviewNewOpened(!isModalReviewNewOpened);
+    dispatch(setModalWindowState(false));
   };
 
-  const onModalThanksCloseClick = () => {
+  const handleModalThanksCloseClick = () => {
     dispatch(setIsNewCommentPush(false));
+    dispatch(setModalWindowState(true));
   };
 
   const sortReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
@@ -66,7 +69,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
         className="button button--red-border button--big reviews__sumbit-button" href="##"
         onClick={(evt) => {
           evt.preventDefault();
-          onReviewNewBtnClick();
+          handleReviewNewBtnClick();
         }}
       >Оставить отзыв
       </a>
@@ -103,12 +106,12 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
       {isModalReviewNewOpened &&
         <ModalReviewNew
           guitar={currentGuitar}
-          onModalReviewNewCloseClick={onReviewNewBtnClick}
+          onModalReviewNewCloseClick={handleReviewNewBtnClick}
         />}
 
       {isNewCommentPushed &&
         <ModalReviewThanks
-          onModalThanksCloseClick={onModalThanksCloseClick}
+          onModalThanksCloseClick={handleModalThanksCloseClick}
         />}
 
     </section>

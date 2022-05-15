@@ -8,13 +8,13 @@ import { NameSpace } from '../const';
 const rootPersistConfig = {
   key: 'root',
   storage,
-  blacklist: ['guitars'],
+  blacklist: ['guitars', 'isModalClose', 'isNewCommentPushed'],
 };
 
 const guitarsPersistConfig = {
   key: 'guitars',
   storage,
-  whitelist: ['pickedId, currentPageCatalog'],
+  whitelist: ['pickedId', 'currentPageCatalog'],
 };
 
 const rootReducer = combineReducers({
