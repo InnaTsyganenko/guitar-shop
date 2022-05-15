@@ -1,7 +1,7 @@
 import { Guitar, Guitars, CommentGet, CommentPost } from '../types/guitars';
 
 const makeFakeCommentGet = (): CommentGet => ({
-  id: 'string',
+  id: `string${Math.random()}`,
   userName: 'string',
   advantage: 'string',
   disadvantage: 'string',
@@ -12,7 +12,7 @@ const makeFakeCommentGet = (): CommentGet => ({
 } as CommentGet);
 
 export const makeFakeCommentPost = (): CommentPost => ({
-  guitarId: 1,
+  guitarId: Math.floor(Math.random() * 100000000000000),
   userName: 'string',
   advantage: 'string',
   disadvantage: 'string',
@@ -21,7 +21,7 @@ export const makeFakeCommentPost = (): CommentPost => ({
 } as CommentPost);
 
 export const makeFakeGuitar = (): Guitar => ({
-  id: 1,
+  id: Math.ceil(Math.random() * 100000000000) + 1,
   name: 'string',
   vendorCode: 'string',
   type: 'string',

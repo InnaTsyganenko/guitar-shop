@@ -71,7 +71,7 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
       >Оставить отзыв
       </a>
       {sortReviews.slice(0, quantityComment).map((review) => (
-        <div className="review" key={review.id} style={{}}>
+        <div className="review" key={review.id}>
           <div className="review__wrapper">
             <h4 className="review__title review__title--author title title--lesser">{review.userName}</h4><span className="review__date">{new Date(review.createAt).toLocaleDateString('ru', optionsForReviewDate)}</span>
           </div>

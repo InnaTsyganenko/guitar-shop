@@ -15,7 +15,7 @@ export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
   'data/fetchGuitars',
   async (currentPageCatalog, {dispatch, extra: api}) => {
     try {
-      const response = await api.get<any>(`${APIRoute.Guitars}?_start=${currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY}&_limit=${GUITARS_QUANTITY_FOR_DISPLAY}&_embed=comments`);
+      const response = await api.get(`${APIRoute.Guitars}?_start=${currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY}&_limit=${GUITARS_QUANTITY_FOR_DISPLAY}&_embed=comments`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
 

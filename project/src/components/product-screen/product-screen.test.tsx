@@ -4,19 +4,41 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import ProductScreen from './product-screen';
-import thunk from 'redux-thunk';
+import { makeFakeGuitar } from '../../utils/mock';
+import { waitFor } from '@testing-library/react';
+import {Action} from 'redux';
+import thunk, {ThunkDispatch} from 'redux-thunk';
+import MockAdapter from 'axios-mock-adapter';
+import {createAPI} from '../../services/api';
+import { fetchGuitarByIdAction } from '../../store/api-actions';
+import {APIRoute} from '../../const';
+import {State} from '../../types/state';
 
-const middlewares = [thunk];
-const mockStore = configureMockStore(middlewares);
-const history = createMemoryHistory();
+const api = createAPI();
+const mockAPI = new MockAdapter(api);
+const middlewares = [thunk.withExtraArgument(api)];
+
+const mockStore = configureMockStore<
+  State,
+  Action,
+  ThunkDispatch<State, typeof api, Action>
+>(middlewares);
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
+  DATA: {isDataLoaded: true, guitarById: makeFakeGuitar()},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
+const history = createMemoryHistory();
+
 describe('Component: ProductScreen', () => {
-  it('should render correctly', () => {
+  it('should render correctly', async() => {
+    const mockGuitar = makeFakeGuitar();
+    mockAPI
+      .onGet(APIRoute.GuitarById)
+      .reply(200, mockGuitar);
+
+    await store.dispatch(fetchGuitarByIdAction(1));
 
     render(
       <Provider store={store}>
@@ -26,6 +48,7 @@ describe('Component: ProductScreen', () => {
       </Provider>,
     );
 
-    expect(screen.getByText(/Loading/i)).toBeInTheDocument();
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+    await waitFor(() => screen.findByText(/Характеристики/i));
   });
 });

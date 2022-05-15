@@ -2,18 +2,21 @@ import { render, screen } from '@testing-library/react';
 import { createMemoryHistory } from 'history';
 import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
+import { waitFor } from '@testing-library/react';
+import thunk from 'redux-thunk';
+import { makeFakeGuitar, makeFakeGuitars } from '../../utils/mock';
 import HistoryRouter from '../history-route/history-route';
 import { AppRoute } from '../../const';
 import App from './app';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+const history = createMemoryHistory();
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
+  DATA: {isDataLoaded: true, guitars: makeFakeGuitars, guitarById: makeFakeGuitar()},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
-
-const history = createMemoryHistory();
 
 const fakeApp = (
   <Provider store={store}>
@@ -24,21 +27,23 @@ const fakeApp = (
 );
 
 describe('Application Routing', () => {
-  it('should render "CatalogScreen" when user navigate to "/guitars/page_1"', () => {
+  it('should render "CatalogScreen" when user navigate to "/guitars/page_1"', async() => {
     history.push(`${AppRoute.Catalog}1`);
 
     render(fakeApp);
 
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+    await waitFor(() => screen.findByText(/Каталог гитар/i));
   });
 
-  it('should render "ProductScreen" when user navigate to "/guitars/1"', () => {
+  it('should render "ProductScreen" when user navigate to "/guitars/1"', async() => {
     const pickedId = 1;
     history.push(`${AppRoute.Guitars}${pickedId}`);
 
     render(fakeApp);
 
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+    await waitFor(() => screen.findByText(/Характеристики/i));
   });
 
   it('should render "CartScreen" when user navigate to "/cart"', () => {
