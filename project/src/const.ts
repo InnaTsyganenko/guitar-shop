@@ -11,7 +11,7 @@ export enum ValuesForInitialState {
 
 export enum AppRoute {
   Root = '/',
-  Catalog = '/guitars/page_',
+  Catalog = '/catalog/page_',
   Cart = '/cart',
   Guitars = '/guitars/'
 }

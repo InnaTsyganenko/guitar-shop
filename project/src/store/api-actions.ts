@@ -12,7 +12,7 @@ export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
   state: State,
   extra: AxiosInstance
 }>(
-  'data/fetchGuitars',
+  'DATA/fetchGuitars',
   async (currentPageCatalog, {dispatch, extra: api}) => {
     try {
       const response = await api.get(`${APIRoute.Guitars}?_start=${currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY}&_limit=${GUITARS_QUANTITY_FOR_DISPLAY}&_embed=comments`);
@@ -33,7 +33,7 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
   state: State,
   extra: AxiosInstance
 }>(
-  'data/fetchGuitarById',
+  'DATA/fetchGuitarById',
   async (pickedId, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}?_embed=comments`);
@@ -49,7 +49,7 @@ export const pushCommentAction = createAsyncThunk<void, CommentPost, {
   state: State,
   extra: AxiosInstance
 }>(
-  'data/pushComment',
+  'DATA/pushComment',
   async ({guitarId, userName, advantage, disadvantage, comment, rating}, {dispatch, extra: api}) => {
     try {
       await api.post<GuitarById>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});

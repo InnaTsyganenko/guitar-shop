@@ -35,7 +35,7 @@ describe('Async actions', () => {
 
     const actions = store.getActions().map(({type}) => type);
 
-    expect(actions).toContain('data/fetchGuitars/pending');
+    expect(actions).toContain('DATA/fetchGuitars/pending');
   });
 
   it('should dispatch LoadGuitarById when GET /guitars/1', async () => {
@@ -48,7 +48,7 @@ describe('Async actions', () => {
 
     const actions = store.getActions().map(({type}) => type);
 
-    expect(actions).toContain('data/fetchGuitarById/pending');
+    expect(actions).toContain('DATA/fetchGuitarById/pending');
   });
 
   it('should dispatch PushReview when POST /comments', async () => {
@@ -62,6 +62,6 @@ describe('Async actions', () => {
 
     const actions = store.getActions().map(({type}) => type);
 
-    expect(actions).toContain('data/pushComment/pending');
+    expect(actions).toContain('DATA/pushComment/pending');
   });
 });

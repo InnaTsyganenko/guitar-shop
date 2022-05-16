@@ -18,7 +18,7 @@ function Wrapper(props: WrapperProps): JSX.Element {
 }
 
 Wrapper.defaultProps = {
-  children: 0,
+  children: '',
 };
 
 export default Wrapper;

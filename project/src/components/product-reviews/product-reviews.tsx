@@ -22,6 +22,8 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 
+  const isNewCommentPushed = useAppSelector(getIsReviewNewPushed);
+
   const handleReviewNewBtnClick = () => {
     setModalReviewNewOpened(!isModalReviewNewOpened);
     dispatch(setModalWindowState(false));
@@ -54,13 +56,15 @@ function ProductReviews(props: ProductReviewsProps): JSX.Element {
     window.addEventListener('scroll', throttledCheckPosition);
     window.addEventListener('resize', throttledCheckPosition);
 
+    if (isNewCommentPushed && (quantityComment >= reviews.length)) {
+      setQuantityCommentForDisplay(COMMENTS_QUANTITY_FOR_DISPLAY);
+    }
+
     return () => {
       window.removeEventListener('scroll', throttledCheckPosition);
       window.removeEventListener('resize', throttledCheckPosition);
     };
-  }, [quantityComment, reviews.length]);
-
-  const isNewCommentPushed = useAppSelector(getIsReviewNewPushed);
+  }, [quantityComment, reviews.length, isNewCommentPushed]);
 
   return (
     <section className="reviews">

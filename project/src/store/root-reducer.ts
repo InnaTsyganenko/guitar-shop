@@ -8,7 +8,7 @@ import { NameSpace } from '../const';
 const rootPersistConfig = {
   key: 'root',
   storage,
-  blacklist: ['guitars', 'isModalClose', 'isNewCommentPushed'],
+  blacklist: ['guitars'],
 };
 
 const guitarsPersistConfig = {

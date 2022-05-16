@@ -1,35 +1,31 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
-import { useAppSelector } from '../../hooks';
-import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 function Footer(): JSX.Element {
-  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
-
   return (
     <footer className="footer">
       <div className="footer__container container">
-        <Link className="footer__logo logo" to={`${AppRoute.Catalog}${currentPageCatalog}`}>
+        <Link className="footer__logo logo" to={AppRoute.Root}>
           <img className="logo__img" width="70" height="70" src="../img/svg/logo.svg" alt="Логотип" />
         </Link>
         <div className="socials footer__socials">
           <ul className="socials__list">
             <li className="socials-item">
-              <a className="socials__link" href="https://www.skype.com/" aria-label="skype">
+              <a className="socials__link" href="https://www.skype.com/" aria-label="skype" onClick={(evt) => evt.preventDefault()}>
                 <svg className="socials__icon" width="24" height="24" aria-hidden="true">
                   <use xlinkHref="/img/sprite_auto.svg#icon-skype"></use>
                 </svg>
               </a>
             </li>
             <li className="socials-item">
-              <a className="socials__link" href="https://www.vsco.com/" aria-label="vsco">
+              <a className="socials__link" href="https://www.vsco.com/" aria-label="vsco" onClick={(evt) => evt.preventDefault()}>
                 <svg className="socials__icon" width="24" height="24" aria-hidden="true">
                   <use xlinkHref="/img/sprite_auto.svg#icon-vsco"></use>
                 </svg>
               </a>
             </li>
             <li className="socials-item">
-              <a className="socials__link" href="https://www.pinterest.com/" aria-label="pinterest">
+              <a className="socials__link" href="https://www.pinterest.com/" aria-label="pinterest" onClick={(evt) => evt.preventDefault()}>
                 <svg className="socials__icon" width="24" height="24" aria-hidden="true">
                   <use xlinkHref="/img/sprite_auto.svg#icon-pinterest"></use>
                 </svg>
