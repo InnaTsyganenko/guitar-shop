@@ -15,8 +15,7 @@ type ProductReviewsProps = PropsWithChildren<{
   reviews: GuitarComments;
 }>;
 
-function ProductReviews(props: ProductReviewsProps): JSX.Element {
-  const { currentGuitar, reviews } = props;
+function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Element {
   const [quantityComment, setQuantityCommentForDisplay] = useState(COMMENTS_QUANTITY_FOR_DISPLAY);
   const [isModalReviewNewOpened, setModalReviewNewOpened] = useState(false);
 

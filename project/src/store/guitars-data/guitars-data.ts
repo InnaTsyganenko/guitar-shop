@@ -1,10 +1,10 @@
 import { Guitar } from './../../types/guitars';
 import { createSlice } from '@reduxjs/toolkit';
 import { GuitarsData } from '../../types/state';
-import { NameSpace, ValuesForInitialState } from '../../const';
+import { NameSpace, InitialStateValues } from '../../const';
 
 const initialState: GuitarsData = {
-  guitarsTotalCount: ValuesForInitialState.InitialTotalCountGuitars,
+  guitarsTotalCount: InitialStateValues.InitialTotalCountGuitars,
   guitars: [],
   guitarById: {} as Guitar,
   guitarComments: [],

@@ -4,7 +4,7 @@ export const GUITARS_QUANTITY_FOR_DISPLAY = 9;
 export const COMMENTS_QUANTITY_FOR_DISPLAY = 3;
 export const TOTAL_RATING_UNITS = 5;
 
-export enum ValuesForInitialState {
+export enum InitialStateValues {
   InitialPickedId = 0,
   InitialTotalCountGuitars = 0,
 }
@@ -39,13 +39,13 @@ export enum CardGuitarTabs {
   description = 'Описание',
 }
 
-export enum TypeofGuitar {
+export enum GuitarType {
   electric = 'Электрогитара',
   acoustic = 'Акустическая гитара',
   ukulele = 'Укулеле',
 }
 
-export const ValueofRating = {
+export const RatingValues = {
   1: 'Ужасно',
   2: 'Плохо',
   3: 'Нормально',

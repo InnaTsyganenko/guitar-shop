@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react';
 import { PropsWithChildren, useState, useEffect } from 'react';
-import { ValueofRating } from '../../const';
+import { RatingValues } from '../../const';
 import { useAppDispatch } from '../../hooks';
 import { pushCommentAction } from '../../store/api-actions';
 import { Guitar } from '../../types/guitars';
@@ -11,8 +11,7 @@ type ModalReviewNewProps = PropsWithChildren<{
   onModalReviewNewCloseClick: () => void;
 }>;
 
-function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
-  const { guitar, onModalReviewNewCloseClick } = props;
+function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 
@@ -84,7 +83,7 @@ function ModalReviewNew(props: ModalReviewNewProps): JSX.Element {
                 </div>
                 <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                   <div className="rate rate--reverse">
-                    {Object.entries(ValueofRating).reverse().map((value, key) => (
+                    {Object.entries(RatingValues).reverse().map((value, key) => (
                       <React.Fragment key={value[0]}>
                         <input
                           className="visually-hidden"

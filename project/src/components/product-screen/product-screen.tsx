@@ -10,7 +10,7 @@ import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { toast } from 'react-toastify';
-import { CardGuitarTabs, TypeofGuitar } from '../../const';
+import { CardGuitarTabs, GuitarType } from '../../const';
 import Wrapper from '../wrapper/wrapper';
 
 function ProductScreen(): JSX.Element {
@@ -94,7 +94,7 @@ function ProductScreen(): JSX.Element {
                         </tr>
                         <tr className="tabs__table-row">
                           <td className="tabs__title">Тип:</td>
-                          <td className="tabs__value">{TypeofGuitar[guitar.type as keyof object]}</td>
+                          <td className="tabs__value">{GuitarType[guitar.type as keyof object]}</td>
                         </tr>
                         <tr className="tabs__table-row">
                           <td className="tabs__title">Количество струн:</td>

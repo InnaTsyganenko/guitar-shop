@@ -21,7 +21,7 @@ describe('Component: Rating', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <Rating  rating={1} />
+          <Rating rating={1} />
         </HistoryRouter>
       </Provider>,
     );

@@ -3,9 +3,8 @@ import { createAsyncThunk } from '@reduxjs/toolkit';
 import { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush } from './guitars-data/guitars-data';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
-import { PickedId, GuitarById, CurrentPageCatalog, CommentPost, Guitar } from '../types/guitars';
+import { Guitars, PickedId, GuitarById, CurrentPageCatalog, CommentPost, Guitar } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
-import { GUITARS_QUANTITY_FOR_DISPLAY } from '../const';
 
 export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
   dispatch: AppDispatch,
@@ -13,13 +12,13 @@ export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
   extra: AxiosInstance
 }>(
   'DATA/fetchGuitars',
-  async (currentPageCatalog, {dispatch, extra: api}) => {
+  async (_arg, {dispatch, extra: api}) => {
     try {
-      const response = await api.get(`${APIRoute.Guitars}?_start=${currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY}&_limit=${GUITARS_QUANTITY_FOR_DISPLAY}&_embed=comments`);
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
 
-      dispatch(setTotalCountGuitarsFromResponse(response.headers['x-total-count']));
+      dispatch(setTotalCountGuitarsFromResponse(filtredGuitars.length));
       dispatch(loadGuitars(filtredGuitars));
 
     } catch (error) {

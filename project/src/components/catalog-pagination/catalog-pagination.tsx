@@ -10,8 +10,7 @@ type CatalogPaginatioProps = PropsWithChildren<{
   onPaginationClick: (page: number) => void;
 }>;
 
-function CatalogPagination(props: CatalogPaginatioProps): JSX.Element {
-  const {page, totalPages, onPaginationClick} = props;
+function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginatioProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 

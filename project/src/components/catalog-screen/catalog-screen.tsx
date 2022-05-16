@@ -65,7 +65,7 @@ function CatalogScreen(): JSX.Element {
             <div className="catalog">
               <CatalogFilterAndSort />
               <div className="cards catalog__cards">
-                {guitars.map((guitar) => (
+                {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
                   <div className="product-card" key={guitar.id}>
                     <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
                     <div className="product-card__info">

@@ -11,9 +11,7 @@ type BreadcrumbsProps = PropsWithChildren<{
   guitarName: GuitarName;
 }>;
 
-function Breadcrumbs(props: BreadcrumbsProps): JSX.Element {
-  const { guitarId, guitarName } = props;
-
+function Breadcrumbs({guitarId, guitarName}: BreadcrumbsProps): JSX.Element {
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
   return (

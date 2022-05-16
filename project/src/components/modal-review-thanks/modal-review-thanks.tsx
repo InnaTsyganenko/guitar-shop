@@ -4,8 +4,7 @@ type ModalReviewThanksProps = PropsWithChildren<{
   onModalThanksCloseClick: () => void;
 }>;
 
-function ModalReviewThanks(props: ModalReviewThanksProps): JSX.Element {
-  const { onModalThanksCloseClick } = props;
+function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): JSX.Element {
 
   useEffect(() => {
     const isEscEvent = (evt: KeyboardEvent) => {
@@ -21,7 +20,7 @@ function ModalReviewThanks(props: ModalReviewThanksProps): JSX.Element {
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--success modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal onClick={() => onModalThanksCloseClick()} />
+          <div className="modal__overlay" data-close-modal onClick={onModalThanksCloseClick} />
           <div className="modal__content">
             <svg className="modal__icon" width={26} height={20} aria-hidden="true">
               <use xlinkHref="#icon-success" />
@@ -30,11 +29,11 @@ function ModalReviewThanks(props: ModalReviewThanksProps): JSX.Element {
             <div className="modal__button-container modal__button-container--review">
               <button
                 className="button button--small modal__button modal__button--review"
-                onClick={() => onModalThanksCloseClick()}
+                onClick={onModalThanksCloseClick}
               >К покупкам!
               </button>
             </div>
-            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть" onClick={() => onModalThanksCloseClick()}><span className="button-cross__icon" /><span className="modal__close-btn-interactive-area" />
+            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть" onClick={onModalThanksCloseClick}><span className="button-cross__icon" /><span className="modal__close-btn-interactive-area" />
             </button>
           </div>
         </div>
