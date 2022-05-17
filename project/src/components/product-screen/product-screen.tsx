@@ -38,6 +38,11 @@ function ProductScreen(): JSX.Element {
 
   const guitar = useAppSelector(getGuitarById);
 
+  const handleCardGuitarTabs = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>, key: string) => {
+    evt.preventDefault();
+    setActiveTab(key);
+  };
+
   if (error) {
     return (
       <Wrapper>
@@ -71,10 +76,7 @@ function ProductScreen(): JSX.Element {
                 <div className="tabs">
                   {Object.entries(CardGuitarTabs).map(([key, value]) => (
                     <a key={key}
-                      onClick={(evt) => {
-                        evt.preventDefault();
-                        setActiveTab(key);
-                      }}
+                      onClick={(evt) => handleCardGuitarTabs(evt, key)}
                       className={activeTab === key ?
                         'button button--medium tabs__button'
                         : 'button button--black-border button--medium tabs__button'}

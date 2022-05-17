@@ -31,26 +31,27 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
     });
   };
 
+  const handleModalClose = () => {
+    onModalReviewNewCloseClick();
+    dispatch(setModalWindowState(true));
+  };
+
   useEffect(() => {
     const isEscEvent = (evt: KeyboardEvent) => {
       if (evt.key === ('Escape' || 'Esc')){
-        onModalReviewNewCloseClick();
-        dispatch(setModalWindowState(true));
+        handleModalClose();
       }
     };
     window.addEventListener('keydown', isEscEvent);
     return () => window.removeEventListener('keydown', isEscEvent);
-  },[dispatch, onModalReviewNewCloseClick]);
+  },[dispatch, handleModalClose]);
 
   return (
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--review modal-for-ui-kit">
         <div className="modal__wrapper">
           <div className="modal__overlay" data-close-modal
-            onClick={() => {
-              onModalReviewNewCloseClick();
-              dispatch(setModalWindowState(true));
-            }}
+            onClick={handleModalClose}
           >
           </div>
           <div className="modal__content">
@@ -63,8 +64,7 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
               onSubmit={(evt) => {
                 evt.preventDefault();
                 dispatch(pushCommentAction(state));
-                onModalReviewNewCloseClick();
-                setModalWindowState(true);
+                handleModalClose();
               }}
             >
               <div className="form-review__wrapper">
@@ -138,10 +138,7 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>
             <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть"
-              onClick={() => {
-                onModalReviewNewCloseClick();
-                dispatch(setModalWindowState(true));
-              }}
+              onClick={handleModalClose}
             ><span className="button-cross__icon"></span><span className="modal__close-btn-interactive-area"></span>
             </button>
           </div>

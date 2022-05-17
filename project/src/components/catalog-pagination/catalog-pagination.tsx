@@ -20,6 +20,11 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
     countPages.push(countPages.length + DEFAULT_CATALOG_PAGE);
   }
 
+  const handlePaginationBtnClick = (updatePage: number) => {
+    onPaginationClick(updatePage);
+    dispatch(setCurrentPageCatalog(updatePage));
+  };
+
   if (countPages.length === DEFAULT_CATALOG_PAGE) {
     return <div data-testid="div"></div>;
   } else {
@@ -30,10 +35,7 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
             <li className="pagination__page pagination__page--prev" id="prev">
               <Link
                 className="link pagination__page-link"
-                onClick={() => {
-                  onPaginationClick(page - STEP_ONE);
-                  dispatch(setCurrentPageCatalog(page - STEP_ONE));
-                }}
+                onClick={() => handlePaginationBtnClick(page - STEP_ONE)}
                 to={`${AppRoute.Catalog}${page - STEP_ONE}`}
               >Назад
               </Link>
@@ -49,10 +51,7 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
             >
               <Link
                 className="link pagination__page-link"
-                onClick={() => {
-                  onPaginationClick(item);
-                  dispatch(setCurrentPageCatalog(item));
-                }}
+                onClick={() => handlePaginationBtnClick(item)}
                 to={`${AppRoute.Catalog}${item}`}
               >{item}
               </Link>
@@ -63,10 +62,7 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
             <li className="pagination__page pagination__page--next" id="next">
               <Link
                 className="link pagination__page-link"
-                onClick={() => {
-                  onPaginationClick(page + STEP_ONE);
-                  dispatch(setCurrentPageCatalog(page + STEP_ONE));
-                }}
+                onClick={() => handlePaginationBtnClick(page + STEP_ONE)}
                 to={`${AppRoute.Catalog}${page + STEP_ONE}`}
               >Далее
               </Link>

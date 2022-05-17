@@ -1,7 +1,6 @@
 import { PropsWithChildren } from 'react';
-import { RatingValues } from '../../const';
+import { RatingValues, TOTAL_RATING_UNITS } from '../../const';
 import { RatingCount, CommentsLength } from '../../types/guitars';
-import { countFullStars, countEmptyStars } from '../../utils/utils';
 
 type RatingProps = PropsWithChildren<{
   rating: RatingCount;
@@ -10,14 +9,15 @@ type RatingProps = PropsWithChildren<{
 }>;
 
 function Rating({rating, commentsLength = 0, isRatingWithCountReviews = false}: RatingProps): JSX.Element {
+  rating = Math.round(rating);
   return (
     <>
-      {countFullStars(rating).map((item) => (
+      {Array.from(Array(rating).keys()).map((item) => (
         <svg key={item} width="14" height="14" aria-hidden="true">
           <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
         </svg>
       ))}
-      {countEmptyStars(rating).map((item) => (
+      {Array.from(Array(TOTAL_RATING_UNITS - rating).keys()).map((item) => (
         <svg key={item} width="14" height="14" aria-hidden="true">
           <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
         </svg>

@@ -22,7 +22,7 @@ function CatalogScreen(): JSX.Element {
 
   const dispatch = useAppDispatch();
 
-  const handlePaginationBtnClick = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
+  const handleUpdatePageCatalog = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
   useEffect(() => {
@@ -84,9 +84,7 @@ function CatalogScreen(): JSX.Element {
                       <Link
                         className="button button--mini"
                         aria-label="Корзина"
-                        onClick={() => {
-                          dispatch(getIdGuitar(guitar.id));
-                        }}
+                        onClick={() => dispatch(getIdGuitar(guitar.id))}
                         to={`${AppRoute.Guitars}${guitar.id}`}
                       >Подробнее
                       </Link>
@@ -98,7 +96,7 @@ function CatalogScreen(): JSX.Element {
               <CatalogPagination
                 page={currentPageCatalog}
                 totalPages={totalPages}
-                onPaginationClick={handlePaginationBtnClick}
+                onPaginationClick={handleUpdatePageCatalog}
               />
             </div>
           </div>
