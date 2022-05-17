@@ -1,10 +1,11 @@
-import React, { ChangeEvent } from 'react';
-import { PropsWithChildren, useState, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect, useCallback } from 'react';
 import { RatingValues } from '../../const';
 import { useAppDispatch } from '../../hooks';
 import { pushCommentAction } from '../../store/api-actions';
 import { Guitar } from '../../types/guitars';
 import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
+import { NewReview } from '../../types/use-form-interface';
+import { useForm } from '../../hooks/use-form';
 
 type ModalReviewNewProps = PropsWithChildren<{
   guitar: Guitar;
@@ -15,26 +16,11 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
 
   const dispatch = useAppDispatch();
 
-  const [state, setState] = useState({
-    guitarId: guitar.id,
-    userName: '',
-    advantage: '',
-    disadvantage: '',
-    comment: '',
-    rating: 0,
-  });
 
-  const handleInputRatingChange = (evt: ChangeEvent<HTMLInputElement>) => {
-    setState({
-      ...state,
-      rating: parseInt(evt.target.value, 10),
-    });
-  };
-
-  const handleModalClose = () => {
+  const handleModalClose = useCallback(() => {
     onModalReviewNewCloseClick();
-    dispatch(setModalWindowState(true));
-  };
+    dispatch(setModalWindowState(false));
+  }, [onModalReviewNewCloseClick, dispatch]);
 
   useEffect(() => {
     const isEscEvent = (evt: KeyboardEvent) => {
@@ -45,6 +31,47 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
     window.addEventListener('keydown', isEscEvent);
     return () => window.removeEventListener('keydown', isEscEvent);
   },[dispatch, handleModalClose]);
+
+
+  const { handleSubmit, handleChange, data: review, errors } = useForm<NewReview>({
+    validations: {
+      userName: {
+        custom: {
+          isValid: (value) => value !== undefined,
+          message: 'Заполните поле',
+        },
+      },
+      advantage: {
+        custom: {
+          isValid: (value) => value !== undefined,
+          message: 'Заполните поле',
+        },
+      },
+      disadvantage: {
+        custom: {
+          isValid: (value) => value !== undefined,
+          message: 'Заполните поле',
+        },
+      },
+      comment: {
+        custom: {
+          isValid: (value) => value !== undefined,
+          message: 'Заполните поле',
+        },
+      },
+      rating: {
+        custom: {
+          isValid: (value) => parseInt(value, 5) > 0,
+          message: 'Поставьте оценку',
+        },
+      },
+    },
+    onSubmit: () => {
+      review.guitarId = guitar.id;
+      dispatch(pushCommentAction(review));
+      handleModalClose();
+    },
+  });
 
   return (
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
@@ -61,11 +88,8 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
               className="form-review"
               method="post"
               action="#"
-              onSubmit={(evt) => {
-                evt.preventDefault();
-                dispatch(pushCommentAction(state));
-                handleModalClose();
-              }}
+              onSubmit={handleSubmit}
+              noValidate
             >
               <div className="form-review__wrapper">
                 <div className="form-review__name-wrapper">
@@ -75,29 +99,30 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
                     id="user-name"
                     type="text"
                     autoComplete="off"
-                    onChange={(event) => state.userName = event.target.value}
+                    value={review.userName || ''}
+                    onChange={handleChange('userName')}
                     autoFocus
                     required
                   />
-                  <p className="form-review__warning">Заполните поле</p>
+                  <p className="form-review__warning">{errors.userName}&nbsp;</p>
                 </div>
                 <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
                   <div className="rate rate--reverse">
-                    {Object.entries(RatingValues).reverse().map((value, key) => (
-                      <React.Fragment key={value[0]}>
+                    {Object.entries(RatingValues).reverse().map((item, key) => (
+                      <React.Fragment key={item[0]}>
                         <input
                           className="visually-hidden"
-                          id={`star-${value[0]}`}
+                          id={`star-${item[0]}`}
                           name="rate"
                           type="radio"
-                          value={value[0]}
-                          onChange={(evt) => handleInputRatingChange(evt)}
+                          value={item[0]}
+                          onChange={handleChange<number>('rating', (value) => parseInt(value, 10))}
                           required
                         />
-                        <label className="rate__label" htmlFor={`star-${value[0]}`} title={value[1] as keyof object}></label>
+                        <label className="rate__label" htmlFor={`star-${item[0]}`} title={item[1] as keyof object}></label>
                       </React.Fragment>
                     ))}
-                    <p className="rate__message">Поставьте оценку</p>
+                    <p className="rate__message">{errors.rating}&nbsp;</p>
                   </div>
                 </div>
               </div>
@@ -108,10 +133,10 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
                 id="advantage"
                 type="text"
                 autoComplete="off"
-                onChange={(event) => state.advantage = event.target.value}
+                onChange={handleChange('advantage')}
                 required
               />
-              <p className="form-review__warning">Заполните поле</p>
+              <p className="form-review__warning">{errors.advantage}&nbsp;</p>
 
               <label className="form-review__label form-review__label--required" htmlFor="disadvantage">Недостатки</label>
               <input
@@ -119,10 +144,10 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
                 id="disadvantage"
                 type="text"
                 autoComplete="off"
-                onChange={(event) => state.disadvantage = event.target.value}
+                onChange={handleChange('disadvantage')}
                 required
               />
-              <p className="form-review__warning">Заполните поле</p>
+              <p className="form-review__warning">{errors.disadvantage}&nbsp;</p>
 
               <label className="form-review__label form-review__label--required" htmlFor="comment">Комментарий</label>
               <textarea
@@ -130,11 +155,11 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
                 id="comment"
                 rows={10}
                 autoComplete="off"
-                onChange={(event) => state.comment = event.target.value}
+                onChange={handleChange('comment')}
                 required
               >
               </textarea>
-              <p className="form-review__warning">Заполните поле</p>
+              <p className="form-review__warning">{errors.comment}&nbsp;</p>
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>
             <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть"
