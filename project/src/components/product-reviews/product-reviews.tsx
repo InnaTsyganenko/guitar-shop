@@ -23,14 +23,18 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
 
   const isNewCommentPushed = useAppSelector(getIsReviewNewPushed);
 
+  const newReviewButton = document.querySelector('.reviews__sumbit-button');
+
   const handleReviewNewBtnClick = () => {
     setModalReviewNewOpened(!isModalReviewNewOpened);
-    dispatch(setModalWindowState(false));
+    dispatch(setModalWindowState(true));
+    (newReviewButton as HTMLElement)?.focus();
   };
 
   const handleModalThanksCloseClick = () => {
     dispatch(setIsNewCommentPush(false));
-    dispatch(setModalWindowState(true));
+    dispatch(setModalWindowState(false));
+    (newReviewButton as HTMLElement)?.focus();
   };
 
   const sortReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());

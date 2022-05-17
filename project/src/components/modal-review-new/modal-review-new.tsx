@@ -16,6 +16,36 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
 
   const dispatch = useAppDispatch();
 
+  useEffect(() => {
+    const modal = document.getElementById('modal');
+
+    const focusableElementsString = ('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]');
+
+    const focusableElements = Array.prototype.slice.call(modal?.querySelectorAll(focusableElementsString));
+    const firstTabStop = focusableElements[0];
+    const lastTabStop = focusableElements[focusableElements.length - 1];
+    firstTabStop.focus();
+
+    function trapTabKey(evt: KeyboardEvent) {
+      if (evt.key === 'Tab') {
+        if (evt.shiftKey) {
+          if (document.activeElement === firstTabStop) {
+            evt.preventDefault();
+            lastTabStop.focus();
+          }
+
+        } else {
+          if (document.activeElement === lastTabStop) {
+            evt.preventDefault();
+            firstTabStop.focus();
+          }
+        }
+      }
+    }
+
+    modal?.addEventListener('keydown', trapTabKey);
+    return () => modal?.removeEventListener('keydown', trapTabKey);
+  },[dispatch]);
 
   const handleModalClose = useCallback(() => {
     onModalReviewNewCloseClick();
@@ -81,7 +111,7 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
             onClick={handleModalClose}
           >
           </div>
-          <div className="modal__content">
+          <div className="modal__content" id="modal">
             <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
             <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
             <form

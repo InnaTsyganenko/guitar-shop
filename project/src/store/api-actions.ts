@@ -1,6 +1,7 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush } from './guitars-data/guitars-data';
+import { setModalWindowState } from './guitars-operations/guitars-operations';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
 import { Guitars, PickedId, GuitarById, CurrentPageCatalog, CommentPost, Guitar } from '../types/guitars';
@@ -53,6 +54,7 @@ export const pushCommentAction = createAsyncThunk<void, CommentPost, {
     try {
       await api.post<GuitarById>(APIRoute.Comments, {guitarId, userName, advantage, disadvantage, comment, rating});
       dispatch(setIsNewCommentPush(true));
+      dispatch(setModalWindowState(true));
 
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${guitarId}?_embed=comments`);
       dispatch(loadGuitarById(data));

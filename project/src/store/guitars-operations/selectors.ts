@@ -5,4 +5,4 @@ export const getCurrentPageCatalog = (state: State): number => state[NameSpace.g
 
 export const getPickedId = (state: State): number => state[NameSpace.guitars].pickedId;
 
-export const getStatusModalWindow = (state: State): boolean => state[NameSpace.guitars].isModalClose;
+export const getStatusModalWindow = (state: State): boolean => state[NameSpace.guitars].isModalOpen;

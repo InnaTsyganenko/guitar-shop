@@ -8,11 +8,11 @@ import { NameSpace } from '../const';
 const rootPersistConfig = {
   key: 'root',
   storage,
-  blacklist: ['guitars'],
+  blacklist: ['GUITARS'],
 };
 
 const guitarsPersistConfig = {
-  key: 'guitars',
+  key: 'GUITARS',
   storage,
   whitelist: ['pickedId', 'currentPageCatalog'],
 };

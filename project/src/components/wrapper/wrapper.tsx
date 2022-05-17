@@ -8,10 +8,10 @@ type WrapperProps = PropsWithChildren<{
 
 function Wrapper({children = ''}: WrapperProps): JSX.Element {
 
-  const statusModalWindow = useAppSelector(getStatusModalWindow);
+  const isModalWindowOpen = useAppSelector(getStatusModalWindow);
 
   return (
-    <div className={statusModalWindow ? 'wrapper' : 'wrapper wrapper--no-scrollbar'} data-testid="wrapper">
+    <div className={isModalWindowOpen ? 'wrapper wrapper--no-scrollbar' : 'wrapper'} data-testid="wrapper">
       {children}
     </div>
   );

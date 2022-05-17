@@ -11,7 +11,7 @@ const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
   DATA: {isDataLoaded: true},
-  GUITARS: {pickedId: 1, currentPageCatalog: 1, isModalClose: true},
+  GUITARS: {pickedId: 1, currentPageCatalog: 1, isModalOpen: true},
 });
 
 describe('Component: LoadingScreen', () => {

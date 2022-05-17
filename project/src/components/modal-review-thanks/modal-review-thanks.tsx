@@ -7,6 +7,37 @@ type ModalReviewThanksProps = PropsWithChildren<{
 function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): JSX.Element {
 
   useEffect(() => {
+    const modal = document.getElementById('modal');
+
+    const focusableElementsString = ('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]');
+
+    const focusableElements = Array.prototype.slice.call(modal?.querySelectorAll(focusableElementsString));
+    const firstTabStop = focusableElements[0];
+    const lastTabStop = focusableElements[focusableElements.length - 1];
+    firstTabStop.focus();
+
+    function trapTabKey(evt: KeyboardEvent) {
+      if (evt.key === 'Tab') {
+        if (evt.shiftKey) {
+          if (document.activeElement === firstTabStop) {
+            evt.preventDefault();
+            lastTabStop.focus();
+          }
+
+        } else {
+          if (document.activeElement === lastTabStop) {
+            evt.preventDefault();
+            firstTabStop.focus();
+          }
+        }
+      }
+    }
+
+    modal?.addEventListener('keydown', trapTabKey);
+    return () => modal?.removeEventListener('keydown', trapTabKey);
+  },[]);
+
+  useEffect(() => {
     const isEscEvent = (evt: KeyboardEvent) => {
       if (evt.key === ('Escape' || 'Esc')){
         onModalThanksCloseClick();
@@ -21,7 +52,7 @@ function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): J
       <div className="modal is-active modal--success modal-for-ui-kit">
         <div className="modal__wrapper">
           <div className="modal__overlay" data-close-modal onClick={onModalThanksCloseClick} />
-          <div className="modal__content">
+          <div className="modal__content" id="modal">
             <svg className="modal__icon" width={26} height={20} aria-hidden="true">
               <use xlinkHref="#icon-success" />
             </svg>
