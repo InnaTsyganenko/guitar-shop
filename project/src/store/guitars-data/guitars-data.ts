@@ -9,7 +9,7 @@ const initialState: GuitarsData = {
   guitarById: {} as Guitar,
   guitarComments: [],
   isDataLoaded: false,
-  isNewCommentPushed: false,
+  isCommentPushed: false,
 };
 
 export const guitarsData = createSlice({
@@ -27,7 +27,7 @@ export const guitarsData = createSlice({
       state.guitarById = action.payload;
     },
     setIsNewCommentPush: (state, action) => {
-      state.isNewCommentPushed = action.payload;
+      state.isCommentPushed = action.payload;
     },
   },
 });

@@ -21,21 +21,20 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
 
   const dispatch = useAppDispatch();
 
-  const isNewCommentPushed = useAppSelector(getIsReviewNewPushed);
-
   const newReviewButton = document.querySelector('.reviews__sumbit-button');
 
   const handleReviewNewBtnClick = () => {
     setModalCommentOpened(!isModalCommentOpen);
     dispatch(setModalWindowState(true));
-    (newReviewButton as HTMLElement)?.focus();
   };
 
-  const handleModalThanksCloseClick = () => {
+  const handleModalClose = () => {
     dispatch(setIsNewCommentPush(false));
     dispatch(setModalWindowState(false));
     (newReviewButton as HTMLElement)?.focus();
   };
+
+  const isCommentPushed = useAppSelector(getIsReviewNewPushed);
 
   const sortReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
 
@@ -59,7 +58,7 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
     window.addEventListener('scroll', throttledCheckPosition);
     window.addEventListener('resize', throttledCheckPosition);
 
-    if (isNewCommentPushed && (quantityComment >= reviews.length)) {
+    if (isCommentPushed && (quantityComment >= reviews.length)) {
       setQuantityCommentForDisplay(COMMENTS_QUANTITY_FOR_DISPLAY);
     }
 
@@ -67,7 +66,7 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
       window.removeEventListener('scroll', throttledCheckPosition);
       window.removeEventListener('resize', throttledCheckPosition);
     };
-  }, [quantityComment, reviews.length, isNewCommentPushed]);
+  }, [quantityComment, reviews.length, isCommentPushed]);
 
   return (
     <section className="reviews">
@@ -116,9 +115,9 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
           onModalCommentCloseClick={handleReviewNewBtnClick}
         />}
 
-      {isNewCommentPushed &&
+      {isCommentPushed &&
         <ModalReviewThanks
-          onModalThanksCloseClick={handleModalThanksCloseClick}
+          onModalThanksCloseClick={handleModalClose}
         />}
 
     </section>

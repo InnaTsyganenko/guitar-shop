@@ -10,4 +10,4 @@ export const getStatusLoadedData = (state: State): boolean => state[NameSpace.da
 
 export const getGuitarById = (state: State): Guitar => state[NameSpace.data].guitarById;
 
-export const getIsReviewNewPushed = (state: State): boolean => state[NameSpace.data].isNewCommentPushed;
+export const getIsReviewNewPushed = (state: State): boolean => state[NameSpace.data].isCommentPushed;
