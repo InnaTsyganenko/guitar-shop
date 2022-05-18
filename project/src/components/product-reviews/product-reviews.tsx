@@ -17,7 +17,7 @@ type ProductReviewsProps = PropsWithChildren<{
 
 function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Element {
   const [quantityComment, setQuantityCommentForDisplay] = useState(COMMENTS_QUANTITY_FOR_DISPLAY);
-  const [isModalReviewNewOpened, setModalReviewNewOpened] = useState(false);
+  const [isModalCommentOpen, setModalCommentOpened] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -26,7 +26,7 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
   const newReviewButton = document.querySelector('.reviews__sumbit-button');
 
   const handleReviewNewBtnClick = () => {
-    setModalReviewNewOpened(!isModalReviewNewOpened);
+    setModalCommentOpened(!isModalCommentOpen);
     dispatch(setModalWindowState(true));
     (newReviewButton as HTMLElement)?.focus();
   };
@@ -110,10 +110,10 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
         :
         <a className="button button--up button--red-border button--big reviews__up-button" href="#header">Наверх</a>}
 
-      {isModalReviewNewOpened &&
+      {isModalCommentOpen &&
         <ModalReviewNew
           guitar={currentGuitar}
-          onModalReviewNewCloseClick={handleReviewNewBtnClick}
+          onModalCommentCloseClick={handleReviewNewBtnClick}
         />}
 
       {isNewCommentPushed &&

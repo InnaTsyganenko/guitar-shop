@@ -6,51 +6,25 @@ import { Guitar } from '../../types/guitars';
 import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
 import { NewReview } from '../../types/use-form-interface';
 import { useForm } from '../../hooks/use-form';
+import { trapFocusInsideModalWindow } from '../../utils/utils';
 
 type ModalReviewNewProps = PropsWithChildren<{
   guitar: Guitar;
-  onModalReviewNewCloseClick: () => void;
+  onModalCommentCloseClick: () => void;
 }>;
 
-function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProps): JSX.Element {
+function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps): JSX.Element {
 
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    const modal = document.getElementById('modal');
-
-    const focusableElementsString = ('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]');
-
-    const focusableElements = Array.prototype.slice.call(modal?.querySelectorAll(focusableElementsString));
-    const firstTabStop = focusableElements[0];
-    const lastTabStop = focusableElements[focusableElements.length - 1];
-    firstTabStop.focus();
-
-    function trapTabKey(evt: KeyboardEvent) {
-      if (evt.key === 'Tab') {
-        if (evt.shiftKey) {
-          if (document.activeElement === firstTabStop) {
-            evt.preventDefault();
-            lastTabStop.focus();
-          }
-
-        } else {
-          if (document.activeElement === lastTabStop) {
-            evt.preventDefault();
-            firstTabStop.focus();
-          }
-        }
-      }
-    }
-
-    modal?.addEventListener('keydown', trapTabKey);
-    return () => modal?.removeEventListener('keydown', trapTabKey);
+    trapFocusInsideModalWindow();
   },[dispatch]);
 
   const handleModalClose = useCallback(() => {
-    onModalReviewNewCloseClick();
+    onModalCommentCloseClick();
     dispatch(setModalWindowState(false));
-  }, [onModalReviewNewCloseClick, dispatch]);
+  }, [onModalCommentCloseClick, dispatch]);
 
   useEffect(() => {
     const isEscEvent = (evt: KeyboardEvent) => {
@@ -66,32 +40,32 @@ function ModalReviewNew({guitar, onModalReviewNewCloseClick}: ModalReviewNewProp
   const { handleSubmit, handleChange, data: review, errors } = useForm<NewReview>({
     validations: {
       userName: {
-        custom: {
-          isValid: (value) => value !== undefined,
+        required: {
+          value: true,
           message: 'Заполните поле',
         },
       },
       advantage: {
-        custom: {
-          isValid: (value) => value !== undefined,
+        required: {
+          value: true,
           message: 'Заполните поле',
         },
       },
       disadvantage: {
-        custom: {
-          isValid: (value) => value !== undefined,
+        required: {
+          value: true,
           message: 'Заполните поле',
         },
       },
       comment: {
-        custom: {
-          isValid: (value) => value !== undefined,
+        required: {
+          value: true,
           message: 'Заполните поле',
         },
       },
       rating: {
         custom: {
-          isValid: (value) => parseInt(value, 5) > 0,
+          isValid: (value) => parseInt(value, 10) > 0,
           message: 'Поставьте оценку',
         },
       },

@@ -1,4 +1,5 @@
 import { PropsWithChildren, useEffect } from 'react';
+import { trapFocusInsideModalWindow } from '../../utils/utils';
 
 type ModalReviewThanksProps = PropsWithChildren<{
   onModalThanksCloseClick: () => void;
@@ -7,34 +8,7 @@ type ModalReviewThanksProps = PropsWithChildren<{
 function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): JSX.Element {
 
   useEffect(() => {
-    const modal = document.getElementById('modal');
-
-    const focusableElementsString = ('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]');
-
-    const focusableElements = Array.prototype.slice.call(modal?.querySelectorAll(focusableElementsString));
-    const firstTabStop = focusableElements[0];
-    const lastTabStop = focusableElements[focusableElements.length - 1];
-    firstTabStop.focus();
-
-    function trapTabKey(evt: KeyboardEvent) {
-      if (evt.key === 'Tab') {
-        if (evt.shiftKey) {
-          if (document.activeElement === firstTabStop) {
-            evt.preventDefault();
-            lastTabStop.focus();
-          }
-
-        } else {
-          if (document.activeElement === lastTabStop) {
-            evt.preventDefault();
-            firstTabStop.focus();
-          }
-        }
-      }
-    }
-
-    modal?.addEventListener('keydown', trapTabKey);
-    return () => modal?.removeEventListener('keydown', trapTabKey);
+    trapFocusInsideModalWindow();
   },[]);
 
   useEffect(() => {

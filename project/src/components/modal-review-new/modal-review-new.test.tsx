@@ -23,7 +23,7 @@ describe('Component: ModalReviewNew', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ModalReviewNew guitar={guitar} onModalReviewNewCloseClick={jest.fn()} />
+          <ModalReviewNew guitar={guitar} onModalCommentCloseClick={jest.fn()} />
         </HistoryRouter>
       </Provider>,
     );
