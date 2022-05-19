@@ -1,5 +1,6 @@
 import { PropsWithChildren, useEffect } from 'react';
 import { trapFocusInsideModalWindow } from '../../utils/utils';
+import useKeypress from '../../hooks/use-keypress';
 
 type ModalReviewThanksProps = PropsWithChildren<{
   onModalThanksCloseClick: () => void;
@@ -11,15 +12,9 @@ function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): J
     trapFocusInsideModalWindow();
   },[]);
 
-  useEffect(() => {
-    const isEscEvent = (evt: KeyboardEvent) => {
-      if (evt.key === ('Escape' || 'Esc')){
-        onModalThanksCloseClick();
-      }
-    };
-    window.addEventListener('keydown', isEscEvent);
-    return () => window.removeEventListener('keydown', isEscEvent);
-  },[onModalThanksCloseClick]);
+  useKeypress('Escape', () => {
+    onModalThanksCloseClick();
+  });
 
   return (
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>

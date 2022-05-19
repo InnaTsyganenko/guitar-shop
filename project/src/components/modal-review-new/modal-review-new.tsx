@@ -7,6 +7,7 @@ import { setModalWindowState } from '../../store/guitars-operations/guitars-oper
 import { NewReview } from '../../types/use-form-interface';
 import { useForm } from '../../hooks/use-form';
 import { trapFocusInsideModalWindow } from '../../utils/utils';
+import useKeypress from '../../hooks/use-keypress';
 
 type ModalReviewNewProps = PropsWithChildren<{
   guitar: Guitar;
@@ -26,16 +27,9 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
     dispatch(setModalWindowState(false));
   }, [onModalCommentCloseClick, dispatch]);
 
-  useEffect(() => {
-    const isEscEvent = (evt: KeyboardEvent) => {
-      if (evt.key === ('Escape' || 'Esc')){
-        handleModalClose();
-      }
-    };
-    window.addEventListener('keydown', isEscEvent);
-    return () => window.removeEventListener('keydown', isEscEvent);
-  },[dispatch, handleModalClose]);
-
+  useKeypress('Escape', () => {
+    handleModalClose();
+  });
 
   const { handleSubmit, handleChange, data: review, errors } = useForm<NewReview>({
     validations: {
