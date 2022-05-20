@@ -11,7 +11,6 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 

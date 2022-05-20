@@ -10,7 +10,7 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
+  DATA: {},
   GUITARS: {pickedId: 1, currentPageCatalog: 1, isModalOpen: true},
 });
 
@@ -21,12 +21,12 @@ describe('Component: LoadingScreen', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <LoadingScreen />
+          <LoadingScreen text={'Load'} />
         </HistoryRouter>
       </Provider>,
     );
 
-    const textElement = screen.getByText('Loading...');
+    const textElement = screen.getByText('Load');
 
     expect(textElement).toBeInTheDocument();
   });

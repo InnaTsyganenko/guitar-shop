@@ -5,9 +5,12 @@ export type GuitarsData = {
   guitarsTotalCount: GuitarsTotalCount,
   guitars: Guitars,
   guitarById: GuitarById,
-  isDataLoaded: boolean,
+  isGuitarsLoaded: boolean,
+  isGuitarLoaded: boolean,
   guitarComments: GuitarComments,
   isCommentPushed: boolean,
+  search: string,
+  searchResults: Guitars,
 };
 
 export type GuitarsOperations = {

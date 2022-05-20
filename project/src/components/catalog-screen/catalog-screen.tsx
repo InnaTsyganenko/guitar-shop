@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
@@ -15,45 +14,27 @@ import { getIdGuitar, setCurrentPageCatalog } from '../../store/guitars-operatio
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
+import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
+import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 
 function CatalogScreen(): JSX.Element {
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
 
   const dispatch = useAppDispatch();
 
   const handleUpdatePageCatalog = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(fetchGuitarsAction(currentPageCatalog))
-        .then(() => {
-          setIsLoaded(true);
-        },
-        (err) => {
-          setError(err);
-        });
-    };
-
-    fetchData();
-  }, [dispatch, currentPageCatalog]);
+  const data: TApiResponse = useApiGet(currentPageCatalog, fetchGuitarsAction);
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const guitars = useAppSelector(getGuitars);
   const totalPages = Math.ceil(guitarsTotalCount / GUITARS_QUANTITY_FOR_DISPLAY);
+  const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
 
-  if (error) {
-    return (
-      <Wrapper>
-        <main className="page-content">
-          <div className="container">
-            {toast(error)}
-          </div>
-        </main>
-      </Wrapper>);
-  } else if (!isLoaded) {
-    return <LoadingScreen />;
+  if (!isGuitarsLoaded) {
+    return <LoadingScreen text={'Loading failed.'} />;
+  } else if (!data.loading) {
+    return <LoadingScreen text={'Loading...'} />;
   } else {
     return (
       <Wrapper>

@@ -8,8 +8,11 @@ const initialState: GuitarsData = {
   guitars: [],
   guitarById: {} as Guitar,
   guitarComments: [],
-  isDataLoaded: false,
+  isGuitarsLoaded: true,
+  isGuitarLoaded: true,
   isCommentPushed: false,
+  search: '',
+  searchResults: [],
 };
 
 export const guitarsData = createSlice({
@@ -21,15 +24,26 @@ export const guitarsData = createSlice({
     },
     loadGuitars: (state, action) => {
       state.guitars = action.payload;
-      state.isDataLoaded = true;
+    },
+    setGuitarsLoadStatus: (state, action) => {
+      state.isGuitarsLoaded = action.payload;
     },
     loadGuitarById: (state, action) => {
       state.guitarById = action.payload;
     },
+    setGuitarLoadStatus: (state, action) => {
+      state.isGuitarLoaded = action.payload;
+    },
     setIsNewCommentPush: (state, action) => {
       state.isCommentPushed = action.payload;
+    },
+    setSearchRequest: (state, action) => {
+      state.search = action.payload;
+    },
+    loadSearchResults: (state, action) => {
+      state.searchResults = action.payload;
     },
   },
 });
 
-export const { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush } = guitarsData.actions;
+export const { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarsLoadStatus, setGuitarLoadStatus, setSearchRequest, loadSearchResults } = guitarsData.actions;

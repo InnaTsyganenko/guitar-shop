@@ -25,7 +25,7 @@ const mockStore = configureMockStore<
 >(middlewares);
 
 const store = mockStore({
-  DATA: {isDataLoaded: true, guitars: makeFakeGuitars},
+  DATA: {guitars: makeFakeGuitars},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 

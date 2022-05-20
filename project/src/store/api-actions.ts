@@ -1,6 +1,6 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush } from './guitars-data/guitars-data';
+import { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarLoadStatus, setGuitarsLoadStatus, loadSearchResults } from './guitars-data/guitars-data';
 import { setModalWindowState } from './guitars-operations/guitars-operations';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
@@ -18,11 +18,12 @@ export const fetchGuitarsAction = createAsyncThunk<void, CurrentPageCatalog, {
       const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
-
+      dispatch(setGuitarsLoadStatus(true));
       dispatch(setTotalCountGuitarsFromResponse(filtredGuitars.length));
       dispatch(loadGuitars(filtredGuitars));
 
     } catch (error) {
+      dispatch(setGuitarsLoadStatus(false));
       errorHandle(error);
     }
   },
@@ -37,8 +38,10 @@ export const fetchGuitarByIdAction = createAsyncThunk<void, PickedId, {
   async (pickedId, {dispatch, extra: api}) => {
     try {
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${pickedId}?_embed=comments`);
+      dispatch(setGuitarLoadStatus(true));
       dispatch(loadGuitarById(data));
     } catch (error) {
+      dispatch(setGuitarLoadStatus(false));
       errorHandle(error);
     }
   },
@@ -58,6 +61,26 @@ export const pushCommentAction = createAsyncThunk<void, CommentPost, {
 
       const {data} = await api.get<GuitarById>(`${APIRoute.GuitarById}${guitarId}?_embed=comments`);
       dispatch(loadGuitarById(data));
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const fetchGuitarsBySearchAction = createAsyncThunk<void, string, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'DATA/fetchGuitarsBySearch',
+  async (searchRequest, {dispatch, extra: api}) => {
+    try {
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?name_like=${searchRequest}&_embed=comments`);
+console.log(response.data);
+console.log(searchRequest);
+      const filtredGuitars = response.data.filter((item: Guitar) => item.name);
+      dispatch(loadSearchResults(filtredGuitars));
+
     } catch (error) {
       errorHandle(error);
     }

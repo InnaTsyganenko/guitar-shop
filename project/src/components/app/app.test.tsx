@@ -14,7 +14,7 @@ const mockStore = configureMockStore(middlewares);
 const history = createMemoryHistory();
 
 const store = mockStore({
-  DATA: {isDataLoaded: true, guitars: makeFakeGuitars, guitarById: makeFakeGuitar()},
+  DATA: {guitars: makeFakeGuitars, guitarById: makeFakeGuitar()},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 

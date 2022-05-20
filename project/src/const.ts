@@ -29,11 +29,6 @@ export enum NameSpace {
   guitars = 'GUITARS',
 }
 
-export enum HTTP_CODE {
-  BAD_REQUEST = 400,
-  NOT_FOUND = 404,
-}
-
 export enum CardGuitarTabs {
   characteristics = 'Характеристики',
   description = 'Описание',

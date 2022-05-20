@@ -3,31 +3,30 @@ import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
-import ModalReviewNew from './modal-review-new';
-import { makeFakeGuitar } from '../../utils/mock';
+import HeaderSearch from './header-search';
 import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-const history = createMemoryHistory();
 
-const guitar = makeFakeGuitar();
 const store = mockStore({
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
-describe('Component: ModalReviewNew', () => {
+describe('Component: Header', () => {
   it('should render correctly', () => {
+    const history = createMemoryHistory();
 
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ModalReviewNew guitar={guitar} onModalCommentCloseClick={jest.fn()} />
+          <HeaderSearch />
         </HistoryRouter>
       </Provider>,
     );
 
-    expect(screen.getByText(/Оставить отзыв/i)).toBeInTheDocument();
+    expect(screen.getByText(/Начать поиск/i)).toBeInTheDocument();
+    expect(screen.getByText(/Поиск?/i)).toBeInTheDocument();
+    expect(screen.getByText(/Сбросить поиск/i)).toBeInTheDocument();
   });
 });
-

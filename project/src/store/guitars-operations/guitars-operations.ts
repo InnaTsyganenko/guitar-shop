@@ -4,7 +4,7 @@ import { GuitarsOperations } from '../../types/state';
 import { NameSpace } from '../../const';
 
 const initialState: GuitarsOperations = {
-  pickedId: InitialStateValues.InitialTotalCountGuitars,
+  pickedId: InitialStateValues.InitialPickedId,
   currentPageCatalog: DEFAULT_CATALOG_PAGE,
   isModalOpen: false,
 };

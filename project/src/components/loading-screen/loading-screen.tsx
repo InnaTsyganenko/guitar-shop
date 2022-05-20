@@ -1,11 +1,16 @@
+import { PropsWithChildren } from 'react';
 import Wrapper from '../wrapper/wrapper';
 
-function LoadingScreen() {
+type LoadingScreenProps = PropsWithChildren<{
+  text: string;
+}>;
+
+function LoadingScreen({text}: LoadingScreenProps) {
   return (
     <Wrapper>
       <main className="page-content">
         <div className="container">
-          <h2>Loading...</h2>
+          <h2>{text}</h2>
         </div>
       </main>
     </Wrapper>

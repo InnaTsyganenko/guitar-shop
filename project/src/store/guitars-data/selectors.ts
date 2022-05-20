@@ -6,8 +6,14 @@ export const getTotalCountGuitars = (state: State): GuitarsTotalCount => state[N
 
 export const getGuitars = (state: State): Guitars => state[NameSpace.data].guitars;
 
-export const getStatusLoadedData = (state: State): boolean => state[NameSpace.data].isDataLoaded;
+export const getStatusLoadedGuitars = (state: State): boolean => state[NameSpace.data].isGuitarsLoaded;
 
 export const getGuitarById = (state: State): Guitar => state[NameSpace.data].guitarById;
 
+export const getStatusLoadedGuitar = (state: State): boolean => state[NameSpace.data].isGuitarLoaded;
+
 export const getIsReviewNewPushed = (state: State): boolean => state[NameSpace.data].isCommentPushed;
+
+export const getSearchRequest = (state: State): string => state[NameSpace.data].search;
+
+export const getSearchResults = (state: State): Guitars => state[NameSpace.data].searchResults;

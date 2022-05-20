@@ -11,7 +11,6 @@ const mockStore = configureMockStore(middlewares);
 const history = createMemoryHistory();
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 

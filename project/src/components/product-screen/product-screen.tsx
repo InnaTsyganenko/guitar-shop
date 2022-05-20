@@ -1,3 +1,4 @@
+import Wrapper from '../wrapper/wrapper';
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Rating from '../rating/rating';
@@ -7,53 +8,31 @@ import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getPickedId } from '../../store/guitars-operations/selectors';
 import { useState, useEffect } from 'react';
 import { fetchGuitarByIdAction } from '../../store/api-actions';
-import { getGuitarById } from '../../store/guitars-data/selectors';
+import { getGuitarById, getStatusLoadedGuitar } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { toast } from 'react-toastify';
-import { CardGuitarTabs, GuitarType } from '../../const';
-import Wrapper from '../wrapper/wrapper';
+import { APIRoute, CardGuitarTabs, GuitarType } from '../../const';
+import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
 
 function ProductScreen(): JSX.Element {
   const dispatch = useAppDispatch();
-
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [error, setError] = useState(null);
   const [activeTab, setActiveTab] = useState<string>(Object.keys(CardGuitarTabs)[0]);
 
   const pickedId = useAppSelector(getPickedId);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(fetchGuitarByIdAction(pickedId))
-        .then(() => {
-          setIsLoaded(true);
-        },
-        (err) => {
-          setError(err);
-        });
-    };
-
-    fetchData();
-  }, [dispatch, pickedId]);
+  const data: TApiResponse = useApiGet(pickedId, fetchGuitarByIdAction);
 
   const guitar = useAppSelector(getGuitarById);
+  const isGuitarLoaded = useAppSelector(getStatusLoadedGuitar);
 
   const handleCardGuitarTabs = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>, key: string) => {
     evt.preventDefault();
     setActiveTab(key);
   };
 
-  if (error) {
-    return (
-      <Wrapper>
-        <main className="page-content">
-          <div className="container">
-            {toast(error)}
-          </div>
-        </main>
-      </Wrapper>);
-  } else if (!isLoaded) {
-    return <LoadingScreen />;
+  if (!isGuitarLoaded) {
+    return <LoadingScreen text={'Loading failed.'} />;
+  } else if (!data.loading) {
+    return <LoadingScreen text={'Loading...'} />;
   } else {
     return (
       <Wrapper>

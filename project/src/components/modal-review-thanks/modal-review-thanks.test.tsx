@@ -8,7 +8,6 @@ import ModalReviewThanks from './modal-review-thanks';
 const mockStore = configureMockStore();
 
 const store = mockStore({
-  DATA: {isDataLoaded: true},
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
