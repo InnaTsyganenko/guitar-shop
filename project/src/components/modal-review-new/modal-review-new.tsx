@@ -20,7 +20,7 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
 
   useEffect(() => {
     trapFocusInsideModalWindow();
-  },[dispatch]);
+  },[]);
 
   const handleModalClose = useCallback(() => {
     onModalCommentCloseClick();

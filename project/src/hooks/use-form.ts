@@ -11,7 +11,6 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
   const [data, setData] = useState<T>((options?.initialValues || {}) as T);
   const [errors, setErrors] = useState<ErrorRecord<T>>({});
 
-
   const handleChange = <S extends unknown>(
     key: keyof T,
     sanitizeFn?: (value: string) => S,
