@@ -16,7 +16,7 @@ export const guitarsOperations = createSlice({
     setCurrentPageCatalog: (state, action) => {
       state.currentPageCatalog = action.payload;
     },
-    getIdGuitar: (state, action) => {
+    setGuitarId: (state, action) => {
       state.pickedId = action.payload;
     },
     setModalWindowState: (state, action) => {
@@ -25,4 +25,4 @@ export const guitarsOperations = createSlice({
   },
 });
 
-export const { setCurrentPageCatalog, getIdGuitar, setModalWindowState } = guitarsOperations.actions;
+export const { setCurrentPageCatalog, setGuitarId, setModalWindowState } = guitarsOperations.actions;

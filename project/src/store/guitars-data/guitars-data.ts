@@ -43,7 +43,11 @@ export const guitarsData = createSlice({
     loadSearchResults: (state, action) => {
       state.searchResults = action.payload;
     },
+    resetSearch: (state) => {
+      state.search = initialState.search;
+      state.searchResults = initialState.searchResults;
+    },
   },
 });
 
-export const { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarsLoadStatus, setGuitarLoadStatus, setSearchRequest, loadSearchResults } = guitarsData.actions;
+export const { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarsLoadStatus, setGuitarLoadStatus, setSearchRequest, loadSearchResults, resetSearch } = guitarsData.actions;

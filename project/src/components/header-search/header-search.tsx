@@ -1,31 +1,41 @@
-import { EventType } from '@testing-library/react';
-import { WaitForValueToChange } from '@testing-library/react-hooks';
-import { ChangeEvent, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { ChangeEvent, KeyboardEvent, useCallback } from 'react';
 import { AppRoute } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
-import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
-import { setSearchRequest } from '../../store/guitars-data/guitars-data';
-import { fetchGuitarsBySearchAction } from '../../store/api-actions';
-import { getSearchResults, getSearchRequest } from '../../store/guitars-data/selectors';
+import { resetSearch } from '../../store/guitars-data/guitars-data';
+import { getSearchResults } from '../../store/guitars-data/selectors';
+import { loadSearchResults } from '../../store/guitars-data/guitars-data';
+import { setGuitarId } from '../../store/guitars-operations/guitars-operations';
+import { useNavigate } from 'react-router-dom';
 
 function HeaderSearch(): JSX.Element {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const searchRequest = useAppSelector(getSearchRequest);
-
-  const data: TApiResponse = useApiGet(searchRequest, fetchGuitarsBySearchAction);
-
-  const searchGuitars = (evt: ChangeEvent<HTMLInputElement>) => {
+  const fetchMyAPI = useCallback(async (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value.toLowerCase();
-    dispatch(setSearchRequest(value));
-  };
+    let response = await fetch(`https://guitar-shop.accelerator.pages.academy/guitars?name_like=${value}`);
+    response = await response.json();
+    dispatch(loadSearchResults(response));
+  }, [dispatch]);
 
   const searchResults = useAppSelector(getSearchResults);
-  console.log(data);
-  console.log(searchRequest);
-  console.log(searchResults);
+
+  const handleSearchResultClick = (id: number) => {
+    dispatch(resetSearch());
+    dispatch(setGuitarId(id));
+    if (window.location.pathname.includes(AppRoute.Guitars)) {
+      navigate(`${AppRoute.Guitars}${id}`);
+      window.location.reload();
+    } else {
+      navigate(`${AppRoute.Guitars}${id}`);
+    }
+  };
+
+  const handleKeyDown = (evt: KeyboardEvent, id: number) => {
+    if (evt.key === 'Enter') {
+      handleSearchResultClick(id);
+    }
+  };
 
   return (
     <div className="form-search">
@@ -41,23 +51,25 @@ function HeaderSearch(): JSX.Element {
           type="text"
           autoComplete="off"
           placeholder="что вы ищете?"
-          onInput={searchGuitars}
+          onInput={fetchMyAPI}
         />
         <label className="visually-hidden" htmlFor="search">Поиск</label>
       </form>
       <ul className={((searchResults !== undefined) && searchResults.length !== 0)
-        ? 'form-search__select-list'
+        ? 'list-opened form-search__select-list'
         : 'form-search__select-list hidden'}
       >
-        {searchResults.map((item) => <li key={item.id} className="form-search__select-item" tabIndex={0}>{item.name}</li>)}
-        <li className="form-search__select-item" tabIndex={0}>Четстер Plus</li>
-        <li className="form-search__select-item" tabIndex={0}>Четстер UX</li>
-        <li className="form-search__select-item" tabIndex={0}>Четстер UX2</li>
-        <li className="form-search__select-item" tabIndex={0}>Четстер UX3</li>
-        <li className="form-search__select-item" tabIndex={0}>Четстер UX4</li>
-        <li className="form-search__select-item" tabIndex={0}>Четстер UX5</li>
+        {(searchResults !== undefined || searchResults === null) && searchResults.map((item) => (
+          <li
+            key={item.id}
+            className="form-search__select-item"
+            tabIndex={0}
+            onClick={() => handleSearchResultClick(item.id)}
+            onKeyDown={(evt) => handleKeyDown(evt, item.id)}
+          >{item.name}
+          </li>))}
       </ul>
-      <button className="form-search__reset" type="reset" form="form-search">
+      <button className="form-search__reset" type="reset" form="form-search" onClick={() => dispatch(resetSearch())}>
         <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
           <use xlinkHref="../img/sprite_auto.svg#icon-close"></use>
         </svg><span className="visually-hidden">Сбросить поиск</span>

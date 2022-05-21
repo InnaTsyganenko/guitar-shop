@@ -4,17 +4,16 @@ import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Rating from '../rating/rating';
 import ProductReviews from '../product-reviews/product-reviews';
 import Footer from '../footer/footer';
-import { useAppSelector, useAppDispatch } from '../../hooks';
+import { useAppSelector } from '../../hooks';
 import { getPickedId } from '../../store/guitars-operations/selectors';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById, getStatusLoadedGuitar } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { APIRoute, CardGuitarTabs, GuitarType } from '../../const';
+import { CardGuitarTabs, GuitarType } from '../../const';
 import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
 
 function ProductScreen(): JSX.Element {
-  const dispatch = useAppDispatch();
   const [activeTab, setActiveTab] = useState<string>(Object.keys(CardGuitarTabs)[0]);
 
   const pickedId = useAppSelector(getPickedId);

@@ -75,9 +75,7 @@ export const fetchGuitarsBySearchAction = createAsyncThunk<void, string, {
   'DATA/fetchGuitarsBySearch',
   async (searchRequest, {dispatch, extra: api}) => {
     try {
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?name_like=${searchRequest}&_embed=comments`);
-console.log(response.data);
-console.log(searchRequest);
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?name_like=${searchRequest}`);
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
       dispatch(loadSearchResults(filtredGuitars));
 

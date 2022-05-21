@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAppDispatch } from '.';
 
 export type TApiResponse = {
@@ -11,17 +11,17 @@ export const useApiGet = (arg: any, fetchFunc: any): TApiResponse => {
 
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    const fetchData = async () => {
-      await dispatch(fetchFunc(arg))
-        .then(() => {
-          setLoading(true);
-        });
-    };
+  const fetchMyAPI = useCallback(async () => {
+    await dispatch(fetchFunc(arg))
+      .then(() => {
+        setLoading(true);
+      });
+  }, [dispatch, arg, fetchFunc]);
 
-    fetchData();
+  useEffect(() => {
+    fetchMyAPI();
     setLoading(false);
-  }, []);
+  }, [fetchMyAPI]);
 
   return { loading };
 };

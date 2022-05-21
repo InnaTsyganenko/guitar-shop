@@ -1,4 +1,3 @@
-import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
@@ -10,7 +9,7 @@ import LoadingScreen from '../loading-screen/loading-screen';
 import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getTotalCountGuitars } from '../../store/guitars-data/selectors';
-import { getIdGuitar, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
+import { setGuitarId, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
@@ -65,7 +64,7 @@ function CatalogScreen(): JSX.Element {
                       <Link
                         className="button button--mini"
                         aria-label="Корзина"
-                        onClick={() => dispatch(getIdGuitar(guitar.id))}
+                        onClick={() => dispatch(setGuitarId(guitar.id))}
                         to={`${AppRoute.Guitars}${guitar.id}`}
                       >Подробнее
                       </Link>

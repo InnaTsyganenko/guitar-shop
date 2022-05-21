@@ -15,12 +15,12 @@ function App(): JSX.Element {
   return (
     <Routes>
       <Route
-        path={`${AppRoute.Catalog}${currentPageCatalog}`}
-        element={<CatalogScreen />}
-      />
-      <Route
         path={`${AppRoute.Guitars}${pickedId}`}
         element={<ProductScreen />}
+      />
+      <Route
+        path={`${AppRoute.Catalog}${currentPageCatalog}`}
+        element={<CatalogScreen />}
       />
       <Route
         path={AppRoute.Cart}
