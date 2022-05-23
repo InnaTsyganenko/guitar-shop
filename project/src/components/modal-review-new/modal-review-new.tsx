@@ -4,7 +4,7 @@ import { useAppDispatch } from '../../hooks';
 import { pushCommentAction } from '../../store/api-actions';
 import { Guitar } from '../../types/guitars';
 import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
-import { NewReview } from '../../types/use-form-interface';
+import { NewReview } from '../../types/state';
 import { useForm } from '../../hooks/use-form';
 import { trapFocusInsideModalWindow } from '../../utils/utils';
 import useKeypress from '../../hooks/use-keypress';

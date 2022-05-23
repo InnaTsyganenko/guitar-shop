@@ -12,7 +12,7 @@ export const useApiGet = (arg: any, fetchFunc: any): TApiResponse => {
   const dispatch = useAppDispatch();
 
   const fetchMyAPI = useCallback(async () => {
-    await dispatch(fetchFunc(arg))
+    await dispatch(fetchFunc({arg}))
       .then(() => {
         setLoading(true);
       });

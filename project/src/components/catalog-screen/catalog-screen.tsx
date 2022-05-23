@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
-import CatalogFilterAndSort from '../catalog-filter-and-sort/catalog-filter-and-sort';
+import CatalogFilter from '../catalog-filter/catalog-filter';
+import CatalogSort from '../catalog-sort/catalog-sort';
 import Rating from '../rating/rating';
 import CatalogPagination from '../catalog-pagination/catalog-pagination';
 import Footer from '../footer/footer';
@@ -10,20 +11,22 @@ import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getTotalCountGuitars } from '../../store/guitars-data/selectors';
 import { setGuitarId, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
-import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
+import { getSortType, getSortDirection } from '../../store/guitars-data/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
 import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
+import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 function CatalogScreen(): JSX.Element {
-
   const dispatch = useAppDispatch();
 
   const handleUpdatePageCatalog = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+  const selectedSortType = useAppSelector(getSortType);
+  const selectedSortDirection = useAppSelector(getSortDirection);
 
-  const data: TApiResponse = useApiGet(currentPageCatalog, fetchGuitarsAction);
+  const data: TApiResponse = useApiGet(selectedSortType, fetchGuitarsAction);
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const guitars = useAppSelector(getGuitars);
@@ -43,7 +46,8 @@ function CatalogScreen(): JSX.Element {
             <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
             <Breadcrumbs guitarId={0} guitarName={''} />
             <div className="catalog">
-              <CatalogFilterAndSort />
+              <CatalogFilter />
+              <CatalogSort />
               <div className="cards catalog__cards">
                 {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
                   <div className="product-card" key={guitar.id}>

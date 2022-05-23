@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-constraint */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, FormEvent, useState } from 'react';
-import { Validations, ErrorRecord } from '../types/use-form-interface';
+import { Validations, ErrorRecord } from '../types/state';
 
 export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(options?: {
   validations?: Validations<T>;

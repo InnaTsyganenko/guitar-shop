@@ -17,3 +17,7 @@ export const getIsReviewNewPushed = (state: State): boolean => state[NameSpace.d
 export const getSearchRequest = (state: State): string => state[NameSpace.data].search;
 
 export const getSearchResults = (state: State): Guitars => state[NameSpace.data].searchResults;
+
+export const getSortType = (state: State): string => state[NameSpace.data].sortType;
+
+export const getSortDirection = (state: State): string => state[NameSpace.data].sortDirection;

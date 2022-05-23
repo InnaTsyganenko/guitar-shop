@@ -3,7 +3,7 @@ import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
-import CatalogFilterAndSort from './catalog-filter-and-sort';
+import CatalogSort from './catalog-sort';
 import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
@@ -20,12 +20,14 @@ describe('Component: CatalogFilterAndSort', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <CatalogFilterAndSort />
+          <CatalogSort />
         </HistoryRouter>
       </Provider>,
     );
 
-    expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
+    expect(screen.getByText(/Сортировать/i)).toBeInTheDocument();
+    expect(screen.getByText(/по цене/i)).toBeInTheDocument();
+    expect(screen.getByText(/по популярности/i)).toBeInTheDocument();
   });
 });
 
