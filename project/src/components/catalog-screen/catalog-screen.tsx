@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../header/header';
@@ -36,7 +35,7 @@ function CatalogScreen(): JSX.Element {
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
 
 
-  const fetchMyAPI = useCallback(async () => {
+  const fetchGuitars = useCallback(async () => {
     const sortOptions = {
       sortType: selectedSortType,
       sortDirection: selectedSortDirection,
@@ -49,9 +48,14 @@ function CatalogScreen(): JSX.Element {
   }, [dispatch, selectedSortType, selectedSortDirection]);
 
   useEffect(() => {
-    fetchMyAPI();
+    fetchGuitars();
     setLoading(false);
-  }, [fetchMyAPI]);
+  }, [fetchGuitars]);
+
+
+  const minPrice: number = Math.min(...guitars.map((item) => item.price));
+  const maxPrice: number = Math.max(...guitars.map((item) => item.price));
+
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
@@ -66,7 +70,10 @@ function CatalogScreen(): JSX.Element {
             <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
             <Breadcrumbs guitarId={0} guitarName={''} />
             <div className="catalog">
-              <CatalogFilter />
+              <CatalogFilter
+                minPrice={minPrice}
+                maxPrice={maxPrice}
+              />
               <CatalogSort />
               <div className="cards catalog__cards">
                 {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (

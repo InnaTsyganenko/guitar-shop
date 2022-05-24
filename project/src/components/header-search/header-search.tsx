@@ -3,19 +3,21 @@ import { AppRoute } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { resetSearch } from '../../store/guitars-data/guitars-data';
 import { getSearchResults } from '../../store/guitars-data/selectors';
-import { loadSearchResults } from '../../store/guitars-data/guitars-data';
 import { setGuitarId } from '../../store/guitars-operations/guitars-operations';
 import { useNavigate } from 'react-router-dom';
+import { fetchGuitarsBySearchAction } from '../../store/api-actions';
 
 function HeaderSearch(): JSX.Element {
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const fetchMyAPI = useCallback(async (evt: ChangeEvent<HTMLInputElement>) => {
+  const fetchSearchGuitars = useCallback(async (evt: ChangeEvent<HTMLInputElement>) => {
     const value = evt.target.value.toLowerCase();
-    let response = await fetch(`https://guitar-shop.accelerator.pages.academy/guitars?name_like=${value}`);
-    response = await response.json();
-    dispatch(loadSearchResults(response));
+    if (value === '') {
+      dispatch(resetSearch());
+      return;
+    }
+    await dispatch(fetchGuitarsBySearchAction(value));
   }, [dispatch]);
 
   const searchResults = useAppSelector(getSearchResults);
@@ -23,12 +25,7 @@ function HeaderSearch(): JSX.Element {
   const handleSearchResultClick = (id: number) => {
     dispatch(resetSearch());
     dispatch(setGuitarId(id));
-    if (window.location.pathname.includes(AppRoute.Guitars)) {
-      navigate(`${AppRoute.Guitars}${id}`);
-      window.location.reload();
-    } else {
-      navigate(`${AppRoute.Guitars}${id}`);
-    }
+    navigate(`${AppRoute.Guitars}${id}`);
   };
 
   const handleKeyDown = (evt: KeyboardEvent, id: number) => {
@@ -51,7 +48,7 @@ function HeaderSearch(): JSX.Element {
           type="text"
           autoComplete="off"
           placeholder="что вы ищете?"
-          onInput={fetchMyAPI}
+          onChange={fetchSearchGuitars}
         />
         <label className="visually-hidden" htmlFor="search">Поиск</label>
       </form>

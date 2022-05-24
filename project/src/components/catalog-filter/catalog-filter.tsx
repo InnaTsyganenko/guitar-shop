@@ -1,4 +1,42 @@
-function CatalogFilter(): JSX.Element {
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { setSortType, setSortDirection } from '../../store/guitars-data/guitars-data';
+import { getSortType, getSortDirection } from '../../store/guitars-data/selectors';
+import { ListSortTypes, ListSortDirections } from '../../const';
+import { useState, PropsWithChildren, DetailedHTMLProps, InputHTMLAttributes } from 'react';
+
+type CatalogFilterProps = PropsWithChildren<{
+  minPrice?: number;
+  maxPrice?: number;
+}>;
+
+function CatalogFilter({minPrice, maxPrice}: CatalogFilterProps): JSX.Element {
+  const dispatch = useAppDispatch();
+
+  const selectedSortType = useAppSelector(getSortType);
+
+  // const handleSortKeyChange = (sortType: string) => {
+  //   if (selectedSortDirection === '') {
+  //     dispatch(setSortDirection('asc'));
+  //   }
+  //   dispatch(setSortType(sortType));
+  // };
+
+
+  const [value, setValue] = useState({
+    min: minPrice,
+    max: maxPrice,
+  });
+
+  const handleChange = (event: any) => {
+    const newMinValue = Math.max(minPrice as number, Math.min(maxPrice as number, Number(event.target.value)));
+    setValue({
+      ...value,
+      min: newMinValue,
+    });
+  };
+
+  console.log(value);
+
   return (
     <form className="catalog-filter">
       <h2 className="title title--bigger catalog-filter__title">Фильтр</h2>
@@ -7,11 +45,11 @@ function CatalogFilter(): JSX.Element {
         <div className="catalog-filter__price-range">
           <div className="form-input">
             <label className="visually-hidden">Минимальная цена</label>
-            <input type="number" placeholder="1 000" id="priceMin" name="от" />
+            <input type="number" placeholder={minPrice?.toString()} id="priceMin" name="от" value={value.min} onChange={handleChange} />
           </div>
           <div className="form-input">
             <label className="visually-hidden">Максимальная цена</label>
-            <input type="number" placeholder="30 000" id="priceMax" name="до" />
+            <input type="number" placeholder={maxPrice?.toString()} id="priceMax" name="до" />
           </div>
         </div>
       </fieldset>
