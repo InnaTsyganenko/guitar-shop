@@ -47,3 +47,14 @@ export const RatingValues = {
   4: 'Хорошо',
   5: 'Отлично',
 } as const;
+
+
+export const ListSortTypes = [
+  { label: 'по цене', value: 'price' },
+  { label: 'по популярности', value: 'rating' },
+] as const;
+
+export const ListSortDirections = [
+  { label: 'По возрастанию', class: 'catalog-sort__order-button--up', value: 'asc' },
+  { label: 'По убыванию', class: 'catalog-sort__order-button--down', value: 'desc' },
+] as const;

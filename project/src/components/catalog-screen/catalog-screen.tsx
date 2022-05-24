@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
@@ -14,28 +16,46 @@ import { setGuitarId, setCurrentPageCatalog } from '../../store/guitars-operatio
 import { getSortType, getSortDirection } from '../../store/guitars-data/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
-import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 function CatalogScreen(): JSX.Element {
+  const [loading, setLoading] = useState<boolean>(false);
+
   const dispatch = useAppDispatch();
 
   const handleUpdatePageCatalog = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
+
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
-
-  const data: TApiResponse = useApiGet(selectedSortType, fetchGuitarsAction);
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const guitars = useAppSelector(getGuitars);
   const totalPages = Math.ceil(guitarsTotalCount / GUITARS_QUANTITY_FOR_DISPLAY);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
 
+
+  const fetchMyAPI = useCallback(async () => {
+    const sortOptions = {
+      sortType: selectedSortType,
+      sortDirection: selectedSortDirection,
+    };
+
+    await dispatch(fetchGuitarsAction(sortOptions))
+      .then(() => {
+        setLoading(true);
+      });
+  }, [dispatch, selectedSortType, selectedSortDirection]);
+
+  useEffect(() => {
+    fetchMyAPI();
+    setLoading(false);
+  }, [fetchMyAPI]);
+
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
-  } else if (!data.loading) {
+  } else if (!loading) {
     return <LoadingScreen text={'Loading...'} />;
   } else {
     return (

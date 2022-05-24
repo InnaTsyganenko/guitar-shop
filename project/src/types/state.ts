@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { store } from '../store/index.js';
 import { Guitars, GuitarById, CurrentPageCatalog, PickedId, GuitarsTotalCount, GuitarComments } from './guitars.js';
 
@@ -48,15 +49,6 @@ export interface NewReview {
   comment: string,
   rating: number,
 }
-
-export type SortDirection = 'asc' | 'desc';
-
-export type ItemKey<T> = keyof T;
-
-export type SortOption<T> = {
-  label: T[ItemKey<T>];
-  value: ItemKey<T>;
-};
 
 export type State = ReturnType<typeof store.getState>;
 

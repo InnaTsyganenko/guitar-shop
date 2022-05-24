@@ -13,8 +13,8 @@ const initialState: GuitarsData = {
   isCommentPushed: false,
   search: '',
   searchResults: [],
-  sortType: 'price',
-  sortDirection: 'asc',
+  sortType: '',
+  sortDirection: '',
 };
 
 export const guitarsData = createSlice({

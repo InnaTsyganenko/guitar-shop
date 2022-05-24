@@ -48,28 +48,3 @@ export const trapFocusInsideModalWindow = () => {
   modal?.addEventListener('keydown', trapTabKey);
   return () => modal?.removeEventListener('keydown', trapTabKey);
 };
-
-/**
- * Generic typed comparison fn for use with `Array.sort`
- * This is passed as the comparison function with
- * the following syntax:
- * MyArray.sort(compareObjectsByKey<MyObjectType>('myObjectKey', true/false)`
- * @type T
- * @param key: keyof T
- * @param ascending: boolean
- */
-export function compareObjectsByKey<T>(key: keyof T, ascending = true) {
-  return function innerSort(objectA: T, objectB: T) {
-    let sortValue;
-    if (objectA[key] > objectB[key]) {
-      sortValue = 1;
-    } else if (objectA[key] < objectB[key]) {
-      sortValue = -1;
-    } else {
-      sortValue = 0;
-    }
-    console.log(sortValue);
-
-    return ascending ? sortValue : -1 * sortValue;
-  };
-}

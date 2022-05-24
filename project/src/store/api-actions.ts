@@ -7,15 +7,15 @@ import { AppDispatch, State } from '../types/state.js';
 import { Guitars, PickedId, GuitarById, CommentPost, Guitar, SortOptions } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
 
-export const fetchGuitarsAction = createAsyncThunk<void, string, {
+export const fetchGuitarsAction = createAsyncThunk<void, SortOptions, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'DATA/fetchGuitars',
-  async (sortType, {dispatch, extra: api}) => {
+  async ({sortType, sortDirection}, {dispatch, extra: api}) => {
     try {
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_sort=${sortType}&_order=asc&_embed=comments`);
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortDirection}` : ''}`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
       dispatch(setGuitarsLoadStatus(true));
