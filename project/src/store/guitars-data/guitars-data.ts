@@ -15,6 +15,10 @@ const initialState: GuitarsData = {
   searchResults: [],
   sortType: '',
   sortDirection: '',
+  filterMinPrice: 0,
+  filterMaxPrice: 0,
+  filterGuitarType: '',
+  filterStringCount: '',
 };
 
 export const guitarsData = createSlice({
@@ -55,7 +59,42 @@ export const guitarsData = createSlice({
     setSortDirection: (state, action) => {
       state.sortDirection = action.payload;
     },
+    setFilterMinPrice: (state, action) => {
+      state.filterMinPrice = action.payload;
+    },
+    setFilterMaxPrice: (state, action) => {
+      state.filterMaxPrice = action.payload;
+    },
+    setFilterGuitarType: (state, action) => {
+      state.filterGuitarType = action.payload;
+    },
+    setFilterStringCount: (state, action) => {
+      state.filterStringCount = action.payload;
+    },
+    resetFilters: (state) => {
+      state.filterMinPrice = initialState.filterMinPrice;
+      state.filterMaxPrice = initialState.filterMaxPrice;
+      state.filterGuitarType = initialState.filterGuitarType;
+      state.filterStringCount = initialState.filterStringCount;
+    },
   },
 });
 
-export const { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarsLoadStatus, setGuitarLoadStatus, setSearchRequest, loadSearchResults, resetSearch, setSortType, setSortDirection } = guitarsData.actions;
+export const {
+  loadGuitars,
+  loadGuitarById,
+  setTotalCountGuitarsFromResponse,
+  setIsNewCommentPush,
+  setGuitarsLoadStatus,
+  setGuitarLoadStatus,
+  setSearchRequest,
+  loadSearchResults,
+  resetSearch,
+  setSortType,
+  setSortDirection,
+  setFilterMinPrice,
+  setFilterMaxPrice,
+  setFilterGuitarType,
+  setFilterStringCount,
+  resetFilters,
+} = guitarsData.actions;

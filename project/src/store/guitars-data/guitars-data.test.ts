@@ -12,25 +12,85 @@ describe('Reducer: guitarsData', () => {
   });
 
   it('should download guitars', () => {
-    const state = {guitarsTotalCount: 0, guitars: [], guitarById: {} as Guitar, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: false, search: '', searchResults: [], sortType: '', sortDirection: ''};
+    const state = {
+guitarsTotalCount: 0,
+  guitars: [],
+  guitarById: {} as Guitar,
+  guitarComments: [],
+  isGuitarsLoaded: true,
+  isGuitarLoaded: true,
+  isCommentPushed: false,
+  search: '',
+  searchResults: [],
+  sortType: '',
+  sortDirection: '',
+  filterMinPrice: 0,
+  filterMaxPrice: 0,
+  filterGuitarType: '',
+  filterStringCount: '',};
     expect(guitarsData.reducer(state, setTotalCountGuitarsFromResponse(20)))
       .toEqual({guitarsTotalCount: 20, guitars: [], guitarById: {}, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: false, search: '', searchResults: [], sortType: '', sortDirection: ''});
   });
 
   it('should set total count guitars from response', () => {
-    const state = {guitarsTotalCount: 0, guitars: [], guitarById: {} as Guitar, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: false, search: '', searchResults: [], sortType: '', sortDirection: ''};
+    const state = {
+guitarsTotalCount: 0,
+  guitars: [],
+  guitarById: {} as Guitar,
+  guitarComments: [],
+  isGuitarsLoaded: true,
+  isGuitarLoaded: true,
+  isCommentPushed: false,
+  search: '',
+  searchResults: [],
+  sortType: '',
+  sortDirection: '',
+  filterMinPrice: 0,
+  filterMaxPrice: 0,
+  filterGuitarType: '',
+  filterStringCount: '',};
     expect(guitarsData.reducer(state, loadGuitars(makeFakeGuitars)))
       .toEqual({guitarsTotalCount: 0, guitars: makeFakeGuitars, guitarById: {}, guitarComments: [], isCommentPushed: false, sortType: '', sortDirection: ''});
   });
 
   it('should update guitar by load guitar', () => {
-    const state = {guitarsTotalCount: 0, guitars: [], guitarById: {} as Guitar, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: false, search: '', searchResults: [], sortType: '', sortDirection: ''};
+    const state = {
+guitarsTotalCount: 0,
+  guitars: [],
+  guitarById: {} as Guitar,
+  guitarComments: [],
+  isGuitarsLoaded: true,
+  isGuitarLoaded: true,
+  isCommentPushed: false,
+  search: '',
+  searchResults: [],
+  sortType: '',
+  sortDirection: '',
+  filterMinPrice: 0,
+  filterMaxPrice: 0,
+  filterGuitarType: '',
+  filterStringCount: '',};
     expect(guitarsData.reducer(state, loadGuitarById(guitar)))
       .toEqual({guitarsTotalCount: 0, guitars: [], guitarById: guitar, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: false, sortType: '', sortDirection: ''});
   });
 
   it('should set true when new comment push', () => {
-    const state = {guitarsTotalCount: 0, guitars: [], guitarById: {} as Guitar, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: false, search: '', searchResults: [], sortType: '', sortDirection: ''};
+    const state = {
+guitarsTotalCount: 0,
+  guitars: [],
+  guitarById: {} as Guitar,
+  guitarComments: [],
+  isGuitarsLoaded: true,
+  isGuitarLoaded: true,
+  isCommentPushed: false,
+  search: '',
+  searchResults: [],
+  sortType: '',
+  sortDirection: '',
+  filterMinPrice: 0,
+  filterMaxPrice: 0,
+  filterGuitarType: '',
+  filterStringCount: '',};
     expect(guitarsData.reducer(state, setIsNewCommentPush(true)))
       .toEqual({guitarsTotalCount: 0, guitars: [], guitarById: {}, guitarComments: [], isGuitarsLoaded: true, isGuitarLoaded: true,  isCommentPushed: true, sortType: '', sortDirection: ''});
   });

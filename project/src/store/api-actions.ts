@@ -4,18 +4,18 @@ import { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNew
 import { setModalWindowState } from './guitars-operations/guitars-operations';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
-import { Guitars, PickedId, GuitarById, CommentPost, Guitar, SortOptions } from '../types/guitars';
+import { Guitars, PickedId, GuitarById, CommentPost, Guitar, FilterAndSortOptions } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
 
-export const fetchGuitarsAction = createAsyncThunk<void, SortOptions, {
+export const fetchGuitarsAction = createAsyncThunk<void, FilterAndSortOptions, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'DATA/fetchGuitars',
-  async ({sortType, sortDirection}, {dispatch, extra: api}) => {
+  async ({sortType, sortDirection, filterMinPrice, filterMaxPrice, filterGuitarType, filterStringCount}, {dispatch, extra: api}) => {
     try {
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortDirection}` : ''}`);
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortDirection}` : ''}${(filterMinPrice > 0) && (filterMaxPrice > 0) ? `&price_gte=${filterMinPrice}&price_lte=${filterMaxPrice}` : ''}${filterGuitarType !== '' ? `&_type=${filterGuitarType}` : ''}${filterStringCount !== 'fdf' ? `&_string=${4}` : ''}`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
       dispatch(setGuitarsLoadStatus(true));

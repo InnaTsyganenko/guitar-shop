@@ -21,3 +21,11 @@ export const getSearchResults = (state: State): Guitars => state[NameSpace.data]
 export const getSortType = (state: State): string => state[NameSpace.data].sortType;
 
 export const getSortDirection = (state: State): string => state[NameSpace.data].sortDirection;
+
+export const getFilterMinPrice = (state: State): number => state[NameSpace.data].filterMinPrice;
+
+export const getFilterMaxPrice = (state: State): number => state[NameSpace.data].filterMaxPrice;
+
+export const getFilterGuitarType = (state: State): string => state[NameSpace.data].filterGuitarType;
+
+export const getFilterStringCount = (state: State): string => state[NameSpace.data].filterStringCount;

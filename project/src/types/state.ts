@@ -14,6 +14,10 @@ export type GuitarsData = {
   searchResults: Guitars,
   sortType: string,
   sortDirection: string,
+  filterMinPrice: number,
+  filterMaxPrice: number,
+  filterGuitarType: string,
+  filterStringCount: string,
 };
 
 export type GuitarsOperations = {

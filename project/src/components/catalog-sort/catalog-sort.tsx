@@ -9,17 +9,16 @@ function CatalogSort(): JSX.Element {
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
 
-
   const handleSortKeyChange = (sortType: string) => {
     if (selectedSortDirection === '') {
-      dispatch(setSortDirection('asc'));
+      dispatch(setSortDirection(ListSortDirections[0].value));
     }
     dispatch(setSortType(sortType));
   };
 
   const handleDirectionToggle = (sortDirection: string) => {
     if (selectedSortType === '') {
-      dispatch(setSortType('price'));
+      dispatch(setSortType(ListSortTypes[0].value));
     }
     dispatch(setSortDirection(sortDirection));
   };

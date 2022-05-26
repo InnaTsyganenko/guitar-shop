@@ -1,6 +1,10 @@
+/* eslint-disable prefer-arrow-callback */
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setSortType, setSortDirection } from '../../store/guitars-data/guitars-data';
-import { getSortType, getSortDirection } from '../../store/guitars-data/selectors';
+import { setFilterMinPrice, setFilterMaxPrice, setFilterGuitarType, setFilterStringCount } from '../../store/guitars-data/guitars-data';
+import { getFilterMinPrice,
+  getFilterMaxPrice,
+  getFilterStringCount,
+  getFilterGuitarType } from '../../store/guitars-data/selectors';
 import { ListSortTypes, ListSortDirections } from '../../const';
 import { useState, PropsWithChildren, DetailedHTMLProps, InputHTMLAttributes, ChangeEvent, KeyboardEventHandler } from 'react';
 
@@ -11,16 +15,6 @@ type CatalogFilterProps = PropsWithChildren<{
 
 function CatalogFilter({minPrice, maxPrice}: CatalogFilterProps): JSX.Element {
   const dispatch = useAppDispatch();
-
-  const selectedSortType = useAppSelector(getSortType);
-
-  // const handleSortKeyChange = (sortType: string) => {
-  //   if (selectedSortDirection === '') {
-  //     dispatch(setSortDirection('asc'));
-  //   }
-  //   dispatch(setSortType(sortType));
-  // };
-
 
   const GuitarTypesStringsMatch = [
     {
@@ -40,52 +34,96 @@ function CatalogFilter({minPrice, maxPrice}: CatalogFilterProps): JSX.Element {
     },
   ];
 
+  const GuitarPrices = [
+    {
+      id: 'priceMin',
+      label: 'Минимальная цена',
+      name: 'от',
+    },
+    {
+      id: 'priceMax',
+      label: 'Максимальная цена',
+      name: 'до',
+    },
+  ];
+
   const strings = [4, 6, 7, 12];
 
+  const selectedFilterMinPrice = useAppSelector(getFilterMinPrice);
+  const selectedFilterMaxPrice = useAppSelector(getFilterMaxPrice);
+  const selectedFilterGuitarType = useAppSelector(getFilterGuitarType);
+  const selectedFilterStringCount = useAppSelector(getFilterStringCount);
+
   const [isTypeGuitarChecked, setIsTypeGuitarChecked] = useState<any>([]);
-  const [isChecked, setChecked] = useState(false);
+  const [isChecked, setChecked] = useState<any>({
+    acoustic: false,
+    electric: false,
+    ukulele: false,
+  });
+
+  const removeMatchItemsFromArray = (arrayOne: any, arrayTwo: any): Array<any> => {
+    arrayTwo.forEach((i: any) => {
+      const index = arrayOne.lastIndexOf(i);
+      if (index > -1) {
+        arrayOne.splice(index, 1);
+      }
+    });
+
+    return arrayOne;
+  };
+
+  const SymbolsBanForInput = ['+','-','e'];
 
   const handleTypeGuitarChange = (evt: any) => {
-    setChecked(!isChecked);
+    isChecked[evt.target.name] = !isChecked[evt.target.name];
+    setChecked({...isChecked});
 
-    if (!isChecked) {
-      const arr = GuitarTypesStringsMatch.find((element) => element.type === evt.target.name);
-      setIsTypeGuitarChecked(arr?.stringsNumber);
+    const arr: any = GuitarTypesStringsMatch.find((element) => element.type === evt.target.name)?.stringsNumber;
+
+    if (isChecked[evt.target.name]) {
+      const myFinalArray = [...isTypeGuitarChecked ,...arr];
+      setIsTypeGuitarChecked(myFinalArray);
     } else {
-      setIsTypeGuitarChecked([]);
+      const myFinalArray = removeMatchItemsFromArray(isTypeGuitarChecked, arr);
+      setIsTypeGuitarChecked(myFinalArray);
     }
   };
 
-  console.log(GuitarTypesStringsMatch[0].stringsNumber);
-  console.log(isTypeGuitarChecked);
-  console.log(isChecked);
-  console.log();
 
   const [minValue, setMinValue] = useState(minPrice);
-  // const [maxValue, setMaxValue] = useState(maxPrice);
+  const [maxValue, setMaxValue] = useState(maxPrice);
 
-  const handleFocus = (event: any) => event.target.select();
+  const handleInputPriceFocus = (event: any) => event.target.select();
 
-
-  const handleMinMaxInputChange = (event: any) => {
-    if (event.target.id === 'priceMin') {
+  const handleMinMaxPriceInputChange = (event: any) => {
+    if (event.target.id === GuitarPrices[0].id) {
       setMinValue(event.target.value);
     }
 
-    // if (event.target.id === 'priceMax') {
-    //   setMaxValue(event.target.value);
-    // }
+    if (event.target.id === GuitarPrices[1].id) {
+      setMaxValue(event.target.value);
+    }
   };
 
   const handleMinMaxPriceInputBlur = (event: any) => {
-    if ((event.target.id === 'priceMin')&& (event.target.value < (minPrice as number) || event.target.value > (maxPrice as number))) {
-      event.target.value = minPrice;
+    if (event.target.id === GuitarPrices[0].id) {
+      if (event.target.value < (minPrice as number) || event.target.value > (maxPrice as number)) {
+        event.target.value = minPrice;
+      }
+
+      dispatch(setFilterMinPrice(event.target.value));
     }
 
-    if ((event.target.id === 'priceMax') && (minValue && maxPrice) && (event.target.value < minValue || event.target.value > maxPrice)) {
-      event.target.value = maxPrice;
+    if (event.target.id === GuitarPrices[1].id) {
+      if (event.target.value < (minValue as number) || event.target.value > (maxPrice as number)) {
+        event.target.value = maxPrice;
+      }
+
+      dispatch(setFilterMaxPrice(event.target.value));
     }
   };
+  console.log(selectedFilterMinPrice);
+
 
   return (
     <form className="catalog-filter">
@@ -93,34 +131,24 @@ function CatalogFilter({minPrice, maxPrice}: CatalogFilterProps): JSX.Element {
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Цена, ₽</legend>
         <div className="catalog-filter__price-range">
-          <div className="form-input">
-            <label className="visually-hidden">Минимальная цена</label>
-            <input
-              type='number'
-              placeholder={minPrice?.toString()}
-              id="priceMin"
-              name="от"
-              onFocus={handleFocus}
-              onChange={handleMinMaxInputChange}
-              onBlur={handleMinMaxPriceInputBlur}
-              onKeyDown={(event) => (['+','-','e'].includes( event.key ) ? event.preventDefault() : null)}
-            />
-          </div>
-          <div className="form-input">
-            <label className="visually-hidden">Максимальная цена</label>
-            <input
-              type="number"
-              placeholder={maxPrice?.toString()}
-              id="priceMax"
-              name="до"
-              onKeyDown={(event) => (['+','-','e'].includes( event.key ) ? event.preventDefault() : null)}
-              onFocus={handleFocus}
-              onChange={handleMinMaxInputChange}
-              onBlur={handleMinMaxPriceInputBlur}
-              min={minPrice}
-              max={maxPrice}
-            />
-          </div>
+          {GuitarPrices.map((item) => (
+            <div key={item.id} className="form-input">
+              <label className="visually-hidden">{item.label}</label>
+              <input
+                type='number'
+                placeholder={item.id === GuitarPrices[0].id ? minPrice?.toString() : maxPrice?.toString()}
+                value={item.id === GuitarPrices[0].id ? minValue : maxValue}
+                id={item.id}
+                name={item.name}
+                onFocus={handleInputPriceFocus}
+                onChange={handleMinMaxPriceInputChange}
+                onBlur={handleMinMaxPriceInputBlur}
+                onKeyDown={(event) => (SymbolsBanForInput.includes( event.key ) ? event.preventDefault() : null)}
+                min={minPrice}
+                max={maxPrice}
+              />
+            </div>
+          ))}
         </div>
       </fieldset>
       <fieldset className="catalog-filter__block">

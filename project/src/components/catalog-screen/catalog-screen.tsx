@@ -12,7 +12,14 @@ import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getTotalCountGuitars } from '../../store/guitars-data/selectors';
 import { setGuitarId, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
-import { getSortType, getSortDirection } from '../../store/guitars-data/selectors';
+import {
+  getSortType,
+  getSortDirection,
+  getFilterMinPrice,
+  getFilterMaxPrice,
+  getFilterGuitarType,
+  getFilterStringCount
+} from '../../store/guitars-data/selectors';
 import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
@@ -26,8 +33,14 @@ function CatalogScreen(): JSX.Element {
   const handleUpdatePageCatalog = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
 
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
+
+  const selectedFilterMinPrice = useAppSelector(getFilterMinPrice);
+  const selectedFilterMaxPrice = useAppSelector(getFilterMaxPrice);
+  const selectedFilterGuitarType = useAppSelector(getFilterGuitarType);
+  const selectedFilterStringCount = useAppSelector(getFilterStringCount);
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const guitars = useAppSelector(getGuitars);
@@ -36,16 +49,28 @@ function CatalogScreen(): JSX.Element {
 
 
   const fetchGuitars = useCallback(async () => {
-    const sortOptions = {
+    const FilterAndSortOptions = {
       sortType: selectedSortType,
       sortDirection: selectedSortDirection,
+      filterMinPrice: selectedFilterMinPrice,
+      filterMaxPrice: selectedFilterMaxPrice,
+      filterGuitarType: selectedFilterGuitarType,
+      filterStringCount: selectedFilterStringCount,
     };
 
-    await dispatch(fetchGuitarsAction(sortOptions))
+    await dispatch(fetchGuitarsAction(FilterAndSortOptions))
       .then(() => {
         setLoading(true);
       });
-  }, [dispatch, selectedSortType, selectedSortDirection]);
+  }, [
+    dispatch,
+    selectedSortType,
+    selectedSortDirection,
+    selectedFilterMinPrice,
+    selectedFilterMaxPrice,
+    selectedFilterGuitarType,
+    selectedFilterStringCount,
+  ]);
 
   useEffect(() => {
     fetchGuitars();

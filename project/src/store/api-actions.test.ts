@@ -33,6 +33,10 @@ describe('Async actions', () => {
     const sortOptionsMock = {
       sortType: '',
       sortDirection: '',
+      filterMinPrice: 0,
+      filterMaxPrice: 0,
+      filterGuitarType: '',
+      filterStringCount: '',
     };
 
     await store.dispatch(fetchGuitarsAction(sortOptionsMock));
