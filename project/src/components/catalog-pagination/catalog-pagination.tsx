@@ -1,18 +1,19 @@
 import { PropsWithChildren } from 'react';
 import { Link } from 'react-router-dom';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 import { AppRoute, DEFAULT_CATALOG_PAGE, STEP_ONE } from '../../const';
+import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 
 type CatalogPaginatioProps = PropsWithChildren<{
-  page: number;
   totalPages: number;
-  onPaginationClick: (page: number) => void;
 }>;
 
-function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginatioProps): JSX.Element {
+function CatalogPagination({totalPages}: CatalogPaginatioProps): JSX.Element {
 
   const dispatch = useAppDispatch();
+
+  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 
   const countPages = [DEFAULT_CATALOG_PAGE];
 
@@ -21,7 +22,6 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
   }
 
   const handlePaginationBtnClick = (updatePage: number) => {
-    onPaginationClick(updatePage);
     dispatch(setCurrentPageCatalog(updatePage));
   };
 
@@ -35,8 +35,8 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
             <li className="pagination__page pagination__page--prev" id="prev">
               <Link
                 className="link pagination__page-link"
-                onClick={() => handlePaginationBtnClick(page - STEP_ONE)}
-                to={`${AppRoute.Catalog}${page - STEP_ONE}`}
+                onClick={() => handlePaginationBtnClick(currentPageCatalog - STEP_ONE)}
+                to={`${AppRoute.Catalog}${currentPageCatalog - STEP_ONE}`}
               >Назад
               </Link>
             </li>
@@ -62,8 +62,8 @@ function CatalogPagination({page, totalPages, onPaginationClick}: CatalogPaginat
             <li className="pagination__page pagination__page--next" id="next">
               <Link
                 className="link pagination__page-link"
-                onClick={() => handlePaginationBtnClick(page + STEP_ONE)}
-                to={`${AppRoute.Catalog}${page + STEP_ONE}`}
+                onClick={() => handlePaginationBtnClick(currentPageCatalog + STEP_ONE)}
+                to={`${AppRoute.Catalog}${currentPageCatalog + STEP_ONE}`}
               >Далее
               </Link>
             </li>

@@ -30,16 +30,7 @@ describe('Async actions', () => {
       .onGet(APIRoute.Guitars)
       .reply(200, mockGuitars);
 
-    const sortOptionsMock = {
-      sortType: '',
-      sortDirection: '',
-      filterMinPrice: 0,
-      filterMaxPrice: 0,
-      filterGuitarType: '',
-      filterStringCount: '',
-    };
-
-    await store.dispatch(fetchGuitarsAction(sortOptionsMock));
+    await store.dispatch(fetchGuitarsAction());
 
     const actions = store.getActions().map(({type}) => type);
 

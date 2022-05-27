@@ -6,11 +6,14 @@ import { NameSpace, InitialStateValues } from '../../const';
 const initialState: GuitarsData = {
   guitarsTotalCount: InitialStateValues.InitialTotalCountGuitars,
   guitars: [],
+  guitarsMinPrice: 0,
+  guitarsMaxPrice: 0,
   guitarById: {} as Guitar,
   guitarComments: [],
   isGuitarsLoaded: true,
   isGuitarLoaded: true,
   isCommentPushed: false,
+  isGuitarsSortFilterLoaded: true,
   search: '',
   searchResults: [],
   sortType: '',
@@ -30,6 +33,10 @@ export const guitarsData = createSlice({
     },
     loadGuitars: (state, action) => {
       state.guitars = action.payload;
+      state.guitarsMinPrice = Math.min(...state.guitars.map((item) => item.price));
+      state.guitarsMaxPrice = Math.max(...state.guitars.map((item) => item.price));
+      state.filterMinPrice = state.guitarsMinPrice;
+      state.filterMaxPrice = state.guitarsMaxPrice;
     },
     setGuitarsLoadStatus: (state, action) => {
       state.isGuitarsLoaded = action.payload;
@@ -52,6 +59,13 @@ export const guitarsData = createSlice({
     resetSearch: (state) => {
       state.search = initialState.search;
       state.searchResults = initialState.searchResults;
+    },
+    loadGuitarsSortFilter: (state, action) => {
+      state.guitars = action.payload;
+      state.isGuitarsSortFilterLoaded = true;
+    },
+    setLoadGuitarsSortFilter: (state, action) => {
+      state.isGuitarsSortFilterLoaded= action.payload;
     },
     setSortType: (state, action) => {
       state.sortType = action.payload;
@@ -90,6 +104,8 @@ export const {
   setSearchRequest,
   loadSearchResults,
   resetSearch,
+  loadGuitarsSortFilter,
+  setLoadGuitarsSortFilter,
   setSortType,
   setSortDirection,
   setFilterMinPrice,

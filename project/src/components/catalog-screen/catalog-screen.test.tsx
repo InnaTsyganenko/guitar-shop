@@ -38,16 +38,7 @@ describe('Component: CatalogScreen', () => {
       .onGet(APIRoute.Guitars)
       .reply(200, mockGuitars);
 
-    const sortOptionsMock = {
-      sortType: '',
-      sortDirection: '',
-      filterMinPrice: 0,
-      filterMaxPrice: 0,
-      filterGuitarType: '',
-      filterStringCount: '',
-    };
-
-    await store.dispatch(fetchGuitarsAction(sortOptionsMock));
+    await store.dispatch(fetchGuitarsAction());
 
     render(
       <Provider store={store}>

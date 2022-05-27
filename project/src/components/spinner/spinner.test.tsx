@@ -3,27 +3,32 @@ import { Provider } from 'react-redux';
 import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
-import CatalogPagination from './catalog-pagination';
+import Spinner from './spinner';
 import thunk from 'redux-thunk';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-const history = createMemoryHistory();
 
 const store = mockStore({
-  GUITARS: {pickedId: 1, currentPageCatalog: 1},
+  DATA: {},
+  GUITARS: {pickedId: 1, currentPageCatalog: 1, isModalOpen: true},
 });
 
-describe('Component: CatalogPagination', () => {
+describe('Component: Spinner', () => {
   it('should render correctly', () => {
+    const history = createMemoryHistory();
+
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <CatalogPagination totalPages={3} />
+          <Spinner />
+          <span>Spinner component</span>
         </HistoryRouter>
-      </Provider>);
+      </Provider>,
+    );
 
-    expect(screen.getByText(/1/i)).toBeInTheDocument();
-    expect(screen.getByText(/Далее/i)).toBeInTheDocument();
+    const textElement = screen.getByText('Spinner component');
+
+    expect(textElement).toBeInTheDocument();
   });
 });

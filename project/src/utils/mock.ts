@@ -34,3 +34,25 @@ export const makeFakeGuitar = (): Guitar => ({
 } as Guitar);
 
 export const makeFakeGuitars: Guitars = Array.from({length: 10}, makeFakeGuitar) as Guitars;
+
+export const mockState = {
+  guitarsTotalCount: 0,
+  guitars: [],
+  guitarsMinPrice: 0,
+  guitarsMaxPrice: 0,
+  guitarById: {} as Guitar,
+  guitarComments: [],
+  isGuitarsLoaded: true,
+  isGuitarLoaded: true,
+  isCommentPushed: false,
+  search: '',
+  searchResults: [],
+  guitarsSortFilter: [],
+  isGuitarsSortFilterLoaded: false,
+  sortType: '',
+  sortDirection: '',
+  filterMinPrice: 0,
+  filterMaxPrice: 0,
+  filterGuitarType: '',
+  filterStringCount: '',
+};

@@ -5,6 +5,8 @@ import { Guitars, GuitarById, CurrentPageCatalog, PickedId, GuitarsTotalCount, G
 export type GuitarsData = {
   guitarsTotalCount: GuitarsTotalCount,
   guitars: Guitars,
+  guitarsMinPrice: number,
+  guitarsMaxPrice: number,
   guitarById: GuitarById,
   isGuitarsLoaded: boolean,
   isGuitarLoaded: boolean,
@@ -12,6 +14,7 @@ export type GuitarsData = {
   isCommentPushed: boolean,
   search: string,
   searchResults: Guitars,
+  isGuitarsSortFilterLoaded: boolean,
   sortType: string,
   sortDirection: string,
   filterMinPrice: number,

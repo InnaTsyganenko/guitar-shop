@@ -8,9 +8,10 @@ import Rating from '../rating/rating';
 import CatalogPagination from '../catalog-pagination/catalog-pagination';
 import Footer from '../footer/footer';
 import LoadingScreen from '../loading-screen/loading-screen';
-import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
+import Spinner from '../spinner/spinner';
+import { AppRoute, DEFAULT_CATALOG_PAGE, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
-import { getGuitars, getTotalCountGuitars } from '../../store/guitars-data/selectors';
+import { getGuitars, getStatusLoadedGuitarsSortFIlter, getTotalCountGuitars } from '../../store/guitars-data/selectors';
 import { setGuitarId, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 import {
   getSortType,
@@ -20,19 +21,22 @@ import {
   getFilterGuitarType,
   getFilterStringCount
 } from '../../store/guitars-data/selectors';
-import { fetchGuitarsAction } from '../../store/api-actions';
+import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
+import { setLoadGuitarsSortFilter } from '../../store/guitars-data/guitars-data';
+import browserHistory from '../../browser-history';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
+  // const [loadingGuitarsSortFilter, setLoadingGuitarsSortFilter] = useState<boolean>(false);
 
   const dispatch = useAppDispatch();
 
-  const handleUpdatePageCatalog = (updatePage: number) => dispatch(setCurrentPageCatalog(updatePage));
 
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+  const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
 
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
@@ -49,6 +53,23 @@ function CatalogScreen(): JSX.Element {
 
 
   const fetchGuitars = useCallback(async () => {
+
+    await dispatch(fetchGuitarsAction())
+      .then(() => {
+        setLoading(true);
+      });
+  }, [dispatch]);
+
+  useEffect(() => {
+    fetchGuitars();
+    setLoading(false);
+  }, [fetchGuitars]);
+
+
+  const fetchGuitarsSortFilter = useCallback(async () => {
+    dispatch(setLoadGuitarsSortFilter(false));
+    console.log(selectedFilterMinPrice);
+    console.log(selectedFilterMaxPrice);
     const FilterAndSortOptions = {
       sortType: selectedSortType,
       sortDirection: selectedSortDirection,
@@ -58,10 +79,7 @@ function CatalogScreen(): JSX.Element {
       filterStringCount: selectedFilterStringCount,
     };
 
-    await dispatch(fetchGuitarsAction(FilterAndSortOptions))
-      .then(() => {
-        setLoading(true);
-      });
+    await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
   }, [
     dispatch,
     selectedSortType,
@@ -73,14 +91,8 @@ function CatalogScreen(): JSX.Element {
   ]);
 
   useEffect(() => {
-    fetchGuitars();
-    setLoading(false);
-  }, [fetchGuitars]);
-
-
-  const minPrice: number = Math.min(...guitars.map((item) => item.price));
-  const maxPrice: number = Math.max(...guitars.map((item) => item.price));
-
+    fetchGuitarsSortFilter();
+  }, [fetchGuitarsSortFilter]);
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
@@ -95,45 +107,41 @@ function CatalogScreen(): JSX.Element {
             <h1 className="page-content__title title title--bigger">Каталог гитар</h1>
             <Breadcrumbs guitarId={0} guitarName={''} />
             <div className="catalog">
-              <CatalogFilter
-                minPrice={minPrice}
-                maxPrice={maxPrice}
-              />
+              <CatalogFilter />
               <CatalogSort />
-              <div className="cards catalog__cards">
-                {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
-                  <div className="product-card" key={guitar.id}>
-                    <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
-                    <div className="product-card__info">
-                      <div className="rate product-card__rate">
-                        <Rating
-                          rating={guitar.rating}
-                          commentsLength={guitar.comments.length}
-                          isRatingWithCountReviews
-                        />
+              {!loadingGuitarsSortFilter ? <Spinner /> :
+                <>
+                  <div className="cards catalog__cards">
+                    {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
+                      <div className="product-card" key={guitar.id}>
+                        <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
+                        <div className="product-card__info">
+                          <div className="rate product-card__rate">
+                            <Rating
+                              rating={guitar.rating}
+                              commentsLength={guitar.comments.length}
+                              isRatingWithCountReviews
+                            />
+                          </div>
+                          <p className="product-card__title">{guitar.name}</p>
+                          <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
+                          </p>
+                        </div>
+                        <div className="product-card__buttons">
+                          <Link
+                            className="button button--mini"
+                            aria-label="Корзина"
+                            onClick={() => dispatch(setGuitarId(guitar.id))}
+                            to={`${AppRoute.Guitars}${guitar.id}`}
+                          >Подробнее
+                          </Link>
+                          <a className="button button--red button--mini button--add-to-cart" href="##" onClick={(evt) => evt.preventDefault()}>Купить</a>
+                        </div>
                       </div>
-                      <p className="product-card__title">{guitar.name}</p>
-                      <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
-                      </p>
-                    </div>
-                    <div className="product-card__buttons">
-                      <Link
-                        className="button button--mini"
-                        aria-label="Корзина"
-                        onClick={() => dispatch(setGuitarId(guitar.id))}
-                        to={`${AppRoute.Guitars}${guitar.id}`}
-                      >Подробнее
-                      </Link>
-                      <a className="button button--red button--mini button--add-to-cart" href="##" onClick={(evt) => evt.preventDefault()}>Купить</a>
-                    </div>
+                    ))}
                   </div>
-                ))}
-              </div>
-              <CatalogPagination
-                page={currentPageCatalog}
-                totalPages={totalPages}
-                onPaginationClick={handleUpdatePageCatalog}
-              />
+                  <CatalogPagination totalPages={totalPages} />
+                </>}
             </div>
           </div>
         </main>

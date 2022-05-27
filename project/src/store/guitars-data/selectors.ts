@@ -6,6 +6,10 @@ export const getTotalCountGuitars = (state: State): GuitarsTotalCount => state[N
 
 export const getGuitars = (state: State): Guitars => state[NameSpace.data].guitars;
 
+export const getGuitarsMinPrice = (state: State): number => state[NameSpace.data].guitarsMinPrice;
+
+export const getGuitarsMaxPrice = (state: State): number => state[NameSpace.data].guitarsMaxPrice;
+
 export const getStatusLoadedGuitars = (state: State): boolean => state[NameSpace.data].isGuitarsLoaded;
 
 export const getGuitarById = (state: State): Guitar => state[NameSpace.data].guitarById;
@@ -29,3 +33,5 @@ export const getFilterMaxPrice = (state: State): number => state[NameSpace.data]
 export const getFilterGuitarType = (state: State): string => state[NameSpace.data].filterGuitarType;
 
 export const getFilterStringCount = (state: State): string => state[NameSpace.data].filterStringCount;
+
+export const getStatusLoadedGuitarsSortFIlter = (state: State): boolean => state[NameSpace.data].isGuitarsSortFilterLoaded;

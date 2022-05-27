@@ -20,10 +20,7 @@ describe('Component: CatalogFilterAndSort', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <CatalogFilter
-            minPrice={0}
-            maxPrice={10000000}
-          />
+          <CatalogFilter />
         </HistoryRouter>
       </Provider>,
     );
