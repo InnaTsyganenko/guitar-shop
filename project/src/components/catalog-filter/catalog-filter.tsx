@@ -101,6 +101,7 @@ function CatalogFilter(): JSX.Element {
     dispatch(setFilterGuitarType(checkedTypesArray));
   };
 
+
   const [minValue, setMinValue] = useState(guitarsMinPrice);
 
   const handleInputPriceFocus = (evt: any) => evt.target.select();
@@ -145,8 +146,12 @@ function CatalogFilter(): JSX.Element {
     let enabledStringArray;
 
     if (isStringEnabled[string]) {
-      enabledStringArray = [...new Set(isStringChecked) , string];
+      enabledStringArray = [...new Set(isStringChecked), string];
       setStringChecked(enabledStringArray);
+    } else {
+      const index = isStringChecked.indexOf(string);
+      if (index > -1) {isStringChecked.splice(index, 1);}
+      setStringChecked(isStringChecked);
     }
 
     const checkedStringArray = Object.keys(isStringEnabled).filter((id) => isStringEnabled[id]);
@@ -197,6 +202,7 @@ function CatalogFilter(): JSX.Element {
               type="checkbox"
               id={string.type}
               name={string.type}
+              disabled={(GuitarTypesStringsMatch.find((element) => element.type === string.type)?.stringsNumber.some(element => isStringChecked.includes(element) || isStringChecked.length === 0)) ? false : true}
               onChange={handleTypeGuitarChange}
             />
             <label htmlFor={string.type}>{string.name}</label>

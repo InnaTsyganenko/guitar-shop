@@ -50,9 +50,9 @@ export type RatingCount = number;
 export type CommentsLength = number;
 
 export type FilterAndSortOptions = {
-  sortType: string;
-  sortDirection: string;
-  filterMinPrice: number;
-  filterMaxPrice: number;
-  filterGuitarTypes: [];
+  sort: string;
+  order: string;
+  price_gte: number;
+  price_lte: number;
+  type: [];
 };

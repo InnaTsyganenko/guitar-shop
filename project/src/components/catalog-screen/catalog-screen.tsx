@@ -25,8 +25,9 @@ import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/ap
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
-import { setLoadGuitarsSortFilter } from '../../store/guitars-data/guitars-data';
+import { resetFilters, resetSearch, resetSort, setLoadGuitarsSortFilter } from '../../store/guitars-data/guitars-data';
 import browserHistory from '../../browser-history';
+import { useParams, useSearchParams } from 'react-router-dom';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
@@ -36,16 +37,21 @@ function CatalogScreen(): JSX.Element {
   const history = browserHistory;
   const navigate = useNavigate();
 
+
+  let { userId } = useParams();
+  let [searchParams, setSearchParams] = useSearchParams();
+
+
 const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
 
-  const selectedSortType = useAppSelector(getSortType);
-  const selectedSortDirection = useAppSelector(getSortDirection);
+  const selectedSortType: string = useAppSelector(getSortType);
+  const selectedSortDirection: string = useAppSelector(getSortDirection);
 
-  const selectedFilterMinPrice = useAppSelector(getFilterMinPrice);
-  const selectedFilterMaxPrice = useAppSelector(getFilterMaxPrice);
-  const selectedFilterGuitarType = useAppSelector(getFilterGuitarTypes);
-  const selectedFilterStringCount = useAppSelector(getFilterStringCount);
+  const selectedFilterMinPrice: number = useAppSelector(getFilterMinPrice);
+  const selectedFilterMaxPrice: number = useAppSelector(getFilterMaxPrice);
+  const selectedFilterGuitarType: any = useAppSelector(getFilterGuitarTypes);
+  const selectedFilterStringCount: any = useAppSelector(getFilterStringCount);
 
   const guitars = useAppSelector(getGuitars);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
@@ -65,6 +71,13 @@ const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter
     setLoading(false);
   }, [fetchGuitars]);
 
+  const FilterAndSortOptions = {
+    sort: selectedSortType,
+    order: selectedSortDirection,
+    price_gte: selectedFilterMinPrice,
+    price_lte: selectedFilterMaxPrice,
+    type: selectedFilterGuitarType,
+  };
 
   const fetchGuitarsSortFilter = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
@@ -73,15 +86,9 @@ const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter
       paginationFirstButton.click();
     }
 
-    const FilterAndSortOptions = {
-      sortType: selectedSortType,
-      sortDirection: selectedSortDirection,
-      filterMinPrice: selectedFilterMinPrice,
-      filterMaxPrice: selectedFilterMaxPrice,
-      filterGuitarTypes: selectedFilterGuitarType,
-    };
 
     await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
+
   }, [
     dispatch,
     selectedSortType,
@@ -93,15 +100,33 @@ const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter
 
   useEffect(() => {
     fetchGuitarsSortFilter();
+
+    const params = Object.entries(FilterAndSortOptions);
+console.log(params);
+      setSearchParams(FilterAndSortOptions);
+      console.log(searchParams.append);
+
+    // if ((selectedFilterMinPrice > 1700) && (selectedFilterMaxPrice < 35000) ) {
+    //   setSearchParams({
+    //     ...searchParams,
+    //     price_gte: selectedFilterMinPrice.toString(),
+    //     price_lte: selectedFilterMaxPrice.toString(),
+    //   });
+    // } else {
+    //   setSearchParams('');
+    // }
   }, [fetchGuitarsSortFilter]);
 
-  console.log(selectedFilterStringCount)
-
   const filtredGuitarsByStrings = guitars.filter((guitar) => selectedFilterStringCount.includes((guitar.stringCount).toString() as keyof object));
-  console.log((filtredGuitarsByStrings.length === 0) && (guitars.length === 0))
+  // console.log((filtredGuitarsByStrings.length === 0) && (guitars.length === 0))
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const totalPages = Math.ceil((selectedFilterStringCount.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
+
+  useEffect(() => {
+    dispatch(resetSort());
+    dispatch(resetFilters());
+  }, [location]);
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;

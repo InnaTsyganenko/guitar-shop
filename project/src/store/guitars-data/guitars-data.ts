@@ -73,6 +73,10 @@ export const guitarsData = createSlice({
     setSortDirection: (state, action) => {
       state.sortDirection = action.payload;
     },
+    resetSort: (state) => {
+      state.sortType = initialState.sortType;
+      state.sortDirection = initialState.sortDirection;
+    },
     setFilterMinPrice: (state, action) => {
       state.filterMinPrice = action.payload;
     },
@@ -108,6 +112,7 @@ export const {
   setLoadGuitarsSortFilter,
   setSortType,
   setSortDirection,
+  resetSort,
   setFilterMinPrice,
   setFilterMaxPrice,
   setFilterGuitarType,
