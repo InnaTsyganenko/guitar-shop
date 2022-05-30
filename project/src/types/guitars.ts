@@ -54,6 +54,5 @@ export type FilterAndSortOptions = {
   sortDirection: string;
   filterMinPrice: number;
   filterMaxPrice: number;
-  filterGuitarType: string;
-  filterStringCount: string;
+  filterGuitarTypes: [];
 };

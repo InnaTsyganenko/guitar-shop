@@ -19,8 +19,8 @@ export type GuitarsData = {
   sortDirection: string,
   filterMinPrice: number,
   filterMaxPrice: number,
-  filterGuitarType: string,
-  filterStringCount: string,
+  filterGuitarTypes: [],
+  filterStringCount: [],
 };
 
 export type GuitarsOperations = {

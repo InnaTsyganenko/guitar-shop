@@ -53,6 +53,6 @@ export const mockState = {
   sortDirection: '',
   filterMinPrice: 0,
   filterMaxPrice: 0,
-  filterGuitarType: '',
+  filterGuitarTypes: [],
   filterStringCount: '',
 };

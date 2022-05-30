@@ -1,15 +1,12 @@
-import { DEFAULT_CATALOG_PAGE, AppRoute } from './../const';
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
 import { loadGuitars, loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarLoadStatus, setGuitarsLoadStatus, loadSearchResults, loadGuitarsSortFilter, setLoadGuitarsSortFilter } from './guitars-data/guitars-data';
-import { setCurrentPageCatalog, setModalWindowState } from './guitars-operations/guitars-operations';
+import { setModalWindowState } from './guitars-operations/guitars-operations';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
 import { Guitars, PickedId, GuitarById, CommentPost, Guitar, FilterAndSortOptions } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
-import browserHistory from '../browser-history';
 
-const history = browserHistory;
 
 export const fetchGuitarsAction = createAsyncThunk<void, undefined, {
   dispatch: AppDispatch,
@@ -39,9 +36,10 @@ export const fetchGuitarsSortFilterAction = createAsyncThunk<void, FilterAndSort
   extra: AxiosInstance
 }>(
   'DATA/fetchGuitarsSortFilter',
-  async ({sortType, sortDirection, filterMinPrice, filterMaxPrice, filterGuitarType, filterStringCount}, {dispatch, extra: api}) => {
+  async ({sortType, sortDirection, filterMinPrice, filterMaxPrice, filterGuitarTypes}, {dispatch, extra: api}) => {
     try {
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortDirection}` : ''}${(filterMinPrice > 0) && (filterMaxPrice > 0) ? `&price_gte=${filterMinPrice}&price_lte=${filterMaxPrice}` : ''}${filterGuitarType !== '' ? `&_type=${filterGuitarType}` : ''}`);
+      const queryTypes = filterGuitarTypes.map((item) => `&type=${item}`).join('');
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortDirection}` : ''}${(filterMinPrice > 0) && (filterMaxPrice > 0) ? `&price_gte=${filterMinPrice}&price_lte=${filterMaxPrice}` : ''}${filterGuitarTypes.length !== 0 ? `&type=${queryTypes}` : ''}`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
 

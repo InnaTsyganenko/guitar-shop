@@ -18,7 +18,7 @@ import {
   getSortDirection,
   getFilterMinPrice,
   getFilterMaxPrice,
-  getFilterGuitarType,
+  getFilterGuitarTypes,
   getFilterStringCount
 } from '../../store/guitars-data/selectors';
 import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/api-actions';
@@ -38,20 +38,16 @@ function CatalogScreen(): JSX.Element {
 
 const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
 const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
-console.log(loading)
-console.log(loadingGuitarsSortFilter)
 
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
 
   const selectedFilterMinPrice = useAppSelector(getFilterMinPrice);
   const selectedFilterMaxPrice = useAppSelector(getFilterMaxPrice);
-  const selectedFilterGuitarType = useAppSelector(getFilterGuitarType);
+  const selectedFilterGuitarType = useAppSelector(getFilterGuitarTypes);
   const selectedFilterStringCount = useAppSelector(getFilterStringCount);
 
-  const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
   const guitars = useAppSelector(getGuitars);
-  const totalPages = Math.ceil(guitarsTotalCount / GUITARS_QUANTITY_FOR_DISPLAY);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
 
 
@@ -72,20 +68,17 @@ console.log(loadingGuitarsSortFilter)
 
   const fetchGuitarsSortFilter = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
-    const a = document.getElementById('1') as HTMLElement;
-    if (a) {
-      console.log(a);
-      a.click();
+    const paginationFirstButton = document.getElementById('1') as HTMLElement;
+    if (paginationFirstButton) {
+      paginationFirstButton.click();
     }
-    console.log(selectedFilterMinPrice);
-    console.log(selectedFilterMaxPrice);
+
     const FilterAndSortOptions = {
       sortType: selectedSortType,
       sortDirection: selectedSortDirection,
       filterMinPrice: selectedFilterMinPrice,
       filterMaxPrice: selectedFilterMaxPrice,
-      filterGuitarType: selectedFilterGuitarType,
-      filterStringCount: selectedFilterStringCount,
+      filterGuitarTypes: selectedFilterGuitarType,
     };
 
     await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
@@ -96,12 +89,19 @@ console.log(loadingGuitarsSortFilter)
     selectedFilterMinPrice,
     selectedFilterMaxPrice,
     selectedFilterGuitarType,
-    selectedFilterStringCount,
   ]);
 
   useEffect(() => {
     fetchGuitarsSortFilter();
   }, [fetchGuitarsSortFilter]);
+
+  console.log(selectedFilterStringCount)
+
+  const filtredGuitarsByStrings = guitars.filter((guitar) => selectedFilterStringCount.includes((guitar.stringCount).toString() as keyof object));
+  console.log((filtredGuitarsByStrings.length === 0) && (guitars.length === 0))
+
+  const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
+  const totalPages = Math.ceil((selectedFilterStringCount.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
@@ -121,7 +121,10 @@ console.log(loadingGuitarsSortFilter)
               {!loadingGuitarsSortFilter ? <Spinner /> :
                 <>
                   <div className="cards catalog__cards">
-                    {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
+                    {(filtredGuitarsByStrings.length === 0) && (guitars.length === 0) ?
+                      <p className="page-content__title title" style={{width:'500px'}}>К сожалению, таких гитар в базе данных нет. Попробуйте изменить параметры фильтра.</p> : ''}
+                    {(selectedFilterStringCount.length === 0 ?
+                      guitars : filtredGuitarsByStrings).slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
                       <div className="product-card" key={guitar.id}>
                         <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
                         <div className="product-card__info">
@@ -133,6 +136,8 @@ console.log(loadingGuitarsSortFilter)
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
+                          <p className="product-card__title">{guitar.stringCount}</p>
+                          <p className="product-card__title">{guitar.type}</p>
                           <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
                           </p>
                         </div>
