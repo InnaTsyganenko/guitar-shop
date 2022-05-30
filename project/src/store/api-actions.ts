@@ -45,14 +45,12 @@ export const fetchGuitarsSortFilterAction = createAsyncThunk<void, FilterAndSort
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
 
-      dispatch(setLoadGuitarsSortFilter(true));
       dispatch(setTotalCountGuitarsFromResponse(filtredGuitars.length));
       dispatch(loadGuitarsSortFilter(filtredGuitars));
-      dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
-      history.push(`${AppRoute.Catalog}${DEFAULT_CATALOG_PAGE}`);
+      dispatch(setLoadGuitarsSortFilter(true));
 
     } catch (error) {
-      dispatch(setGuitarsLoadStatus(false));
+      dispatch(setLoadGuitarsSortFilter(false));
       errorHandle(error);
     }
   },

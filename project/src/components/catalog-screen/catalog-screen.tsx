@@ -1,5 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import CatalogFilter from '../catalog-filter/catalog-filter';
@@ -30,13 +30,16 @@ import browserHistory from '../../browser-history';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
-  // const [loadingGuitarsSortFilter, setLoadingGuitarsSortFilter] = useState<boolean>(false);
+  const [load, setLoad] = useState<boolean>(true);
 
   const dispatch = useAppDispatch();
+  const history = browserHistory;
+  const navigate = useNavigate();
 
-
-  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
-  const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
+const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
+console.log(loading)
+console.log(loadingGuitarsSortFilter)
 
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
@@ -57,6 +60,7 @@ function CatalogScreen(): JSX.Element {
     await dispatch(fetchGuitarsAction())
       .then(() => {
         setLoading(true);
+        setLoad(false);
       });
   }, [dispatch]);
 
@@ -68,6 +72,11 @@ function CatalogScreen(): JSX.Element {
 
   const fetchGuitarsSortFilter = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
+    const a = document.getElementById('1') as HTMLElement;
+    if (a) {
+      console.log(a);
+      a.click();
+    }
     console.log(selectedFilterMinPrice);
     console.log(selectedFilterMaxPrice);
     const FilterAndSortOptions = {
@@ -96,7 +105,7 @@ function CatalogScreen(): JSX.Element {
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
-  } else if (!loading) {
+  } else if (!loading && load) {
     return <LoadingScreen text={'Loading...'} />;
   } else {
     return (

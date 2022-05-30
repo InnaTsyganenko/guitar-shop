@@ -53,6 +53,7 @@ function CatalogPagination({totalPages}: CatalogPaginatioProps): JSX.Element {
                 className="link pagination__page-link"
                 onClick={() => handlePaginationBtnClick(item)}
                 to={`${AppRoute.Catalog}${item}`}
+                id={(item).toString()}
               >{item}
               </Link>
             </li>
