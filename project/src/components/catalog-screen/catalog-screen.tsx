@@ -1,3 +1,5 @@
+/* eslint-disable no-restricted-globals */
+/* eslint-disable camelcase */
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Header from '../header/header';
@@ -27,7 +29,7 @@ import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
 import { resetFilters, resetSearch, resetSort, setLoadGuitarsSortFilter } from '../../store/guitars-data/guitars-data';
 import browserHistory from '../../browser-history';
-import { useParams, useSearchParams } from 'react-router-dom';
+import { useParams, useSearchParams, generatePath } from 'react-router-dom';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
@@ -38,12 +40,13 @@ function CatalogScreen(): JSX.Element {
   const navigate = useNavigate();
 
 
-  let { userId } = useParams();
+  let pageCatalog = useParams();
   let [searchParams, setSearchParams] = useSearchParams();
 
 
-const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
-const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
+  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+  const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
+  // console.log(pageCatalog);
 
   const selectedSortType: string = useAppSelector(getSortType);
   const selectedSortDirection: string = useAppSelector(getSortDirection);
@@ -58,7 +61,6 @@ const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter
 
 
   const fetchGuitars = useCallback(async () => {
-
     await dispatch(fetchGuitarsAction())
       .then(() => {
         setLoading(true);
@@ -72,23 +74,58 @@ const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter
   }, [fetchGuitars]);
 
   const FilterAndSortOptions = {
-    sort: selectedSortType,
-    order: selectedSortDirection,
-    price_gte: selectedFilterMinPrice,
-    price_lte: selectedFilterMaxPrice,
-    type: selectedFilterGuitarType,
+    sortType: selectedSortType,
+    sortOrder: selectedSortDirection,
+    priceMin: selectedFilterMinPrice,
+    priceMax: selectedFilterMaxPrice,
+    guitarTypes: selectedFilterGuitarType,
   };
+
+  const adaptSearchParams = (params: any) => {
+    const adaptedMovie = {...params,
+      sort: params.sortType,
+      order: params.sortOrder,
+      price_gte: params.priceMin,
+      price_lte: params.priceMax,
+      type: params.guitarTypes,
+    };
+
+    delete adaptedMovie.sortType;
+    delete adaptedMovie.sortOrder;
+    delete adaptedMovie.priceMin;
+    delete adaptedMovie.priceMax;
+    delete adaptedMovie.guitarTypes;
+
+    Object.keys(adaptedMovie).map((item: any) => {
+      if ((adaptedMovie[item] === '') || (adaptedMovie[item] === 0) || (adaptedMovie[item].length === 0)) {
+        delete adaptedMovie[item];
+      }
+    });
+
+    return adaptedMovie;
+  };
+
+  const params = adaptSearchParams(FilterAndSortOptions);
+
+  console.log();
 
   const fetchGuitarsSortFilter = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
+
     const paginationFirstButton = document.getElementById('1') as HTMLElement;
     if (paginationFirstButton) {
       paginationFirstButton.click();
     }
+    // dispatch(setCurrentPageCatalog(1));
+    setSearchParams(params);
 
-
-    await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
-
+    await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions)).then(() => {
+      // if (paginationFirstButton) {
+      //   paginationFirstButton.click();
+      // }
+      // dispatch(setCurrentPageCatalog(1));
+      // setSearchParams(params);
+    });
   }, [
     dispatch,
     selectedSortType,
@@ -100,21 +137,6 @@ const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter
 
   useEffect(() => {
     fetchGuitarsSortFilter();
-
-    const params = Object.entries(FilterAndSortOptions);
-console.log(params);
-      setSearchParams(FilterAndSortOptions);
-      console.log(searchParams.append);
-
-    // if ((selectedFilterMinPrice > 1700) && (selectedFilterMaxPrice < 35000) ) {
-    //   setSearchParams({
-    //     ...searchParams,
-    //     price_gte: selectedFilterMinPrice.toString(),
-    //     price_lte: selectedFilterMaxPrice.toString(),
-    //   });
-    // } else {
-    //   setSearchParams('');
-    // }
   }, [fetchGuitarsSortFilter]);
 
   const filtredGuitarsByStrings = guitars.filter((guitar) => selectedFilterStringCount.includes((guitar.stringCount).toString() as keyof object));
@@ -124,9 +146,16 @@ console.log(params);
   const totalPages = Math.ceil((selectedFilterStringCount.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
 
   useEffect(() => {
+    console.log('location evt')
     dispatch(resetSort());
     dispatch(resetFilters());
   }, [location]);
+
+  useEffect(() => {
+    console.log('navigate evt')
+    setSearchParams(params);
+  }, [navigate]);
+
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;

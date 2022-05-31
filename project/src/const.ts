@@ -58,3 +58,37 @@ export const ListSortDirections = [
   { label: 'По возрастанию', class: 'catalog-sort__order-button--up', value: 'asc' },
   { label: 'По убыванию', class: 'catalog-sort__order-button--down', value: 'desc' },
 ] as const;
+
+
+export const SymbolsBanForInput = ['+','-','e'];
+
+export const GuitarTypesStringsMatch = [
+  {
+    type: 'acoustic',
+    name: 'Акустические гитары',
+    stringsNumber: [6, 7, 12],
+  },
+  {
+    type: 'electric',
+    name: 'Электрогитары',
+    stringsNumber: [4, 6, 7],
+  },
+  {
+    type: 'ukulele',
+    name: 'Укулеле',
+    stringsNumber: [4],
+  },
+];
+
+export const GuitarPrices = [
+  {
+    id: 'priceMin',
+    label: 'Минимальная цена',
+    name: 'от',
+  },
+  {
+    id: 'priceMax',
+    label: 'Максимальная цена',
+    name: 'до',
+  },
+] as const;

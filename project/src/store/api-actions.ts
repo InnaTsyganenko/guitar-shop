@@ -36,10 +36,10 @@ export const fetchGuitarsSortFilterAction = createAsyncThunk<void, FilterAndSort
   extra: AxiosInstance
 }>(
   'DATA/fetchGuitarsSortFilter',
-  async ({sort, order, price_gte, price_lte, type}, {dispatch, extra: api}) => {
+  async ({sortType, sortOrder, priceMin, priceMax, guitarTypes}, {dispatch, extra: api}) => {
     try {
-      const queryTypes = type.map((item) => `&type=${item}`).join('');
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sort !== '' ? `&_sort=${sort}&_order=${order}` : ''}${(price_gte > 0) && (price_lte > 0) ? `&price_gte=${price_gte}&price_lte=${price_lte}` : ''}${type.length !== 0 ? `&type=${queryTypes}` : ''}`);
+      const queryTypes = guitarTypes.map((item) => `&type=${item}`).join('');
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortOrder}` : ''}${(priceMin > 0) && (priceMax > 0) ? `&price_gte=${priceMin}&price_lte=${priceMax}` : ''}${guitarTypes.length !== 0 ? `&type=${queryTypes}` : ''}`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
 

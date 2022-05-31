@@ -35,8 +35,6 @@ export const guitarsData = createSlice({
       state.guitars = action.payload;
       state.guitarsMinPrice = Math.min(...state.guitars.map((item) => item.price));
       state.guitarsMaxPrice = Math.max(...state.guitars.map((item) => item.price));
-      state.filterMinPrice = state.guitarsMinPrice;
-      state.filterMaxPrice = state.guitarsMaxPrice;
     },
     setGuitarsLoadStatus: (state, action) => {
       state.isGuitarsLoaded = action.payload;

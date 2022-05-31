@@ -48,3 +48,14 @@ export const trapFocusInsideModalWindow = () => {
   modal?.addEventListener('keydown', trapTabKey);
   return () => modal?.removeEventListener('keydown', trapTabKey);
 };
+
+export const removeMatchItemsFromArray = (arrayOne: any, arrayTwo: any): Array<any> => {
+  arrayTwo.forEach((i: any) => {
+    const index = arrayOne.lastIndexOf(i);
+    if (index > -1) {
+      arrayOne.splice(index, 1);
+    }
+  });
+
+  return arrayOne;
+};

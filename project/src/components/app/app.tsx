@@ -12,6 +12,8 @@ function App(): JSX.Element {
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
   const pickedId = useAppSelector(getPickedId);
 
+  console.log(currentPageCatalog);
+
   return (
     <Routes>
       <Route
@@ -19,7 +21,7 @@ function App(): JSX.Element {
         element={<ProductScreen />}
       />
       <Route
-        path={`${AppRoute.Catalog}${currentPageCatalog}`}
+        path={`${AppRoute.Catalog}:${currentPageCatalog}`}
         element={<CatalogScreen />}
       />
       <Route

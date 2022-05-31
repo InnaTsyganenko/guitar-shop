@@ -2,6 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, FormEvent, useState } from 'react';
 import { Validations, ErrorRecord } from '../types/state';
+import he from 'he';
 
 export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(options?: {
   validations?: Validations<T>;
@@ -15,7 +16,7 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
     key: keyof T,
     sanitizeFn?: (value: string) => S,
   ) => (evt: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
-      const value = sanitizeFn ? sanitizeFn(evt.target.value) : evt.target.value;
+      const value = sanitizeFn ? sanitizeFn(he.encode(evt.target.value)) : he.encode(evt.target.value);
       setData({
         ...data,
         [key]: value,
