@@ -1,4 +1,4 @@
-/* eslint-disable no-restricted-globals */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
 import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,10 +11,10 @@ import CatalogPagination from '../catalog-pagination/catalog-pagination';
 import Footer from '../footer/footer';
 import LoadingScreen from '../loading-screen/loading-screen';
 import Spinner from '../spinner/spinner';
-import { AppRoute, DEFAULT_CATALOG_PAGE, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
+import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getStatusLoadedGuitarsSortFIlter, getTotalCountGuitars } from '../../store/guitars-data/selectors';
-import { setGuitarId, setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
+import { setGuitarId } from '../../store/guitars-operations/guitars-operations';
 import {
   getSortType,
   getSortDirection,
@@ -27,26 +27,22 @@ import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/ap
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
-import { resetFilters, resetSearch, resetSort, setLoadGuitarsSortFilter } from '../../store/guitars-data/guitars-data';
-import browserHistory from '../../browser-history';
-import { useParams, useSearchParams, generatePath } from 'react-router-dom';
+import { setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
+import { useSearchParams } from 'react-router-dom';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
   const [load, setLoad] = useState<boolean>(true);
+  const [loadType, setLoadType] = useState<boolean>(true);
+  const [loadStrings, setLoadStrings] = useState<boolean>(true);
 
   const dispatch = useAppDispatch();
-  const history = browserHistory;
   const navigate = useNavigate();
 
-
-  let pageCatalog = useParams();
-  let [searchParams, setSearchParams] = useSearchParams();
-
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
   const loadingGuitarsSortFilter = useAppSelector(getStatusLoadedGuitarsSortFIlter);
-  // console.log(pageCatalog);
 
   const selectedSortType: string = useAppSelector(getSortType);
   const selectedSortDirection: string = useAppSelector(getSortDirection);
@@ -59,6 +55,32 @@ function CatalogScreen(): JSX.Element {
   const guitars = useAppSelector(getGuitars);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
 
+
+  if (searchParams.get('sort') && !loading) {
+    dispatch(setSortType(searchParams.get('sort')));
+  }
+
+  if (searchParams.get('order') && !loading) {
+    dispatch(setSortDirection(searchParams.get('order')));
+  }
+
+  if (searchParams.get('price_gte') && !loading) {
+    dispatch(setFilterMinPrice(searchParams.get('price_gte')));
+  }
+
+  if (searchParams.get('price_lte') && !loading) {
+    dispatch(setFilterMaxPrice(searchParams.get('price_lte')));
+  }
+
+  if ((searchParams.getAll('string_qt').length > 0) && loadStrings) {
+    setLoadStrings(false);
+    dispatch(setFilterStringCount(searchParams.getAll('string_qt')));
+  }
+
+  if ((searchParams.getAll('type').length > 0) && loadType) {
+    setLoadType(false);
+    dispatch(setFilterGuitarType(searchParams.getAll('type')));
+  }
 
   const fetchGuitars = useCallback(async () => {
     await dispatch(fetchGuitarsAction())
@@ -79,6 +101,7 @@ function CatalogScreen(): JSX.Element {
     priceMin: selectedFilterMinPrice,
     priceMax: selectedFilterMaxPrice,
     guitarTypes: selectedFilterGuitarType,
+    stringQt: selectedFilterStringCount,
   };
 
   const adaptSearchParams = (params: any) => {
@@ -88,6 +111,7 @@ function CatalogScreen(): JSX.Element {
       price_gte: params.priceMin,
       price_lte: params.priceMax,
       type: params.guitarTypes,
+      string_qt: params.stringQt,
     };
 
     delete adaptedMovie.sortType;
@@ -95,19 +119,15 @@ function CatalogScreen(): JSX.Element {
     delete adaptedMovie.priceMin;
     delete adaptedMovie.priceMax;
     delete adaptedMovie.guitarTypes;
+    delete adaptedMovie.stringQt;
 
-    Object.keys(adaptedMovie).map((item: any) => {
-      if ((adaptedMovie[item] === '') || (adaptedMovie[item] === 0) || (adaptedMovie[item].length === 0)) {
-        delete adaptedMovie[item];
-      }
-    });
+    Object.keys(adaptedMovie).map((item: any) => ((adaptedMovie[item] === '') || (adaptedMovie[item] === 0) || (adaptedMovie[item]?.length === 0)) ?
+      delete adaptedMovie[item] : null);
 
     return adaptedMovie;
   };
 
   const params = adaptSearchParams(FilterAndSortOptions);
-
-  console.log();
 
   const fetchGuitarsSortFilter = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
@@ -116,16 +136,11 @@ function CatalogScreen(): JSX.Element {
     if (paginationFirstButton) {
       paginationFirstButton.click();
     }
-    // dispatch(setCurrentPageCatalog(1));
+
     setSearchParams(params);
 
-    await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions)).then(() => {
-      // if (paginationFirstButton) {
-      //   paginationFirstButton.click();
-      // }
-      // dispatch(setCurrentPageCatalog(1));
-      // setSearchParams(params);
-    });
+    await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
     selectedSortType,
@@ -133,27 +148,21 @@ function CatalogScreen(): JSX.Element {
     selectedFilterMinPrice,
     selectedFilterMaxPrice,
     selectedFilterGuitarType,
+    selectedFilterStringCount,
   ]);
 
   useEffect(() => {
     fetchGuitarsSortFilter();
   }, [fetchGuitarsSortFilter]);
 
-  const filtredGuitarsByStrings = guitars.filter((guitar) => selectedFilterStringCount.includes((guitar.stringCount).toString() as keyof object));
-  // console.log((filtredGuitarsByStrings.length === 0) && (guitars.length === 0))
+  const filtredGuitarsByStrings = guitars.filter((guitar) => selectedFilterStringCount?.includes((guitar.stringCount).toString() as keyof object));
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
-  const totalPages = Math.ceil((selectedFilterStringCount.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
+  const totalPages = Math.ceil((selectedFilterStringCount?.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
 
   useEffect(() => {
-    console.log('location evt')
-    dispatch(resetSort());
-    dispatch(resetFilters());
-  }, [location]);
-
-  useEffect(() => {
-    console.log('navigate evt')
     setSearchParams(params);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
 
@@ -177,7 +186,7 @@ function CatalogScreen(): JSX.Element {
                   <div className="cards catalog__cards">
                     {(filtredGuitarsByStrings.length === 0) && (guitars.length === 0) ?
                       <p className="page-content__title title" style={{width:'500px'}}>К сожалению, таких гитар в базе данных нет. Попробуйте изменить параметры фильтра.</p> : ''}
-                    {(selectedFilterStringCount.length === 0 ?
+                    {(selectedFilterStringCount?.length === 0 ?
                       guitars : filtredGuitarsByStrings).slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
                       <div className="product-card" key={guitar.id}>
                         <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
@@ -190,8 +199,6 @@ function CatalogScreen(): JSX.Element {
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
-                          <p className="product-card__title">{guitar.stringCount}</p>
-                          <p className="product-card__title">{guitar.type}</p>
                           <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
                           </p>
                         </div>

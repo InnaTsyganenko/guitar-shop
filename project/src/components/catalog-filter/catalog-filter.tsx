@@ -1,4 +1,5 @@
 /* eslint-disable prefer-arrow-callback */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setFilterMinPrice, setFilterMaxPrice, setFilterGuitarType, setFilterStringCount, resetFilters } from '../../store/guitars-data/guitars-data';
 import { getGuitarsMinPrice, getGuitarsMaxPrice} from '../../store/guitars-data/selectors';
@@ -130,7 +131,7 @@ function CatalogFilter(): JSX.Element {
               <label className="visually-hidden">{item.label}</label>
               <input
                 type='number'
-                placeholder={item.id === GuitarPrices[0].id ? guitarsMinPrice.toString() : guitarsMaxPrice.toString()}
+                placeholder={item.id === GuitarPrices[0].id ? guitarsMinPrice?.toString() : guitarsMaxPrice?.toString()}
                 id={item.id}
                 name={item.name}
                 onFocus={handleInputPriceFocus}

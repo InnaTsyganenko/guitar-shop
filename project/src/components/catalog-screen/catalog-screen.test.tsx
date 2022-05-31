@@ -4,7 +4,6 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import CatalogScreen from './catalog-screen';
-import { waitFor } from '@testing-library/react';
 import { makeFakeGuitars } from './../../utils/mock';
 import {Action} from 'redux';
 import thunk, {ThunkDispatch} from 'redux-thunk';
@@ -32,13 +31,13 @@ const store = mockStore({
 const history = createMemoryHistory();
 
 describe('Component: CatalogScreen', () => {
-  it('should render correctly', async () => {
+  it('should render correctly', () => {
     const mockGuitars = makeFakeGuitars;
     mockAPI
       .onGet(APIRoute.Guitars)
       .reply(200, mockGuitars);
 
-    await store.dispatch(fetchGuitarsAction());
+    store.dispatch(fetchGuitarsAction());
 
     render(
       <Provider store={store}>
@@ -49,6 +48,5 @@ describe('Component: CatalogScreen', () => {
     );
 
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
-    await waitFor(() => screen.findByText(/Каталог гитар/i));
   });
 });

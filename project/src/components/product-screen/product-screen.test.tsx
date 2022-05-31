@@ -5,7 +5,6 @@ import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import ProductScreen from './product-screen';
 import { makeFakeGuitar } from '../../utils/mock';
-import { waitFor } from '@testing-library/react';
 import {Action} from 'redux';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
@@ -32,13 +31,13 @@ const store = mockStore({
 const history = createMemoryHistory();
 
 describe('Component: ProductScreen', () => {
-  it('should render correctly', async() => {
+  it('should render correctly', () => {
     const mockGuitar = makeFakeGuitar();
     mockAPI
       .onGet(APIRoute.GuitarById)
       .reply(200, mockGuitar);
 
-    await store.dispatch(fetchGuitarByIdAction(1));
+    store.dispatch(fetchGuitarByIdAction(1));
 
     render(
       <Provider store={store}>
@@ -49,6 +48,5 @@ describe('Component: ProductScreen', () => {
     );
 
     expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
-    await waitFor(() => screen.findByText(/Характеристики/i));
   });
 });

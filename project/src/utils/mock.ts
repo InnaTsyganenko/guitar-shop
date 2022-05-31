@@ -1,7 +1,7 @@
 import { Guitar, Guitars, CommentGet, CommentPost } from '../types/guitars';
 
 const makeFakeCommentGet = (): CommentGet => ({
-  id: `string${Math.random()}`,
+  id: 'string',
   userName: 'string',
   advantage: 'string',
   disadvantage: 'string',
@@ -12,7 +12,7 @@ const makeFakeCommentGet = (): CommentGet => ({
 } as CommentGet);
 
 export const makeFakeCommentPost = (): CommentPost => ({
-  guitarId: Math.floor(Math.random() * 100000000000000),
+  guitarId: 1,
   userName: 'string',
   advantage: 'string',
   disadvantage: 'string',
@@ -21,7 +21,7 @@ export const makeFakeCommentPost = (): CommentPost => ({
 } as CommentPost);
 
 export const makeFakeGuitar = (): Guitar => ({
-  id: Math.ceil(Math.random() * 100000000000) + 1,
+  id: 1,
   name: 'string',
   vendorCode: 'string',
   type: 'string',
@@ -45,14 +45,13 @@ export const mockState = {
   isGuitarsLoaded: true,
   isGuitarLoaded: true,
   isCommentPushed: false,
+  isGuitarsSortFilterLoaded: true,
   search: '',
   searchResults: [],
-  guitarsSortFilter: [],
-  isGuitarsSortFilterLoaded: false,
   sortType: '',
   sortDirection: '',
   filterMinPrice: 0,
   filterMaxPrice: 0,
   filterGuitarTypes: [],
-  filterStringCount: '',
+  filterStringCount: [],
 };

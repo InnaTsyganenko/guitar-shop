@@ -12,8 +12,6 @@ function App(): JSX.Element {
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
   const pickedId = useAppSelector(getPickedId);
 
-  console.log(currentPageCatalog);
-
   return (
     <Routes>
       <Route

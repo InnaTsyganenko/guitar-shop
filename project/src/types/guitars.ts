@@ -55,4 +55,5 @@ export type FilterAndSortOptions = {
   priceMin: number;
   priceMax: number;
   guitarTypes: [];
+  stringQt: []
 };

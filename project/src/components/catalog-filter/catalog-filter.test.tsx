@@ -13,7 +13,7 @@ const store = mockStore({
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
-describe('Component: CatalogFilterAndSort', () => {
+describe('Component: CatalogFilter', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 
@@ -26,7 +26,6 @@ describe('Component: CatalogFilterAndSort', () => {
     );
 
     expect(screen.getByText(/Фильтр/i)).toBeInTheDocument();
-    expect(screen.getByText(/Цена/i)).toBeInTheDocument();
     expect(screen.getByText(/Тип гитар/i)).toBeInTheDocument();
     expect(screen.getByText(/Количество струн/i)).toBeInTheDocument();
     expect(screen.getByText(/Очистить/i)).toBeInTheDocument();

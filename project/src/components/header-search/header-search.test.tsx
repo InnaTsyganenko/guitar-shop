@@ -26,7 +26,6 @@ describe('Component: Header', () => {
     );
 
     expect(screen.getByText(/Начать поиск/i)).toBeInTheDocument();
-    expect(screen.getByText(/Поиск?/i)).toBeInTheDocument();
     expect(screen.getByText(/Сбросить поиск/i)).toBeInTheDocument();
   });
 });

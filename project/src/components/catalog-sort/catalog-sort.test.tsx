@@ -13,7 +13,7 @@ const store = mockStore({
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
-describe('Component: CatalogFilterAndSort', () => {
+describe('Component: CatalogSort', () => {
   it('should render correctly', () => {
     const history = createMemoryHistory();
 
