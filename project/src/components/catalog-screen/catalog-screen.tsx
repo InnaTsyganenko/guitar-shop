@@ -33,7 +33,6 @@ import { useSearchParams } from 'react-router-dom';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
-  const [load, setLoad] = useState<boolean>(true);
   const [loadType, setLoadType] = useState<boolean>(true);
   const [loadStrings, setLoadStrings] = useState<boolean>(true);
 
@@ -87,7 +86,6 @@ function CatalogScreen(): JSX.Element {
     await dispatch(fetchGuitarsAction())
       .then(() => {
         setLoading(true);
-        setLoad(false);
       });
   }, [dispatch]);
 
@@ -169,7 +167,7 @@ function CatalogScreen(): JSX.Element {
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
-  } else if (!loading && load) {
+  } else if (!loading) {
     return <LoadingScreen text={'Loading...'} />;
   } else {
     return (
