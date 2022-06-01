@@ -14,7 +14,7 @@ const rootPersistConfig = {
 const guitarsPersistConfig = {
   key: 'GUITARS',
   storage,
-  whitelist: ['pickedId', 'currentPageCatalog'],
+  whitelist: ['pickedId'],
 };
 
 const rootReducer = combineReducers({

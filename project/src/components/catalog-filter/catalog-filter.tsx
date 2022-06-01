@@ -11,20 +11,20 @@ import { GuitarTypesStringsMatch, GuitarPrices, SymbolsBanForInput } from '../..
 function CatalogFilter(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const strings = [...new Set(GuitarTypesStringsMatch.map((item: any) => item.stringsNumber).sort().flat())];
+  const strings = [...new Set(GuitarTypesStringsMatch.map((item) => item.stringsNumber).sort().flat())];
 
   const guitarsMinPrice = useAppSelector(getGuitarsMinPrice);
   const guitarsMaxPrice = useAppSelector(getGuitarsMaxPrice);
 
-  const [isTypeGuitarChecked, setIsTypeGuitarChecked] = useState<any>([]);
-  const [isTypeEnabled, setTypeEnabled] = useState<any>({
+  const [typeGuitarChecked, setIsTypeGuitarChecked] = useState<any>([]);
+  const [typeEnabled, setTypeEnabled] = useState<any>({
     acoustic: false,
     electric: false,
     ukulele: false,
   });
 
-  const [isStringChecked, setStringChecked] = useState<any>([]);
-  const [isStringEnabled, setStringEnabled] = useState<any>({
+  const [stringChecked, setStringChecked] = useState<any>([]);
+  const [stringEnabled, setStringEnabled] = useState<any>({
     4: false,
     6: false,
     7: false,
@@ -32,22 +32,22 @@ function CatalogFilter(): JSX.Element {
   });
 
   const handleTypeGuitarChange = (evt: any) => {
-    isTypeEnabled[evt.target.name] = !isTypeEnabled[evt.target.name];
-    setTypeEnabled({...isTypeEnabled});
+    typeEnabled[evt.target.name] = !typeEnabled[evt.target.name];
+    setTypeEnabled({...typeEnabled});
 
     const firstStringArray: any = GuitarTypesStringsMatch.find((element) => element.type === evt.target.name)?.stringsNumber;
 
     let availableStringArray;
 
-    if (isTypeEnabled[evt.target.name]) {
-      availableStringArray = [...isTypeGuitarChecked , ...firstStringArray];
+    if (typeEnabled[evt.target.name]) {
+      availableStringArray = [...typeGuitarChecked , ...firstStringArray];
       setIsTypeGuitarChecked(availableStringArray);
     } else {
-      availableStringArray = removeMatchItemsFromArray(isTypeGuitarChecked, firstStringArray);
+      availableStringArray = removeMatchItemsFromArray(typeGuitarChecked, firstStringArray);
       setIsTypeGuitarChecked(availableStringArray);
     }
 
-    const checkedTypesArray = Object.keys(isTypeEnabled).filter((id) => isTypeEnabled[id]);
+    const checkedTypesArray = Object.keys(typeEnabled).filter((id) => typeEnabled[id]);
     dispatch(setFilterGuitarType(checkedTypesArray));
   };
 
@@ -56,10 +56,10 @@ function CatalogFilter(): JSX.Element {
 
   const handleInputPriceFocus = (evt: any) => evt.target.select();
 
-  const handleMinMaxPriceInputChange = (evt: any) => {
-    if (evt.target.id === GuitarPrices[0].id) {
-      if ((evt.target.value > guitarsMinPrice) && (evt.target.value < guitarsMaxPrice)) {
-        setMinValue(evt.target.value);
+  const handleMinMaxPriceInputChange = ({target:{id, value}}: any) => {
+    if (id === GuitarPrices[0].id) {
+      if ((value > guitarsMinPrice) && (value < guitarsMaxPrice)) {
+        setMinValue(value);
       }
     }
   };
@@ -96,21 +96,21 @@ function CatalogFilter(): JSX.Element {
   };
 
   const handleStringInputChange = (string: any) => {
-    isStringEnabled[string] = !isStringEnabled[string];
-    setStringEnabled({...isStringEnabled});
+    stringEnabled[string] = !stringEnabled[string];
+    setStringEnabled({...stringEnabled});
 
     let enabledStringArray;
 
-    if (isStringEnabled[string]) {
-      enabledStringArray = [...new Set(isStringChecked), string];
+    if (stringEnabled[string]) {
+      enabledStringArray = [...new Set(stringChecked), string];
       setStringChecked(enabledStringArray);
     } else {
-      const index = isStringChecked.indexOf(string);
-      if (index > -1) {isStringChecked.splice(index, 1);}
-      setStringChecked(isStringChecked);
+      const index = stringChecked.indexOf(string);
+      if (index > -1) {stringChecked.splice(index, 1);}
+      setStringChecked(stringChecked);
     }
 
-    const checkedStringArray = Object.keys(isStringEnabled).filter((id) => isStringEnabled[id]);
+    const checkedStringArray = Object.keys(stringEnabled).filter((id) => stringEnabled[id]);
     dispatch(setFilterStringCount(checkedStringArray));
   };
 
@@ -163,7 +163,7 @@ function CatalogFilter(): JSX.Element {
               id={string.type}
               name={string.type}
               onChange={handleTypeGuitarChange}
-              disabled={isStringChecked.length !== 0 && GuitarTypesStringsMatch.find((element) => element.type === string.type)?.stringsNumber.every((element) => !(isStringChecked.includes(element)))}
+              disabled={stringChecked.length !== 0 && GuitarTypesStringsMatch.find((element) => element.type === string.type)?.stringsNumber.every((element) => !(stringChecked.includes(element)))}
             />
             <label htmlFor={string.type}>{string.name}</label>
           </div>))}
@@ -177,7 +177,7 @@ function CatalogFilter(): JSX.Element {
               type="checkbox"
               id={`${string}-strings`}
               name={`${string}-strings`}
-              disabled={isTypeGuitarChecked.length > 0 ? !isTypeGuitarChecked.includes(string) : false}
+              disabled={typeGuitarChecked.length > 0 ? !typeGuitarChecked.includes(string) : false}
               onClick={() => handleStringInputChange(string)}
             />
             <label htmlFor={`${string}-strings`}>{string}</label>

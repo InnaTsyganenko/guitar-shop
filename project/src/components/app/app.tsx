@@ -6,10 +6,9 @@ import CartScreen from '../cart-screen/cart-screen';
 import ProductScreen from '../product-screen/product-screen';
 import NotFoundScreen from '../not-found-screen/not-found-screen';
 import { useAppSelector } from '../../hooks';
-import { getCurrentPageCatalog, getPickedId } from '../../store/guitars-operations/selectors';
+import { getPickedId } from '../../store/guitars-operations/selectors';
 
 function App(): JSX.Element {
-  const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
   const pickedId = useAppSelector(getPickedId);
 
   return (
@@ -19,7 +18,11 @@ function App(): JSX.Element {
         element={<ProductScreen />}
       />
       <Route
-        path={`${AppRoute.Catalog}:${currentPageCatalog}`}
+        path={`${AppRoute.Catalog}`}
+        element={<CatalogScreen />}
+      />
+      <Route
+        path={`${AppRoute.Catalog}:id`}
         element={<CatalogScreen />}
       />
       <Route

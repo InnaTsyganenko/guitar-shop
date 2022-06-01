@@ -11,7 +11,7 @@ export enum InitialStateValues {
 
 export enum AppRoute {
   Root = '/',
-  Catalog = '/catalog/page_',
+  Catalog = '/catalog/page/',
   Cart = '/cart',
   Guitars = '/guitars/'
 }
@@ -92,3 +92,6 @@ export const GuitarPrices = [
     name: 'до',
   },
 ] as const;
+
+
+export const optionsForReviewDate: object = { day: 'numeric', month: 'long' };

@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { COMMENTS_QUANTITY_FOR_DISPLAY } from '../../const';
+import { COMMENTS_QUANTITY_FOR_DISPLAY, optionsForReviewDate } from '../../const';
 import { throttle } from '../../utils/utils';
 import { Guitar, GuitarComments } from '../../types/guitars';
 import Rating from '../rating/rating';
@@ -37,8 +37,6 @@ function ProductReviews({currentGuitar, reviews}: ProductReviewsProps): JSX.Elem
   const isCommentPushed = useAppSelector(getIsReviewNewPushed);
 
   const sortReviews = [...reviews].sort((a, b) => new Date(b.createAt).getTime() - new Date(a.createAt).getTime());
-
-  const optionsForReviewDate: object = { day: 'numeric', month: 'long' };
 
   useEffect(() => {
     const checkPosition = () => {

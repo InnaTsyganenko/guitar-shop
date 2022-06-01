@@ -12,10 +12,10 @@ import CatalogPagination from '../catalog-pagination/catalog-pagination';
 import Footer from '../footer/footer';
 import LoadingScreen from '../loading-screen/loading-screen';
 import Spinner from '../spinner/spinner';
-import { AppRoute, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
+import { AppRoute, DEFAULT_CATALOG_PAGE, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getStatusLoadedGuitarsSortFIlter, getTotalCountGuitars } from '../../store/guitars-data/selectors';
-import { setGuitarId } from '../../store/guitars-operations/guitars-operations';
+import { setCurrentPageCatalog, setGuitarId } from '../../store/guitars-operations/guitars-operations';
 import {
   getSortType,
   getSortDirection,
@@ -28,7 +28,7 @@ import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/ap
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
-import { setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
+import { resetFilters, setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
 import { useSearchParams } from 'react-router-dom';
 
 function CatalogScreen(): JSX.Element {
@@ -131,12 +131,13 @@ function CatalogScreen(): JSX.Element {
   const fetchGuitarsSortFilter = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
 
-    const paginationFirstButton = document.getElementById('1') as HTMLElement;
-    if (paginationFirstButton) {
-      paginationFirstButton.click();
-    }
-
     setSearchParams(params);
+    const searchString = new URLSearchParams(location.search);
+
+    navigate({
+      pathname: `${AppRoute.Catalog}${currentPageCatalog}`,
+      search: searchString.toString(),
+    });
 
     await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
     //eslint-disable-next-line react-hooks/exhaustive-deps
@@ -160,9 +161,14 @@ function CatalogScreen(): JSX.Element {
   const totalPages = Math.ceil((selectedFilterStringCount?.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
 
   useEffect(() => {
-    setSearchParams(params);
+    dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
+
+  useEffect(() => {
+    dispatch(resetFilters());
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
 
   if (!isGuitarsLoaded) {
