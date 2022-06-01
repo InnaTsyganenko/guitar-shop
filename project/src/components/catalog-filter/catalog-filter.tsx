@@ -64,23 +64,29 @@ function CatalogFilter(): JSX.Element {
     }
   };
 
-  const handleMinMaxPriceInputBlur = (evt: any) => {
-    const target = evt.target;
-    const value = Number(target.value);
-    const id = (target.id).toString();
-
-    if (id === GuitarPrices[0].id) {
-      if ((value <= guitarsMinPrice) || (value >= guitarsMaxPrice)) {
-        evt.target.value = guitarsMinPrice;
-      }
-      dispatch(setFilterMinPrice(evt.target.value));
+  const handleMinMaxPriceInput = (evt: any) => {
+    if (SymbolsBanForInput.includes(evt.key)) {
+      evt.preventDefault();
     }
 
-    if (id === GuitarPrices[1].id) {
-      if ((value <= Number(minValue)) || (value >= guitarsMaxPrice)) {
-        evt.target.value = guitarsMaxPrice;
+    if (evt.key === 'Enter' || evt.type === 'blur') {
+      const target = evt.target;
+      const value = Number(target.value);
+      const id = (target.id).toString();
+
+      if (id === GuitarPrices[0].id) {
+        if ((value <= guitarsMinPrice) || (value >= guitarsMaxPrice)) {
+          evt.target.value = guitarsMinPrice;
+        }
+        dispatch(setFilterMinPrice(evt.target.value));
       }
-      dispatch(setFilterMaxPrice(evt.target.value));
+
+      if (id === GuitarPrices[1].id) {
+        if ((value <= Number(minValue)) || (value >= guitarsMaxPrice)) {
+          evt.target.value = guitarsMaxPrice;
+        }
+        dispatch(setFilterMaxPrice(evt.target.value));
+      }
     }
   };
 
@@ -136,8 +142,8 @@ function CatalogFilter(): JSX.Element {
                 name={item.name}
                 onFocus={handleInputPriceFocus}
                 onChange={handleMinMaxPriceInputChange}
-                onBlur={handleMinMaxPriceInputBlur}
-                onKeyDown={(evt) => (SymbolsBanForInput.includes(evt.key) ? evt.preventDefault() : null)}
+                onBlur={handleMinMaxPriceInput}
+                onKeyDown={handleMinMaxPriceInput}
                 onKeyUp={(evt) => (SymbolsBanForInput.includes(evt.key) ? evt.preventDefault() : null)}
                 onPaste={handleInputPricePaste}
                 min={guitarsMinPrice}
