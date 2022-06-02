@@ -39,7 +39,7 @@ export const fetchGuitarsSortFilterAction = createAsyncThunk<void, FilterAndSort
   async ({sortType, sortOrder, priceMin, priceMax, guitarTypes}, {dispatch, extra: api}) => {
     try {
       const queryTypes = guitarTypes.map((item) => `&type=${item}`).join('');
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortOrder}` : ''}${(priceMin > 0) && (priceMax > 0) ? `&price_gte=${priceMin}&price_lte=${priceMax}` : ''}${guitarTypes.length !== 0 ? `&type=${queryTypes}` : ''}`);
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortOrder}` : ''}${(priceMin > 0) ? `&price_gte=${priceMin}` : ''}${(priceMax > 0) ? `&price_lte=${priceMax}` : ''}${guitarTypes.length !== 0 ? `&type=${queryTypes}` : ''}`);
 
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
 

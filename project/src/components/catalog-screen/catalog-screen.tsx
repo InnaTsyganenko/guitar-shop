@@ -97,8 +97,8 @@ function CatalogScreen(): JSX.Element {
   const FilterAndSortOptions = {
     sortType: selectedSortType,
     sortOrder: selectedSortDirection,
-    priceMin: selectedFilterMinPrice,
-    priceMax: selectedFilterMaxPrice,
+    priceMin: Number(selectedFilterMinPrice),
+    priceMax: Number(selectedFilterMaxPrice),
     guitarTypes: selectedFilterGuitarType,
     stringQt: selectedFilterStringCount,
   };
@@ -132,6 +132,7 @@ function CatalogScreen(): JSX.Element {
     dispatch(setLoadGuitarsSortFilter(false));
 
     setSearchParams(params);
+
     const searchString = new URLSearchParams(location.search);
 
     navigate({
@@ -165,10 +166,11 @@ function CatalogScreen(): JSX.Element {
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
-  useEffect(() => {
-    dispatch(resetFilters());
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
+  // useEffect(() => {
+  //   dispatch(resetFilters());
+  //   setSearchParams('');
+  //   //eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [location]);
 
 
   if (!isGuitarsLoaded) {
@@ -204,6 +206,8 @@ function CatalogScreen(): JSX.Element {
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
+                          <p className="product-card__title">{guitar.type}</p>
+                          <p className="product-card__title">{guitar.stringCount}</p>
                           <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
                           </p>
                         </div>

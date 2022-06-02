@@ -23,7 +23,7 @@ function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): J
           <div className="modal__overlay" data-close-modal onClick={onModalThanksCloseClick} />
           <div className="modal__content" id="modal">
             <svg className="modal__icon" width={26} height={20} aria-hidden="true">
-              <use xlinkHref="#icon-success" />
+              <use xlinkHref="/img/sprite_auto.svg#icon-success" />
             </svg>
             <p className="modal__message">Спасибо за ваш отзыв!</p>
             <div className="modal__button-container modal__button-container--review">

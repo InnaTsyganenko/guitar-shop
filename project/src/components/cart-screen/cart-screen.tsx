@@ -27,13 +27,13 @@ function CartScreen(): JSX.Element {
               <div className="quantity cart-item__quantity">
                 <button className="quantity__button" aria-label="Уменьшить количество" onClick={(evt) => evt.preventDefault()}>
                   <svg width="8" height="8" aria-hidden="true">
-                    <use xlinkHref="../img/sprite_auto.svg#icon-minus"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-minus"></use>
                   </svg>
                 </button>
                 <input className="quantity__input" type="number" placeholder="1" id="2-count" name="2-count" max="99" />
                 <button className="quantity__button" aria-label="Увеличить количество" onClick={(evt) => evt.preventDefault()}>
                   <svg width="8" height="8" aria-hidden="true">
-                    <use xlinkHref="../img/sprite_auto.svg#icon-plus"></use>
+                    <use xlinkHref="/img/sprite_auto.svg#icon-plus"></use>
                   </svg>
                 </button>
               </div>

@@ -39,7 +39,7 @@ function HeaderSearch(): JSX.Element {
       <form className="form-search__form" id="form-search">
         <button className="form-search__submit" type="submit">
           <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
-            <use xlinkHref="../img/sprite_auto.svg#icon-search"></use>
+            <use xlinkHref="/img/sprite_auto.svg#icon-search"></use>
           </svg><span className="visually-hidden">Начать поиск</span>
         </button>
         <input
@@ -68,7 +68,7 @@ function HeaderSearch(): JSX.Element {
       </ul>
       <button className="form-search__reset" type="reset" form="form-search" onClick={() => dispatch(resetSearch())}>
         <svg className="form-search__icon" width="14" height="15" aria-hidden="true">
-          <use xlinkHref="../img/sprite_auto.svg#icon-close"></use>
+          <use xlinkHref="/img/sprite_auto.svg#icon-close"></use>
         </svg><span className="visually-hidden">Сбросить поиск</span>
       </button>
     </div>
