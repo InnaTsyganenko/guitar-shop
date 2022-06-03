@@ -135,7 +135,6 @@ function CatalogFilter(): JSX.Element {
         if ((value < Number(minValue)) || (value >= guitarsMaxPrice)) {
           setMaxPrice(guitarsMaxPrice);
           dispatch(setFilterMaxPrice(guitarsMaxPrice));
-          console.log((value >= Number(minValue)) && (value <= guitarsMaxPrice));
         } else if ((value >= Number(minValue)) && (value <= guitarsMaxPrice)) {
           setMaxPrice(value);
           dispatch(setFilterMaxPrice(Number(maxPrice)));
@@ -172,7 +171,6 @@ function CatalogFilter(): JSX.Element {
   }, [filterMinPrice, filterMaxPrice]);
 
   useEffect(() => {
-    console.log(searchParams);
     const searchParamsTypes = searchParams.getAll('type');
     searchParamsTypes.forEach((item) => processTypeUrlData(item));
 
