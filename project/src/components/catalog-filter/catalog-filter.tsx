@@ -40,7 +40,12 @@ function CatalogFilter(): JSX.Element {
   const [maxPrice, setMaxPrice] = useState<any | number>();
   const [minValue, setMinValue] = useState(guitarsMinPrice);
 
-  const offCheckedDisableInput = () => document.getElementById('catalog-filter')?.querySelectorAll(('input[disabled]')).forEach((item: any) => item.checked = false);
+  const offCheckedDisableInput = () => document.getElementById('catalog-filter')?.querySelectorAll(('input[disabled]')).forEach((item: any) => {
+    stringEnabled[item.value] = false;
+    setStringEnabled({...stringEnabled});
+    typeChecked[item.value] = false;
+    setTypeChecked({...typeChecked});
+  });
 
 
   const processTypeUrlData = (value: any) => {
@@ -59,10 +64,10 @@ function CatalogFilter(): JSX.Element {
       setStringsAvailableByType(availableStringArray);
     }
 
+    offCheckedDisableInput();
+
     const checkedTypesArray = Object.keys(typeChecked).filter((id) => typeChecked[id]);
     dispatch(setFilterGuitarType(checkedTypesArray));
-
-    offCheckedDisableInput();
   };
 
   const processStringsUrlData = (value: any) => {
@@ -252,7 +257,7 @@ function CatalogFilter(): JSX.Element {
               id={item.type}
               name={item.type}
               onChange={handleTypeChange}
-              disabled={!typeChecked[item.type] && (stringChecked.length > 0) && item.stringsNumber.every((el) => !stringChecked.includes(el))}
+              disabled={(stringChecked.length > 0) && item.stringsNumber.every((el) => !stringChecked.includes(el))}
               checked={typeChecked[item.type]}
             />
             <label htmlFor={item.type}>{item.name}</label>
@@ -267,9 +272,10 @@ function CatalogFilter(): JSX.Element {
               type="checkbox"
               id={`${string}-strings`}
               name={`${string}-strings`}
+              value={string}
               onChange={() => handleStringChange(string)}
               disabled={(stringsAvailableByType.length > 0) ? !stringsAvailableByType.includes(string) : false}
-              checked={stringsAvailableByType[string]}
+              checked={stringEnabled[string]}
             />
             <label htmlFor={`${string}-strings`}>{string}</label>
           </div>))}
