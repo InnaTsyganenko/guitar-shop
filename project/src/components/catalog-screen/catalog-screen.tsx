@@ -135,6 +135,10 @@ function CatalogScreen(): JSX.Element {
 
     const searchString = new URLSearchParams(location.search);
 
+    if (currentPageCatalog !== DEFAULT_CATALOG_PAGE) {
+      dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
+    }
+
     navigate({
       pathname: `${AppRoute.Catalog}${currentPageCatalog}`,
       search: searchString.toString(),
@@ -161,16 +165,9 @@ function CatalogScreen(): JSX.Element {
   const totalPages = Math.ceil(guitarsTotalCount / GUITARS_QUANTITY_FOR_DISPLAY);
 
   useEffect(() => {
-    dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
     setSearchParams(params);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
-
-  useEffect(() => {
-    // dispatch(resetFilters());
-    // setSearchParams('');
-    //eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location]);
 
   const displayDummy = () => {
     dispatch(resetSort());
@@ -195,8 +192,7 @@ function CatalogScreen(): JSX.Element {
               {!loadingGuitarsSortFilter ? <Spinner /> :
                 <>
                   <div className="cards catalog__cards">
-                    {(guitars.length === 0) ? displayDummy()
-                      : ''}
+                    {(guitars.length === 0) ? displayDummy() : ''}
                     {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
                       <div className="product-card" key={guitar.id}>
                         <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
@@ -209,6 +205,8 @@ function CatalogScreen(): JSX.Element {
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
+                          <p className="product-card__title">{guitar.type}</p>
+                          <p className="product-card__title">{guitar.stringCount}</p>
                           <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
                           </p>
                         </div>
