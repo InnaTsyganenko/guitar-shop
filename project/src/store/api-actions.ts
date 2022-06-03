@@ -19,15 +19,13 @@ export const fetchGuitarsAction = createAsyncThunk<void, FilterAndSortOptions, {
       const queryTypes = guitarTypes.map((item) => `&type=${item}`).join('');
       const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortOrder}` : ''}${(priceMin > 0) ? `&price_gte=${priceMin}` : ''}${(priceMax > 0) ? `&price_lte=${priceMax}` : ''}${guitarTypes.length !== 0 ? `&type=${queryTypes}` : ''}`);
 
-      const filtredGuitars = response.data.filter((item: Guitar) => item.name);
-      // if (stringQt.length > 0) {
-      // filtredGuitars = filtredGuitars.filter((guitar) => stringQt?.includes((guitar.stringCount).toString() as keyof object));
-      // }
-
-      if ((sortType === '') && (stringQt.length === 0) &&(sortOrder === '') && (priceMin === 0) && (priceMax === 0) && (guitarTypes.length === 0)) {
-        dispatch(setGuitarsMinPrice(Math.min(...filtredGuitars.map((item) => item.price))));
-        dispatch(setGuitarsMaxPrice(Math.max(...filtredGuitars.map((item) => item.price))));
+      let filtredGuitars = response.data.filter((item: Guitar) => item.name);
+      if (stringQt.length > 0) {
+        filtredGuitars = filtredGuitars.filter((guitar) => stringQt?.includes((guitar.stringCount).toString() as keyof object));
       }
+
+      dispatch(setGuitarsMinPrice(Math.min(...filtredGuitars.map((item) => Number(item.price)))));
+      dispatch(setGuitarsMaxPrice(Math.max(...filtredGuitars.map((item) => Number(item.price)))));
 
       dispatch(setTotalCountGuitarsFromResponse(filtredGuitars.length));
       dispatch(loadGuitarsSortFilter(filtredGuitars));

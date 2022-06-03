@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setFilterMinPrice, setFilterMaxPrice, setFilterGuitarType, setFilterStringCount, resetFilters } from '../../store/guitars-data/guitars-data';
-import { getFilterMinPrice, getFilterMaxPrice} from '../../store/guitars-data/selectors';
+import { getFilterMinPrice, getFilterMaxPrice, getGuitarsMinPrice, getGuitarsMaxPrice} from '../../store/guitars-data/selectors';
 import { useEffect, useState } from 'react';
 import { removeMatchItemsFromArray  } from '../../utils/utils';
 import { GuitarTypesStringsMatch, GuitarPrices, SymbolsBanForInput } from '../../const';
@@ -15,8 +15,8 @@ function CatalogFilter(): JSX.Element {
 
   const strings = [...new Set(GuitarTypesStringsMatch.map((item) => item.stringsNumber).sort().flat())];
 
-  const guitarsMinPrice = 1700;
-  const guitarsMaxPrice = 35000;
+  const guitarsMinPrice = useAppSelector(getGuitarsMinPrice);
+  const guitarsMaxPrice = useAppSelector(getGuitarsMaxPrice);
 
   const filterMinPrice = useAppSelector(getFilterMinPrice);
   const filterMaxPrice = useAppSelector(getFilterMaxPrice);
@@ -40,6 +40,9 @@ function CatalogFilter(): JSX.Element {
   const [maxPrice, setMaxPrice] = useState<any | number>();
   const [minValue, setMinValue] = useState(guitarsMinPrice);
 
+  const offCheckedDisableInput = () => document.getElementById('catalog-filter')?.querySelectorAll(('input[disabled]')).forEach((item: any) => item.checked = false);
+
+
   const processTypeUrlData = (value: any) => {
     typeChecked[value] = !typeChecked[value];
     setTypeChecked({...typeChecked});
@@ -58,6 +61,8 @@ function CatalogFilter(): JSX.Element {
 
     const checkedTypesArray = Object.keys(typeChecked).filter((id) => typeChecked[id]);
     dispatch(setFilterGuitarType(checkedTypesArray));
+
+    offCheckedDisableInput();
   };
 
   const processStringsUrlData = (value: any) => {
@@ -79,6 +84,8 @@ function CatalogFilter(): JSX.Element {
 
     const checkedStringArray = Object.keys(stringEnabled).filter((id) => stringEnabled[id]);
     dispatch(setFilterStringCount(checkedStringArray));
+
+    offCheckedDisableInput();
   };
 
   const handleTypeChange = (evt: any) => {
@@ -160,10 +167,6 @@ function CatalogFilter(): JSX.Element {
     dispatch(resetFilters());
   };
 
-
-  const offCheckedDisableInput = () => document.getElementById('catalog-filter')?.querySelectorAll(('input[disabled]')).forEach((item: any) => item.checked = false);
-
-  offCheckedDisableInput();
 
   useEffect(() => {
     if (filterMinPrice === 0 && filterMaxPrice === 0) {
@@ -265,8 +268,8 @@ function CatalogFilter(): JSX.Element {
               id={`${string}-strings`}
               name={`${string}-strings`}
               onChange={() => handleStringChange(string)}
-              disabled={!stringEnabled[string] && (stringsAvailableByType.length > 0) ? !stringsAvailableByType.includes(string) : false}
-              checked={stringEnabled[string]}
+              disabled={(stringsAvailableByType.length > 0) ? !stringsAvailableByType.includes(string) : false}
+              checked={stringsAvailableByType[string]}
             />
             <label htmlFor={`${string}-strings`}>{string}</label>
           </div>))}
