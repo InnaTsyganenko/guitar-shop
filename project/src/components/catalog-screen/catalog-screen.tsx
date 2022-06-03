@@ -162,6 +162,7 @@ function CatalogScreen(): JSX.Element {
 
   useEffect(() => {
     dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
+    setSearchParams(params);
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
