@@ -205,8 +205,6 @@ function CatalogScreen(): JSX.Element {
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
-                          <p className="product-card__title">{guitar.type}</p>
-                          <p className="product-card__title">{guitar.stringCount}</p>
                           <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
                           </p>
                         </div>
