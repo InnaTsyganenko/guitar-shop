@@ -2,7 +2,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setFilterMinPrice, setFilterMaxPrice, setFilterGuitarType, setFilterStringCount, resetFilters } from '../../store/guitars-data/guitars-data';
-import { getGuitarsMinPrice, getGuitarsMaxPrice, getFilterMinPrice, getFilterMaxPrice} from '../../store/guitars-data/selectors';
+import { getFilterMinPrice, getFilterMaxPrice} from '../../store/guitars-data/selectors';
 import { useEffect, useState } from 'react';
 import { removeMatchItemsFromArray  } from '../../utils/utils';
 import { GuitarTypesStringsMatch, GuitarPrices, SymbolsBanForInput } from '../../const';
@@ -15,8 +15,8 @@ function CatalogFilter(): JSX.Element {
 
   const strings = [...new Set(GuitarTypesStringsMatch.map((item) => item.stringsNumber).sort().flat())];
 
-  const guitarsMinPrice = useAppSelector(getGuitarsMinPrice);
-  const guitarsMaxPrice = useAppSelector(getGuitarsMaxPrice);
+  const guitarsMinPrice = 1700;
+  const guitarsMaxPrice = 35000;
 
   const filterMinPrice = useAppSelector(getFilterMinPrice);
   const filterMaxPrice = useAppSelector(getFilterMaxPrice);
@@ -185,9 +185,7 @@ function CatalogFilter(): JSX.Element {
     const searchParamsMaxPrice = searchParams.get('price_lte');
     setMaxPrice(searchParamsMaxPrice);
 
-    if ((filterMinPrice > 0)
-    && (filterMaxPrice > 0)
-    && (minPrice > guitarsMinPrice)
+    if ((minPrice > guitarsMinPrice)
     && (minPrice < guitarsMaxPrice)
     && (maxPrice > guitarsMinPrice)
     && (maxPrice < guitarsMaxPrice)) {

@@ -33,8 +33,6 @@ export const guitarsData = createSlice({
     },
     loadGuitars: (state, action) => {
       state.guitars = action.payload;
-      state.guitarsMinPrice = Math.min(...state.guitars.map((item) => item.price));
-      state.guitarsMaxPrice = Math.max(...state.guitars.map((item) => item.price));
     },
     setGuitarsLoadStatus: (state, action) => {
       state.isGuitarsLoaded = action.payload;
@@ -61,6 +59,12 @@ export const guitarsData = createSlice({
     loadGuitarsSortFilter: (state, action) => {
       state.guitars = action.payload;
       state.isGuitarsSortFilterLoaded = true;
+    },
+    setGuitarsMinPrice: (state, action) => {
+      state.guitarsMinPrice = action.payload;
+    },
+    setGuitarsMaxPrice: (state, action) => {
+      state.guitarsMaxPrice = action.payload;
     },
     setLoadGuitarsSortFilter: (state, action) => {
       state.isGuitarsSortFilterLoaded= action.payload;
@@ -116,4 +120,6 @@ export const {
   setFilterGuitarType,
   setFilterStringCount,
   resetFilters,
+  setGuitarsMinPrice,
+  setGuitarsMaxPrice,
 } = guitarsData.actions;

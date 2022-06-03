@@ -9,7 +9,6 @@ import {Action} from 'redux';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 import {createAPI} from '../../services/api';
-import { fetchGuitarsAction } from '../../store/api-actions';
 import {APIRoute} from '../../const';
 import {State} from '../../types/state';
 
@@ -37,7 +36,6 @@ describe('Component: CatalogScreen', () => {
       .onGet(APIRoute.Guitars)
       .reply(200, mockGuitars);
 
-    store.dispatch(fetchGuitarsAction());
 
     render(
       <Provider store={store}>

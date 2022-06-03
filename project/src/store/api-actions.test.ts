@@ -4,7 +4,7 @@ import thunk, {ThunkDispatch} from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {createAPI} from '../services/api';
-import { fetchGuitarsAction, fetchGuitarByIdAction, pushCommentAction } from './api-actions';
+import { fetchGuitarByIdAction, pushCommentAction } from './api-actions';
 import {APIRoute} from '../const';
 import {State} from '../types/state';
 
@@ -30,7 +30,7 @@ describe('Async actions', () => {
       .onGet(APIRoute.Guitars)
       .reply(200, mockGuitars);
 
-    await store.dispatch(fetchGuitarsAction());
+    //await store.dispatch(fetchGuitarsAction());
 
     const actions = store.getActions().map(({type}) => type);
 

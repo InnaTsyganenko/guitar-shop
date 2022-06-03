@@ -24,7 +24,7 @@ import {
   getFilterGuitarTypes,
   getFilterStringCount
 } from '../../store/guitars-data/selectors';
-import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/api-actions';
+import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
@@ -54,18 +54,6 @@ function CatalogScreen(): JSX.Element {
 
   const guitars = useAppSelector(getGuitars);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
-
-  const fetchGuitars = useCallback(async () => {
-    await dispatch(fetchGuitarsAction())
-      .then(() => {
-        setLoading(true);
-      });
-  }, [dispatch]);
-
-  useEffect(() => {
-    fetchGuitars();
-    setLoading(false);
-  }, [fetchGuitars]);
 
   const FilterAndSortOptions = {
     sortType: selectedSortType,
@@ -101,23 +89,20 @@ function CatalogScreen(): JSX.Element {
 
   const params = adaptSearchParams(FilterAndSortOptions);
 
-  const fetchGuitarsSortFilter = useCallback(async () => {
+  const fetchGuitars = useCallback(async () => {
     dispatch(setLoadGuitarsSortFilter(false));
 
     setSearchParams(params);
 
     const searchString = new URLSearchParams(location.search);
 
-    if (currentPageCatalog !== DEFAULT_CATALOG_PAGE) {
-      dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
-    }
-
+    dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
     navigate({
       pathname: `${AppRoute.Catalog}${currentPageCatalog}`,
       search: searchString.toString(),
     });
 
-    await dispatch(fetchGuitarsSortFilterAction(FilterAndSortOptions));
+    await dispatch(fetchGuitarsAction(FilterAndSortOptions)).then(() => setLoading(true));
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     dispatch,
@@ -130,8 +115,8 @@ function CatalogScreen(): JSX.Element {
   ]);
 
   useEffect(() => {
-    fetchGuitarsSortFilter();
-  }, [fetchGuitarsSortFilter]);
+    fetchGuitars();
+  }, [fetchGuitars]);
 
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
