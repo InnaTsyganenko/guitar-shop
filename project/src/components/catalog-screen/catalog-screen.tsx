@@ -55,33 +55,6 @@ function CatalogScreen(): JSX.Element {
   const guitars = useAppSelector(getGuitars);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
 
-
-  if (searchParams.get('sort') && !loading) {
-    dispatch(setSortType(searchParams.get('sort')));
-  }
-
-  if (searchParams.get('order') && !loading) {
-    dispatch(setSortDirection(searchParams.get('order')));
-  }
-
-  if (searchParams.get('price_gte') && !loading) {
-    dispatch(setFilterMinPrice(searchParams.get('price_gte')));
-  }
-
-  if (searchParams.get('price_lte') && !loading) {
-    dispatch(setFilterMaxPrice(searchParams.get('price_lte')));
-  }
-
-  if ((searchParams.getAll('string_qt').length > 0) && loadStrings) {
-    setLoadStrings(false);
-    dispatch(setFilterStringCount(searchParams.getAll('string_qt')));
-  }
-
-  if ((searchParams.getAll('type').length > 0) && loadType) {
-    setLoadType(false);
-    dispatch(setFilterGuitarType(searchParams.getAll('type')));
-  }
-
   const fetchGuitars = useCallback(async () => {
     await dispatch(fetchGuitarsAction())
       .then(() => {
@@ -173,6 +146,34 @@ function CatalogScreen(): JSX.Element {
     dispatch(resetSort());
     return <p className="page-content__title title" style={{width:'500px'}}>К сожалению, таких гитар в базе данных нет. Попробуйте изменить параметры фильтра.</p>;
   };
+
+
+  if (searchParams.get('sort') && !loading) {
+    dispatch(setSortType(searchParams.get('sort')));
+  }
+
+  if (searchParams.get('order') && !loading) {
+    dispatch(setSortDirection(searchParams.get('order')));
+  }
+
+  if (searchParams.get('price_gte') && !loading) {
+    dispatch(setFilterMinPrice(searchParams.get('price_gte')));
+  }
+
+  if (searchParams.get('price_lte') && !loading) {
+    dispatch(setFilterMaxPrice(searchParams.get('price_lte')));
+  }
+
+  if ((searchParams.getAll('string_qt').length > 0) && loadStrings) {
+    setLoadStrings(false);
+    dispatch(setFilterStringCount(searchParams.getAll('string_qt')));
+  }
+
+  if ((searchParams.getAll('type').length > 0) && loadType) {
+    setLoadType(false);
+    dispatch(setFilterGuitarType(searchParams.getAll('type')));
+  }
+
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;

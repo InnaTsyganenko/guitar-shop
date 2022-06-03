@@ -9,7 +9,7 @@ import { useAppSelector } from '../../hooks';
 import { getPickedId } from '../../store/guitars-operations/selectors';
 import browserHistory from '../../browser-history';
 import { useDispatch } from 'react-redux';
-import { resetFilters } from '../../store/guitars-data/guitars-data';
+import { resetFilters, resetSort } from '../../store/guitars-data/guitars-data';
 import { setCurrentPageCatalog } from '../../store/guitars-operations/guitars-operations';
 
 function App(): JSX.Element {
@@ -19,6 +19,7 @@ function App(): JSX.Element {
   browserHistory.listen((location) =>  {
     if (location.location.pathname === AppRoute.Root) {
       dispatch(resetFilters());
+      dispatch(resetSort());
       dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
     }
   });

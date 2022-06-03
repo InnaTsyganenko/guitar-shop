@@ -71,7 +71,9 @@ function CatalogFilter(): JSX.Element {
       setStringChecked(enabledStringArray);
     } else {
       const index = stringChecked.indexOf(value);
-      if (index > -1) {stringChecked.splice(index, 1);}
+      if (index > -1) {
+        stringChecked.splice(index, 1);
+      }
       setStringChecked(stringChecked);
     }
 
@@ -110,36 +112,36 @@ function CatalogFilter(): JSX.Element {
     }
   };
 
+  const processPriceUrlData = (value: any, id: any) => {
+    if (id === GuitarPrices[0].id) {
+      if ((value < guitarsMinPrice) || (value >= guitarsMaxPrice)) {
+        setMinPrice(guitarsMinPrice);
+        dispatch(setFilterMinPrice(guitarsMinPrice));
+      } else if ((value >= guitarsMinPrice) && (value <= guitarsMaxPrice)) {
+        setMinPrice(value);
+        dispatch(setFilterMinPrice(Number(minPrice)));
+      }
+
+    }
+
+    if (id === GuitarPrices[1].id) {
+      if ((value < Number(minValue)) || (value >= guitarsMaxPrice)) {
+        setMaxPrice(guitarsMaxPrice);
+        dispatch(setFilterMaxPrice(guitarsMaxPrice));
+      } else if ((value >= Number(minValue)) && (value <= guitarsMaxPrice)) {
+        setMaxPrice(value);
+        dispatch(setFilterMaxPrice(maxPrice));
+      }
+    }
+  };
+
   const handleInputPriceInput = (evt: any) => {
     if (SymbolsBanForInput.includes(evt.key)) {
       evt.preventDefault();
     }
 
     if ((evt.key === 'Enter') || (evt.type === 'blur')) {
-      const target = evt.target;
-      const value = Number(target.value);
-      const id = (target.id).toString();
-
-      if (id === GuitarPrices[0].id) {
-        if ((value < guitarsMinPrice) || (value >= guitarsMaxPrice)) {
-          setMinPrice(guitarsMinPrice);
-          dispatch(setFilterMinPrice(guitarsMinPrice));
-        } else if ((value >= guitarsMinPrice) && (value <= guitarsMaxPrice)) {
-          setMinPrice(value);
-          dispatch(setFilterMinPrice(Number(minPrice)));
-        }
-
-      }
-
-      if (id === GuitarPrices[1].id) {
-        if ((value < Number(minValue)) || (value >= guitarsMaxPrice)) {
-          setMaxPrice(guitarsMaxPrice);
-          dispatch(setFilterMaxPrice(guitarsMaxPrice));
-        } else if ((value >= Number(minValue)) && (value <= guitarsMaxPrice)) {
-          setMaxPrice(value);
-          dispatch(setFilterMaxPrice(Number(maxPrice)));
-        }
-      }
+      processPriceUrlData(Number(evt.target.value), (evt.target.id).toString());
     }
   };
 
@@ -182,6 +184,16 @@ function CatalogFilter(): JSX.Element {
 
     const searchParamsMaxPrice = searchParams.get('price_lte');
     setMaxPrice(searchParamsMaxPrice);
+
+    if ((filterMinPrice > 0)
+    && (filterMaxPrice > 0)
+    && (minPrice > guitarsMinPrice)
+    && (minPrice < guitarsMaxPrice)
+    && (maxPrice > guitarsMinPrice)
+    && (maxPrice < guitarsMaxPrice)) {
+      processPriceUrlData(Number(searchParamsMinPrice), 'priceMin');
+      processPriceUrlData(Number(searchParamsMaxPrice), 'priceMax');
+    }
 
   }, []);
 
