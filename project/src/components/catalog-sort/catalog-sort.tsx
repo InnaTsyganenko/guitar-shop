@@ -37,10 +37,10 @@ function CatalogSort(): JSX.Element {
     <div className="catalog-sort">
       <h2 className="catalog-sort__title">Сортировать:</h2>
       <div className="catalog-sort__type">
-        {ListSortTypes.map((item) => <button key={item.value} className={item.value === selectedSortType ? 'catalog-sort__type-button catalog-sort__type-button--active' : 'catalog-sort__type-button'} aria-label={item.label} onClick={() => handleSortKeyChange(item.value)}>{item.label}</button>)}
+        {ListSortTypes.map((item) => <button key={item.value} className={(guitarsQt <= 1) && item.value === selectedSortType ? 'catalog-sort__type-button catalog-sort__type-button--active' : 'catalog-sort__type-button'} aria-label={item.label} onClick={() => handleSortKeyChange(item.value)}>{item.label}</button>)}
       </div>
       <div className="catalog-sort__order">
-        {ListSortDirections.map((item) => <button key={item.label} className={`catalog-sort__order-button ${item.value === selectedSortDirection ? 'catalog-sort__order-button--active' : ''} ${item.class}`} aria-label={item.label} onClick={() => handleDirectionToggle(item.value)}></button>)}
+        {ListSortDirections.map((item) => <button key={item.label} className={`catalog-sort__order-button ${(guitarsQt <= 1) && item.value === selectedSortDirection ? 'catalog-sort__order-button--active' : ''} ${item.class}`} aria-label={item.label} onClick={() => handleDirectionToggle(item.value)}></button>)}
       </div>
     </div>
   );
