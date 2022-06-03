@@ -1,19 +1,17 @@
-/* eslint-disable arrow-body-style */
-/* eslint-disable prefer-arrow-callback */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setFilterMinPrice, setFilterMaxPrice, setFilterGuitarType, setFilterStringCount, resetFilters } from '../../store/guitars-data/guitars-data';
 import { getGuitarsMinPrice, getGuitarsMaxPrice} from '../../store/guitars-data/selectors';
-import { HTMLInputTypeAttribute, useImperativeHandle, useLayoutEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { removeMatchItemsFromArray  } from '../../utils/utils';
 import { GuitarTypesStringsMatch, GuitarPrices, SymbolsBanForInput } from '../../const';
-import { useHref, useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 
 
 function CatalogFilter(): JSX.Element {
   const dispatch = useAppDispatch();
-  const searchParams = useSearchParams();
-  // console.log(`searchParams.toString(): ${searchParams.toString()}`)
+  const [searchParams] = useSearchParams();
 
   const strings = [...new Set(GuitarTypesStringsMatch.map((item) => item.stringsNumber).sort().flat())];
 
@@ -21,14 +19,8 @@ function CatalogFilter(): JSX.Element {
   const guitarsMaxPrice = useAppSelector(getGuitarsMaxPrice);
 
 
-  const mytext = useRef<HTMLInputElement | null>(null);
-  const priceMinRef = useRef() as React.MutableRefObject<HTMLInputElement | number | any | null>;
-  const priceMaxRef = useRef() as React.MutableRefObject<HTMLInputElement | number | any | null>;
-
-
-
-  const [typeGuitarChecked, setIsTypeGuitarChecked] = useState<any>([]);
-  const [typeEnabled, setTypeEnabled] = useState<any>({
+  const [stringsAvailableByType, setStringsAvailableByType] = useState<any>([]);
+  const [typeChecked, setTypeChecked] = useState<any>({
     acoustic: false,
     electric: false,
     ukulele: false,
@@ -42,61 +34,79 @@ function CatalogFilter(): JSX.Element {
     12: false,
   });
 
-  const handleTypeGuitarChange = (evt: any) => {
-    typeEnabled[evt.target.name] = !typeEnabled[evt.target.name];
-    setTypeEnabled({...typeEnabled});
+  const [minPrice, setMinPrice] = useState<any | number>();
+  const [maxPrice, setMaxPrice] = useState<any | number>();
+  const [minValue, setMinValue] = useState(guitarsMinPrice);
 
-    const firstStringArray: any = GuitarTypesStringsMatch.find((element) => element.type === evt.target.name)?.stringsNumber;
+  const processTypeUrlData = (value: any) => {
+    typeChecked[value] = !typeChecked[value];
+    setTypeChecked({...typeChecked});
+
+    const firstStringArray: any = GuitarTypesStringsMatch.find((element) => element.type === value)?.stringsNumber;
 
     let availableStringArray;
 
-    if (typeEnabled[evt.target.name]) {
-      availableStringArray = [...typeGuitarChecked , ...firstStringArray];
-      setIsTypeGuitarChecked(availableStringArray);
+    if (typeChecked[value]) {
+      availableStringArray = [...stringsAvailableByType , ...firstStringArray];
+      setStringsAvailableByType(availableStringArray);
     } else {
-      availableStringArray = removeMatchItemsFromArray(typeGuitarChecked, firstStringArray);
-      setIsTypeGuitarChecked(availableStringArray);
+      availableStringArray = removeMatchItemsFromArray(stringsAvailableByType, firstStringArray);
+      setStringsAvailableByType(availableStringArray);
     }
 
-    const checkedTypesArray = Object.keys(typeEnabled).filter((id) => typeEnabled[id]);
+    const checkedTypesArray = Object.keys(typeChecked).filter((id) => typeChecked[id]);
     dispatch(setFilterGuitarType(checkedTypesArray));
   };
 
+  const processStringsUrlData = (value: any) => {
+    stringEnabled[value] = !stringEnabled[value];
+    setStringEnabled({...stringEnabled});
 
-  const [minValue, setMinValue] = useState(guitarsMinPrice);
+    let enabledStringArray;
+
+    if (stringEnabled[value]) {
+      enabledStringArray = [...new Set(stringChecked), value];
+      setStringChecked(enabledStringArray);
+    } else {
+      const index = stringChecked.indexOf(value);
+      if (index > -1) {stringChecked.splice(index, 1);}
+      setStringChecked(stringChecked);
+    }
+
+    const checkedStringArray = Object.keys(stringEnabled).filter((id) => stringEnabled[id]);
+    dispatch(setFilterStringCount(checkedStringArray));
+  };
+
+  const handleTypeChange = (evt: any) => {
+    processTypeUrlData(evt.target.name);
+  };
+
+  const handleStringChange = (string: any) => {
+    processStringsUrlData(string);
+  };
 
   const handleInputPriceFocus = (evt: any) => evt.target.select();
 
   const handleMinMaxPriceInputChange = ({target:{id, value}}: any) => {
-    const prevValue = value;
     if (id === GuitarPrices[0].id) {
-      priceMinRef.current = prevValue.concat(Number(value));
-      console.log(`priceMinRef.current:  ${priceMinRef.current}`);
+      setMinPrice(value);
       if ((value > guitarsMinPrice) && (value < guitarsMaxPrice)) {
         setMinValue(value);
+      } else {
+        setMinValue(guitarsMinPrice);
       }
+    }
+
+    if (id === GuitarPrices[1].id) {
+      setMaxPrice(value);
     }
   };
 
-  // const handlePriceKeyUp = (evt: any) => {
-  //   if (SymbolsBanForInput.includes(evt.key)) {
-  //     evt.preventDefault();
-  //   }
-
-  //   const target = evt.target;
-  //   const id = (target.id).toString();
-
-
-
-  //   if (id === GuitarPrices[0].id) {
-  //     priceMinRef.current = evt.target.value;
-  //     console.log(priceMinRef.current);
-  //   }
-
-  //   if (id === GuitarPrices[1].id) {
-  //     priceMaxRef.current = evt.target.value;
-  //   }
-  // };
+  const handlePriceKeyUp = (evt: any) => {
+    if (SymbolsBanForInput.includes(evt.key)) {
+      evt.preventDefault();
+    }
+  };
 
   const handleMinMaxPriceInput = (evt: any) => {
     if (SymbolsBanForInput.includes(evt.key)) {
@@ -108,47 +118,27 @@ function CatalogFilter(): JSX.Element {
       const value = Number(target.value);
       const id = (target.id).toString();
 
-      // console.log(`priceRef: ${priceRef}`);
-
       if (id === GuitarPrices[0].id) {
         if ((value <= guitarsMinPrice) || (value >= guitarsMaxPrice)) {
-          // priceMinRef.current = guitarsMinPrice;
+          setMinPrice(guitarsMinPrice);
+          dispatch(setFilterMinPrice(guitarsMinPrice));
+        } else if ((value >= guitarsMinPrice) && (value <= guitarsMaxPrice)) {
+          setMinPrice(value);
+          dispatch(setFilterMinPrice(Number(minPrice)));
         }
-        dispatch(setFilterMinPrice(Number(evt.target.value)));
+
       }
 
       if (id === GuitarPrices[1].id) {
         if ((value <= Number(minValue)) || (value >= guitarsMaxPrice)) {
-          evt.target.value = guitarsMaxPrice;
+          setMaxPrice(guitarsMaxPrice);
+          dispatch(setFilterMaxPrice(guitarsMaxPrice));
+        } else if ((value >= Number(minValue)) && (value <= guitarsMaxPrice)) {
+          setMaxPrice(value);
+          dispatch(setFilterMaxPrice(Number(maxPrice)));
         }
-        dispatch(setFilterMaxPrice(Number(evt.target.value)));
       }
     }
-  };
-
-  const handleResetButtonClick = () => {
-    setIsTypeGuitarChecked([]);
-    dispatch(resetFilters());
-    // priceMinRef.current = guitarsMinPrice;
-  };
-
-  const handleStringInputChange = (string: any) => {
-    stringEnabled[string] = !stringEnabled[string];
-    setStringEnabled({...stringEnabled});
-
-    let enabledStringArray;
-
-    if (stringEnabled[string]) {
-      enabledStringArray = [...new Set(stringChecked), string];
-      setStringChecked(enabledStringArray);
-    } else {
-      const index = stringChecked.indexOf(string);
-      if (index > -1) {stringChecked.splice(index, 1);}
-      setStringChecked(stringChecked);
-    }
-
-    const checkedStringArray = Object.keys(stringEnabled).filter((id) => stringEnabled[id]);
-    dispatch(setFilterStringCount(checkedStringArray));
   };
 
   const handleInputPricePaste = (evt: any) => {
@@ -158,53 +148,34 @@ function CatalogFilter(): JSX.Element {
     evt.preventDefault();
   };
 
+  const handleResetButtonClick = () => {
+    setTypeChecked([]);
+    setStringChecked([]);
+    setStringEnabled([]);
+    setStringsAvailableByType([]);
+    dispatch(resetFilters());
+  };
+
 
   const offCheckedDisableInput = () => document.getElementById('catalog-filter')?.querySelectorAll(('input[disabled]')).forEach((item: any) => item.checked = false);
 
   offCheckedDisableInput();
 
+  useEffect(() => {
+    const searchParamsTypes = searchParams.getAll('type');
+    searchParamsTypes.forEach((item) => processTypeUrlData(item));
 
 
-  function test() {
-    const element = document.getElementById("ddddd");
+    const searchParamsStrings = searchParams.getAll('string_qt');
+    searchParamsStrings.forEach((item) => processStringsUrlData(Number(item)));
 
+    const searchParamsMinPrice = searchParams.get('price_gte');
+    setMinPrice(searchParamsMinPrice);
 
-    console.log(`mytext.current?.value: ${mytext.current?.value}`);
-  }
+    const searchParamsMaxPrice = searchParams.get('price_lte');
+    setMaxPrice(searchParamsMaxPrice);
 
-  // test();
-
-  useLayoutEffect(() => {
-    //object can be null
-    // if (priceRef.current) {
-    //   console.log(priceRef.current?.value);
-    // }
-  });
-
-  // const getPriceRef = (element: any) => {
-  //   console.log(element?.id);
-  //   console.log(element?.value);
-  //   console.log(priceMinRef.current);
-  //   const value = priceMinRef.current;
-  //   if (element?.id === GuitarPrices[0].id) {
-  //     const newValue = '5000';
-  //     priceMinRef.current = element?.value;
-  //     // if ((value > guitarsMinPrice) && (value < guitarsMaxPrice)) {
-  //     //   setMinValue(value);
-  //     // }
-  //   }
-  // };
-
-
-  const inputElement = useRef<HTMLInputElement | null>(null);
-  useImperativeHandle(priceMinRef, () => {
-    return {
-      value: inputElement.current ? inputElement.current.value : '',
-      setValue: (value: string) => {
-        inputElement.current && (inputElement.current.value = value);
-      },
-    };
-  });
+  }, []);
 
   return (
     <form className="catalog-filter" id="catalog-filter">
@@ -223,49 +194,47 @@ function CatalogFilter(): JSX.Element {
               onChange={handleMinMaxPriceInputChange}
               onBlur={handleMinMaxPriceInput}
               onKeyDown={handleMinMaxPriceInput}
-              // onKeyUp={handlePriceKeyUp}
+              onKeyUp={handlePriceKeyUp}
               onPaste={handleInputPricePaste}
               min={guitarsMinPrice}
               max={guitarsMaxPrice}
-              ref={priceMinRef}
-              value={Number(priceMinRef.current)}
+              value={minPrice}
             />
           </div>
           <div className="form-input">
             <label className="visually-hidden">Максимальная цена</label>
             <input
               type='number'
-              placeholder={guitarsMinPrice?.toString()}
+              placeholder={guitarsMaxPrice?.toString()}
               id='priceMax'
               name='до'
               onFocus={handleInputPriceFocus}
               onChange={handleMinMaxPriceInputChange}
               onBlur={handleMinMaxPriceInput}
               onKeyDown={handleMinMaxPriceInput}
-              // onKeyUp={handlePriceKeyUp}
+              onKeyUp={handlePriceKeyUp}
               onPaste={handleInputPricePaste}
               min={guitarsMinPrice}
               max={guitarsMaxPrice}
-              ref={priceMaxRef}
-              value={Number(priceMaxRef.current)}
+              value={maxPrice}
             />
           </div>
         </div>
       </fieldset>
       <fieldset className="catalog-filter__block">
         <legend className="catalog-filter__block-title">Тип гитар</legend>
-        {GuitarTypesStringsMatch.map((string) => (
-          <div key={string.type} className="form-checkbox catalog-filter__block-item">
+        {GuitarTypesStringsMatch.map((item) => (
+          <div key={item.type} className="form-checkbox catalog-filter__block-item">
             <input
               className="visually-hidden"
               type="checkbox"
-              id={string.type}
-              name={string.type}
-              onChange={handleTypeGuitarChange}
-              disabled={stringChecked.length !== 0 && GuitarTypesStringsMatch.find((element) => element.type === string.type)?.stringsNumber.every((element) => !(stringChecked.includes(element)))}
-              ref={mytext}
+              id={item.type}
+              name={item.type}
+              onChange={handleTypeChange}
+              disabled={!typeChecked[item.type] && (stringChecked.length > 0) && item.stringsNumber.every((el) => !stringChecked.includes(el))}
+              checked={typeChecked[item.type]}
             />
-            <label htmlFor={string.type}>{string.name}</label>
+            <label htmlFor={item.type}>{item.name}</label>
           </div>))}
       </fieldset>
       <fieldset className="catalog-filter__block">
@@ -277,8 +246,9 @@ function CatalogFilter(): JSX.Element {
               type="checkbox"
               id={`${string}-strings`}
               name={`${string}-strings`}
-              disabled={typeGuitarChecked.length > 0 ? !typeGuitarChecked.includes(string) : false}
-              onClick={() => handleStringInputChange(string)}
+              onChange={() => handleStringChange(string)}
+              disabled={!stringEnabled[string] && (stringsAvailableByType.length > 0) ? !stringsAvailableByType.includes(string) : false}
+              checked={stringEnabled[string]}
             />
             <label htmlFor={`${string}-strings`}>{string}</label>
           </div>))}

@@ -28,7 +28,7 @@ import { fetchGuitarsAction, fetchGuitarsSortFilterAction } from '../../store/ap
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
 import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
-import { resetFilters, setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
+import { resetSort, setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
 import { useSearchParams } from 'react-router-dom';
 
 function CatalogScreen(): JSX.Element {
@@ -156,22 +156,25 @@ function CatalogScreen(): JSX.Element {
     fetchGuitarsSortFilter();
   }, [fetchGuitarsSortFilter]);
 
-  const filtredGuitarsByStrings = guitars.filter((guitar) => selectedFilterStringCount?.includes((guitar.stringCount).toString() as keyof object));
 
   const guitarsTotalCount = useAppSelector(getTotalCountGuitars);
-  const totalPages = Math.ceil((selectedFilterStringCount?.length === 0 ? guitarsTotalCount : filtredGuitarsByStrings.length) / GUITARS_QUANTITY_FOR_DISPLAY);
+  const totalPages = Math.ceil(guitarsTotalCount / GUITARS_QUANTITY_FOR_DISPLAY);
 
   useEffect(() => {
     dispatch(setCurrentPageCatalog(DEFAULT_CATALOG_PAGE));
     //eslint-disable-next-line react-hooks/exhaustive-deps
   }, [navigate]);
 
-  // useEffect(() => {
-  //   dispatch(resetFilters());
-  //   setSearchParams('');
-  //   //eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [location]);
+  useEffect(() => {
+    // dispatch(resetFilters());
+    // setSearchParams('');
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location]);
 
+  const displayDummy = () => {
+    dispatch(resetSort());
+    return <p className="page-content__title title" style={{width:'500px'}}>К сожалению, таких гитар в базе данных нет. Попробуйте изменить параметры фильтра.</p>;
+  };
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
@@ -191,10 +194,9 @@ function CatalogScreen(): JSX.Element {
               {!loadingGuitarsSortFilter ? <Spinner /> :
                 <>
                   <div className="cards catalog__cards">
-                    {(filtredGuitarsByStrings.length === 0) && (guitars.length === 0) ?
-                      <p className="page-content__title title" style={{width:'500px'}}>К сожалению, таких гитар в базе данных нет. Попробуйте изменить параметры фильтра.</p> : ''}
-                    {(selectedFilterStringCount?.length === 0 ?
-                      guitars : filtredGuitarsByStrings).slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
+                    {(guitars.length === 0) ? displayDummy()
+                      : ''}
+                    {guitars.slice(currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY - GUITARS_QUANTITY_FOR_DISPLAY, currentPageCatalog * GUITARS_QUANTITY_FOR_DISPLAY).map((guitar) => (
                       <div className="product-card" key={guitar.id}>
                         <img src={`/${guitar.previewImg}`} width="75" height="190" alt={`Фото гитары ${guitar.name}`} />
                         <div className="product-card__info">
@@ -206,8 +208,6 @@ function CatalogScreen(): JSX.Element {
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
-                          <p className="product-card__title">{guitar.type}</p>
-                          <p className="product-card__title">{guitar.stringCount}</p>
                           <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
                           </p>
                         </div>

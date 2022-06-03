@@ -1,6 +1,6 @@
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setSortType, setSortDirection } from '../../store/guitars-data/guitars-data';
-import { getSortType, getSortDirection } from '../../store/guitars-data/selectors';
+import { setSortType, setSortDirection, resetSort } from '../../store/guitars-data/guitars-data';
+import { getSortType, getSortDirection, getTotalCountGuitars } from '../../store/guitars-data/selectors';
 import { ListSortTypes, ListSortDirections } from '../../const';
 
 function CatalogSort(): JSX.Element {
@@ -8,8 +8,13 @@ function CatalogSort(): JSX.Element {
 
   const selectedSortType = useAppSelector(getSortType);
   const selectedSortDirection = useAppSelector(getSortDirection);
+  const guitarsQt = useAppSelector(getTotalCountGuitars);
 
   const handleSortKeyChange = (sortType: string) => {
+    if (guitarsQt <= 1) {
+      dispatch(resetSort());
+      return;
+    }
     if (selectedSortDirection === '') {
       dispatch(setSortDirection(ListSortDirections[0].value));
     }
@@ -17,6 +22,11 @@ function CatalogSort(): JSX.Element {
   };
 
   const handleDirectionToggle = (sortDirection: string) => {
+    if (guitarsQt <= 1) {
+      dispatch(resetSort());
+      return;
+    }
+
     if (selectedSortType === '') {
       dispatch(setSortType(ListSortTypes[0].value));
     }
