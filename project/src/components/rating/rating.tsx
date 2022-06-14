@@ -12,16 +12,14 @@ function Rating({rating, commentsLength = 0, isRatingWithCountReviews = false}: 
   rating = Math.round(rating);
   return (
     <>
-      {Array.from(Array(rating).keys()).map((item) => (
-        <svg key={item} width="14" height="14" aria-hidden="true">
-          <use xlinkHref="/img/sprite_auto.svg#icon-full-star"></use>
-        </svg>
-      ))}
-      {Array.from(Array(TOTAL_RATING_UNITS - rating).keys()).map((item) => (
-        <svg key={item} width="14" height="14" aria-hidden="true">
-          <use xlinkHref="/img/sprite_auto.svg#icon-star"></use>
-        </svg>
-      ))}
+      {Array.from(Array(TOTAL_RATING_UNITS).keys()).map((star, index) => {
+        index += 1;
+        return (
+          <svg key={star} width="14" height="14" aria-hidden="true">
+            <use xlinkHref={index <= rating ? '/img/sprite_auto.svg#icon-full-star' : '/img/sprite_auto.svg#icon-star'}></use>
+          </svg>
+        );
+      })}
       <p className="visually-hidden">{`Оценка: ${RatingValues[Math.ceil(rating) as keyof object]}`}</p>
       {isRatingWithCountReviews
         ? <p className="rate__count"><span className="visually-hidden">Всего оценок:</span>{commentsLength}</p>

@@ -64,10 +64,9 @@ function CatalogFilter(): JSX.Element {
       setStringsAvailableByType(availableStringArray);
     }
 
-    offCheckedDisableInput();
-
     const checkedTypesArray = Object.keys(typeChecked).filter((id) => typeChecked[id]);
     dispatch(setFilterGuitarType(checkedTypesArray));
+    offCheckedDisableInput();
   };
 
   const processStringsUrlData = (value: any) => {
@@ -89,7 +88,6 @@ function CatalogFilter(): JSX.Element {
 
     const checkedStringArray = Object.keys(stringEnabled).filter((id) => stringEnabled[id]);
     dispatch(setFilterStringCount(checkedStringArray));
-
     offCheckedDisableInput();
   };
 

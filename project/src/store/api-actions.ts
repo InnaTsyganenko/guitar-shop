@@ -4,24 +4,23 @@ import { loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, 
 import { setModalWindowState } from './guitars-operations/guitars-operations';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
-import { Guitars, PickedId, GuitarById, CommentPost, Guitar, FilterAndSortOptions } from '../types/guitars';
+import { Guitars, PickedId, GuitarById, CommentPost, Guitar } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
 
 
-export const fetchGuitarsAction = createAsyncThunk<void, FilterAndSortOptions, {
+export const fetchGuitarsAction = createAsyncThunk<void, string, {
   dispatch: AppDispatch,
   state: State,
   extra: AxiosInstance
 }>(
   'DATA/fetchGuitars',
-  async ({sortType, sortOrder, priceMin, priceMax, guitarTypes, stringQt}, {dispatch, extra: api}) => {
+  async (params, {dispatch, extra: api}) => {
     try {
-      const queryTypes = guitarTypes.map((item) => `&type=${item}`).join('');
-      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${sortType !== '' ? `&_sort=${sortType}&_order=${sortOrder}` : ''}${(priceMin > 0) ? `&price_gte=${priceMin}` : ''}${(priceMax > 0) ? `&price_lte=${priceMax}` : ''}${guitarTypes.length !== 0 ? `&type=${queryTypes}` : ''}`);
+      const response = await api.get<Guitars>(`${APIRoute.Guitars}?_embed=comments${params.length !== 0 ? `&${params}` : ''}`);
 
       let filtredGuitars = response.data.filter((item: Guitar) => item.name);
-      if (stringQt.length > 0) {
-        filtredGuitars = filtredGuitars.filter((guitar) => stringQt?.includes((guitar.stringCount).toString() as keyof object));
+      if (params.includes('string_qt')) {
+        filtredGuitars = filtredGuitars.filter((guitar) => params?.includes((guitar.stringCount).toString() as keyof object));
       }
 
       dispatch(setGuitarsMinPrice(Math.min(...filtredGuitars.map((item) => Number(item.price)))));
@@ -30,7 +29,6 @@ export const fetchGuitarsAction = createAsyncThunk<void, FilterAndSortOptions, {
       dispatch(setTotalCountGuitarsFromResponse(filtredGuitars.length));
       dispatch(loadGuitarsSortFilter(filtredGuitars));
       dispatch(setLoadGuitarsSortFilter(true));
-
 
     } catch (error) {
       dispatch(setLoadGuitarsSortFilter(false));
