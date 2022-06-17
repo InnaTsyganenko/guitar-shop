@@ -5,7 +5,7 @@ import { setFilterMinPrice, setFilterMaxPrice, setFilterGuitarType, setFilterStr
 import { getFilterMinPrice, getFilterMaxPrice, getGuitarsMinPrice, getGuitarsMaxPrice} from '../../store/guitars-data/selectors';
 import { useEffect, useState } from 'react';
 import { removeMatchItemsFromArray  } from '../../utils/utils';
-import { GuitarTypesStringsMatch, GuitarPrices, SymbolsBanForInput } from '../../const';
+import { GuitarTypesStringsMatch, GuitarPrices, SymbolsBanForInputNumber } from '../../const';
 import { useSearchParams } from 'react-router-dom';
 
 
@@ -13,7 +13,7 @@ function CatalogFilter(): JSX.Element {
   const dispatch = useAppDispatch();
   const [searchParams] = useSearchParams();
 
-  const strings = [...new Set(GuitarTypesStringsMatch.map((item) => item.stringsNumber).sort().flat())];
+  const strings = [...new Set(GuitarTypesStringsMatch.map((item) => item.availableStringsForType).sort().flat())];
 
   const guitarsMinPrice = useAppSelector(getGuitarsMinPrice);
   const guitarsMaxPrice = useAppSelector(getGuitarsMaxPrice);
@@ -40,11 +40,21 @@ function CatalogFilter(): JSX.Element {
   const [maxPrice, setMaxPrice] = useState<any | number>();
   const [minValue, setMinValue] = useState(guitarsMinPrice);
 
-  const offCheckedDisableInput = () => document.getElementById('catalog-filter')?.querySelectorAll(('input[disabled]')).forEach((item: any) => {
-    stringEnabled[item.value] = false;
-    setStringEnabled({...stringEnabled});
-    typeChecked[item.value] = false;
-    setTypeChecked({...typeChecked});
+  const getDisabledInputs = (element: any) => [
+    ...element.querySelectorAll(
+      ('input[disabled]'),
+    ),
+  ];
+
+  const offCheckedDisableInput = (element: any) => getDisabledInputs(element).forEach((item: any) => {
+    if (item.checked) {
+      if (item.name.includes('strings')) {
+        processStringsUrlData(Number(item.value));
+      }
+      if (!item.name.includes('strings')) {
+        processTypeUrlData(item.name);
+      }
+    }
   });
 
 
@@ -52,12 +62,12 @@ function CatalogFilter(): JSX.Element {
     typeChecked[value] = !typeChecked[value];
     setTypeChecked({...typeChecked});
 
-    const firstStringArray: any = GuitarTypesStringsMatch.find((element) => element.type === value)?.stringsNumber;
+    const firstStringArray: any = GuitarTypesStringsMatch.find((element) => element.type === value)?.availableStringsForType;
 
     let availableStringArray;
 
     if (typeChecked[value]) {
-      availableStringArray = [...stringsAvailableByType , ...firstStringArray];
+      availableStringArray = [...stringsAvailableByType, ...firstStringArray];
       setStringsAvailableByType(availableStringArray);
     } else {
       availableStringArray = removeMatchItemsFromArray(stringsAvailableByType, firstStringArray);
@@ -66,7 +76,6 @@ function CatalogFilter(): JSX.Element {
 
     const checkedTypesArray = Object.keys(typeChecked).filter((id) => typeChecked[id]);
     dispatch(setFilterGuitarType(checkedTypesArray));
-    offCheckedDisableInput();
   };
 
   const processStringsUrlData = (value: any) => {
@@ -88,15 +97,16 @@ function CatalogFilter(): JSX.Element {
 
     const checkedStringArray = Object.keys(stringEnabled).filter((id) => stringEnabled[id]);
     dispatch(setFilterStringCount(checkedStringArray));
-    offCheckedDisableInput();
   };
 
   const handleTypeChange = (evt: any) => {
     processTypeUrlData(evt.target.name);
+    offCheckedDisableInput(document.getElementById('catalog-filter-strings'));
   };
 
-  const handleStringChange = (string: any) => {
-    processStringsUrlData(string);
+  const handleStringChange = (evt: any) => {
+    processStringsUrlData(Number(evt.target.value));
+    offCheckedDisableInput(document.getElementById('catalog-filter-type'));
   };
 
   const handleInputPriceFocus = (evt: any) => evt.target.select();
@@ -117,7 +127,7 @@ function CatalogFilter(): JSX.Element {
   };
 
   const handlePriceKeyUp = (evt: any) => {
-    if (SymbolsBanForInput.includes(evt.key)) {
+    if (SymbolsBanForInputNumber.includes(evt.key)) {
       evt.preventDefault();
     }
   };
@@ -146,7 +156,7 @@ function CatalogFilter(): JSX.Element {
   };
 
   const handleInputPriceInput = (evt: any) => {
-    if (SymbolsBanForInput.includes(evt.key)) {
+    if (SymbolsBanForInputNumber.includes(evt.key)) {
       evt.preventDefault();
     }
 
@@ -157,7 +167,7 @@ function CatalogFilter(): JSX.Element {
 
   const handleInputPricePaste = (evt: any) => {
     const paste: string = (evt.clipboardData).getData('text');
-    const newPaste = Array.from(paste).filter((item) => !SymbolsBanForInput.includes(item));
+    const newPaste = Array.from(paste).filter((item) => !SymbolsBanForInputNumber.includes(item));
     evt.target.value = newPaste.map((item) => item).join('');
     evt.preventDefault();
   };
@@ -245,7 +255,7 @@ function CatalogFilter(): JSX.Element {
           </div>
         </div>
       </fieldset>
-      <fieldset className="catalog-filter__block">
+      <fieldset className="catalog-filter__block" id="catalog-filter-type">
         <legend className="catalog-filter__block-title">Тип гитар</legend>
         {GuitarTypesStringsMatch.map((item) => (
           <div key={item.type} className="form-checkbox catalog-filter__block-item">
@@ -255,13 +265,13 @@ function CatalogFilter(): JSX.Element {
               id={item.type}
               name={item.type}
               onChange={handleTypeChange}
-              disabled={(stringChecked.length > 0) && item.stringsNumber.every((el) => !stringChecked.includes(el))}
+              disabled={(stringChecked.length > 0) && item.availableStringsForType.every((el) => !stringChecked.includes(el))}
               checked={typeChecked[item.type]}
             />
             <label htmlFor={item.type}>{item.name}</label>
           </div>))}
       </fieldset>
-      <fieldset className="catalog-filter__block">
+      <fieldset className="catalog-filter__block" id="catalog-filter-strings">
         <legend className="catalog-filter__block-title">Количество струн</legend>
         {strings.map((string) => (
           <div key={string} className="form-checkbox catalog-filter__block-item">
@@ -271,7 +281,7 @@ function CatalogFilter(): JSX.Element {
               id={`${string}-strings`}
               name={`${string}-strings`}
               value={string}
-              onChange={() => handleStringChange(string)}
+              onChange={handleStringChange}
               disabled={(stringsAvailableByType.length > 0) ? !stringsAvailableByType.includes(string) : false}
               checked={stringEnabled[string]}
             />

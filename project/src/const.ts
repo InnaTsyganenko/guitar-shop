@@ -60,23 +60,23 @@ export const ListSortDirections = [
 ] as const;
 
 
-export const SymbolsBanForInput = ['+','-','e'];
+export const SymbolsBanForInputNumber = ['+','-','e'];
 
 export const GuitarTypesStringsMatch = [
   {
     type: 'acoustic',
     name: 'Акустические гитары',
-    stringsNumber: [6, 7, 12],
+    availableStringsForType: [6, 7, 12],
   },
   {
     type: 'electric',
     name: 'Электрогитары',
-    stringsNumber: [4, 6, 7],
+    availableStringsForType: [4, 6, 7],
   },
   {
     type: 'ukulele',
     name: 'Укулеле',
-    stringsNumber: [4],
+    availableStringsForType: [4],
   },
 ];
 
