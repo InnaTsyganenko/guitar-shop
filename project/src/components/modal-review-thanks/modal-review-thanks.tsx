@@ -1,6 +1,6 @@
-import { PropsWithChildren, useEffect } from 'react';
-import { trapFocusInsideModalWindow } from '../../utils/utils';
-import useKeypress from '../../hooks/use-keypress';
+import { PropsWithChildren } from 'react';
+import ModalOverlay from '../modal-overlay/modal-overlay';
+import ModalCloseButton from '../modal-close-button/modal-close-button';
 
 type ModalReviewThanksProps = PropsWithChildren<{
   onModalThanksCloseClick: () => void;
@@ -8,19 +8,11 @@ type ModalReviewThanksProps = PropsWithChildren<{
 
 function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): JSX.Element {
 
-  useEffect(() => {
-    trapFocusInsideModalWindow();
-  },[]);
-
-  useKeypress('Escape', () => {
-    onModalThanksCloseClick();
-  });
-
   return (
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--success modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal onClick={onModalThanksCloseClick} />
+          <ModalOverlay onModalCloseClick={onModalThanksCloseClick} />
           <div className="modal__content" id="modal">
             <svg className="modal__icon" width={26} height={20} aria-hidden="true">
               <use xlinkHref="/img/sprite_auto.svg#icon-success" />
@@ -33,8 +25,7 @@ function ModalReviewThanks({onModalThanksCloseClick}: ModalReviewThanksProps): J
               >К покупкам!
               </button>
             </div>
-            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть" onClick={onModalThanksCloseClick}><span className="button-cross__icon" /><span className="modal__close-btn-interactive-area" />
-            </button>
+            <ModalCloseButton onModalCloseClick={onModalThanksCloseClick} />
           </div>
         </div>
       </div>

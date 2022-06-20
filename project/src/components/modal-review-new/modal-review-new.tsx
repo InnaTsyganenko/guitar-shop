@@ -1,13 +1,12 @@
-import React, { PropsWithChildren, useEffect, useCallback } from 'react';
+import React, { PropsWithChildren } from 'react';
 import { RatingValues } from '../../const';
 import { useAppDispatch } from '../../hooks';
 import { pushCommentAction } from '../../store/api-actions';
 import { Guitar } from '../../types/guitars';
-import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
 import { NewReview } from '../../types/state';
 import { useForm } from '../../hooks/use-form';
-import { trapFocusInsideModalWindow } from '../../utils/utils';
-import useKeypress from '../../hooks/use-keypress';
+import ModalOverlay from '../modal-overlay/modal-overlay';
+import ModalCloseButton from '../modal-close-button/modal-close-button';
 
 type ModalReviewNewProps = PropsWithChildren<{
   guitar: Guitar;
@@ -17,19 +16,6 @@ type ModalReviewNewProps = PropsWithChildren<{
 function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps): JSX.Element {
 
   const dispatch = useAppDispatch();
-
-  useEffect(() => {
-    trapFocusInsideModalWindow();
-  },[]);
-
-  const handleModalClose = useCallback(() => {
-    onModalCommentCloseClick();
-    dispatch(setModalWindowState(false));
-  }, [onModalCommentCloseClick, dispatch]);
-
-  useKeypress('Escape', () => {
-    handleModalClose();
-  });
 
   const { handleSubmit, handleChange, data: review, errors } = useForm<NewReview>({
     validations: {
@@ -67,7 +53,7 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
     onSubmit: () => {
       review.guitarId = guitar.id;
       dispatch(pushCommentAction(review));
-      handleModalClose();
+      onModalCommentCloseClick();
     },
   });
 
@@ -75,10 +61,7 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
     <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
       <div className="modal is-active modal--review modal-for-ui-kit">
         <div className="modal__wrapper">
-          <div className="modal__overlay" data-close-modal
-            onClick={handleModalClose}
-          >
-          </div>
+          <ModalOverlay onModalCloseClick={onModalCommentCloseClick} />
           <div className="modal__content" id="modal">
             <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
             <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
@@ -160,10 +143,7 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
               <p className="form-review__warning">{errors.comment}&nbsp;</p>
               <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
             </form>
-            <button className="modal__close-btn button-cross" type="button" aria-label="Закрыть"
-              onClick={handleModalClose}
-            ><span className="button-cross__icon"></span><span className="modal__close-btn-interactive-area"></span>
-            </button>
+            <ModalCloseButton onModalCloseClick={onModalCommentCloseClick} />
           </div>
         </div>
       </div>
