@@ -58,96 +58,91 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
   });
 
   return (
-    <div style={{position: 'relative', width: 550, height: 410, marginBottom: 50}}>
-      <div className="modal is-active modal--review modal-for-ui-kit">
-        <div className="modal__wrapper">
-          <ModalOverlay onModalCloseClick={onModalCommentCloseClick} />
-          <div className="modal__content" id="modal">
-            <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
-            <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
-            <form
-              className="form-review"
-              method="post"
-              action="#"
-              onSubmit={handleSubmit}
-              noValidate
-            >
-              <div className="form-review__wrapper">
-                <div className="form-review__name-wrapper">
-                  <label className="form-review__label form-review__label--required" htmlFor="user-name">Ваше Имя</label>
-                  <input
-                    className="form-review__input form-review__input--name"
-                    id="user-name"
-                    type="text"
-                    autoComplete="off"
-                    value={review.userName || ''}
-                    onChange={handleChange('userName')}
-                    autoFocus
-                    required
-                  />
-                  <p className="form-review__warning">{errors.userName}&nbsp;</p>
-                </div>
-                <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
-                  <div className="rate rate--reverse">
-                    {Object.entries(RatingValues).reverse().map((item, key) => (
-                      <React.Fragment key={item[0]}>
-                        <input
-                          className="visually-hidden"
-                          id={`star-${item[0]}`}
-                          name="rate"
-                          type="radio"
-                          value={item[0]}
-                          onChange={handleChange<number>('rating', (value) => parseInt(value, 10))}
-                          required
-                        />
-                        <label className="rate__label" htmlFor={`star-${item[0]}`} title={item[1] as keyof object}></label>
-                      </React.Fragment>
-                    ))}
-                    <p className="rate__message">{errors.rating}&nbsp;</p>
-                  </div>
-                </div>
+    <ModalOverlay onModalCloseClick={onModalCommentCloseClick}>
+      <div className="modal__content" id="modal-review-new">
+        <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
+        <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
+        <form
+          className="form-review"
+          method="post"
+          action="#"
+          onSubmit={handleSubmit}
+          noValidate
+        >
+          <div className="form-review__wrapper">
+            <div className="form-review__name-wrapper">
+              <label className="form-review__label form-review__label--required" htmlFor="user-name">Ваше Имя</label>
+              <input
+                className="form-review__input form-review__input--name"
+                id="user-name"
+                type="text"
+                autoComplete="off"
+                value={review.userName || ''}
+                onChange={handleChange('userName')}
+                autoFocus
+                required
+              />
+              <p className="form-review__warning">{errors.userName}&nbsp;</p>
+            </div>
+            <div><span className="form-review__label form-review__label--required">Ваша Оценка</span>
+              <div className="rate rate--reverse">
+                {Object.entries(RatingValues).reverse().map((item, key) => (
+                  <React.Fragment key={item[0]}>
+                    <input
+                      className="visually-hidden"
+                      id={`star-${item[0]}`}
+                      name="rate"
+                      type="radio"
+                      value={item[0]}
+                      onChange={handleChange<number>('rating', (value) => parseInt(value, 10))}
+                      required
+                    />
+                    <label className="rate__label" htmlFor={`star-${item[0]}`} title={item[1] as keyof object}></label>
+                  </React.Fragment>
+                ))}
+                <p className="rate__message">{errors.rating}&nbsp;</p>
               </div>
-
-              <label className="form-review__label form-review__label--required" htmlFor="advantage">Достоинства</label>
-              <input
-                className="form-review__input"
-                id="advantage"
-                type="text"
-                autoComplete="off"
-                onChange={handleChange('advantage')}
-                required
-              />
-              <p className="form-review__warning">{errors.advantage}&nbsp;</p>
-
-              <label className="form-review__label form-review__label--required" htmlFor="disadvantage">Недостатки</label>
-              <input
-                className="form-review__input"
-                id="disadvantage"
-                type="text"
-                autoComplete="off"
-                onChange={handleChange('disadvantage')}
-                required
-              />
-              <p className="form-review__warning">{errors.disadvantage}&nbsp;</p>
-
-              <label className="form-review__label form-review__label--required" htmlFor="comment">Комментарий</label>
-              <textarea
-                className="form-review__input form-review__input--textarea"
-                id="comment"
-                rows={10}
-                autoComplete="off"
-                onChange={handleChange('comment')}
-                required
-              >
-              </textarea>
-              <p className="form-review__warning">{errors.comment}&nbsp;</p>
-              <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
-            </form>
-            <ModalCloseButton onModalCloseClick={onModalCommentCloseClick} />
+            </div>
           </div>
-        </div>
+
+          <label className="form-review__label form-review__label--required" htmlFor="advantage">Достоинства</label>
+          <input
+            className="form-review__input"
+            id="advantage"
+            type="text"
+            autoComplete="off"
+            onChange={handleChange('advantage')}
+            required
+          />
+          <p className="form-review__warning">{errors.advantage}&nbsp;</p>
+
+          <label className="form-review__label form-review__label--required" htmlFor="disadvantage">Недостатки</label>
+          <input
+            className="form-review__input"
+            id="disadvantage"
+            type="text"
+            autoComplete="off"
+            onChange={handleChange('disadvantage')}
+            required
+          />
+          <p className="form-review__warning">{errors.disadvantage}&nbsp;</p>
+
+          <label className="form-review__label form-review__label--required" htmlFor="comment">Комментарий</label>
+          <textarea
+            className="form-review__input form-review__input--textarea"
+            id="comment"
+            rows={10}
+            autoComplete="off"
+            onChange={handleChange('comment')}
+            required
+          >
+          </textarea>
+          <p className="form-review__warning">{errors.comment}&nbsp;</p>
+          <button className="button button--medium-20 form-review__button" type="submit">Отправить отзыв</button>
+        </form>
+        <ModalCloseButton onModalCloseClick={onModalCommentCloseClick} />
       </div>
-    </div>
+    </ModalOverlay>
   );
 }
 

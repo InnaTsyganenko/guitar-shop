@@ -15,7 +15,7 @@ import Spinner from '../spinner/spinner';
 import { AppRoute, DEFAULT_CATALOG_PAGE, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getStatusLoadedGuitarsSortFIlter, getTotalCountGuitars } from '../../store/guitars-data/selectors';
-import { setCurrentPageCatalog, setGuitarId, setModalWindowState } from '../../store/guitars-operations/guitars-operations';
+import { setCurrentPageCatalog, setGuitarId, setGuitarInCartState, setModalWindowState } from '../../store/guitars-operations/guitars-operations';
 import {
   getSortType,
   getSortDirection,
@@ -27,10 +27,13 @@ import {
 import { fetchGuitarsAction } from '../../store/api-actions';
 import Wrapper from '../wrapper/wrapper';
 import { getStatusLoadedGuitars } from '../../store/guitars-data/selectors';
-import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
+import { getCurrentPageCatalog, getGuitarAddInCartStatus, getGuitarsInCart } from '../../store/guitars-operations/selectors';
 import { resetSort, setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
 import { useSearchParams } from 'react-router-dom';
-import ModalAddProductToCart from '../modal-add-product-to-cart/modal-add-product-to-cart';
+import ModalCartAdd from '../modal-cart-add/modal-cart-add';
+import { Guitars } from '../../types/guitars';
+import ModalSuccessAdd from '../modal-success-add/modal-success-add';
+import { throttle } from '../../utils/utils';
 
 function CatalogScreen(): JSX.Element {
   const [loading, setLoading] = useState<boolean>(false);
@@ -56,8 +59,12 @@ function CatalogScreen(): JSX.Element {
   const selectedFilterGuitarType: any = useAppSelector(getFilterGuitarTypes);
   const selectedFilterStringCount: any = useAppSelector(getFilterStringCount);
 
+  const isGuitarAddedInCart: boolean = useAppSelector(getGuitarAddInCartStatus);
+
   const guitars = useAppSelector(getGuitars);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
+  const guitarsInCart = useAppSelector(getGuitarsInCart);
+  console.log(guitarsInCart);
 
   const FilterAndSortOptions = {
     sortType: selectedSortType,
@@ -163,24 +170,30 @@ function CatalogScreen(): JSX.Element {
     dispatch(setFilterGuitarType(searchParams.getAll('type')));
   }
 
-  const handleAddProductToCartClick = () => {
-    setModalAddProductOpened(!isModalAddProductOpen);
-    dispatch(setModalWindowState(true));
+  const handleProductBuyClick = () => {
+    setModalAddProductOpened(true);
   };
 
-  if (isModalAddProductOpen) {
-    console.log('yep')
-    document.body.style.position = 'fixed';
-    document.body.style.top = `-${window.scrollY}px`;
-  }
+  const handleAddProductToCartCloseClick = () => {
+    setModalAddProductOpened(false);
+  };
 
-  if (!isModalAddProductOpen) {
-    const scrollY = document.body.style.top;
-    document.body.style.position = '';
-    document.body.style.top = '';
-    window.scrollTo(0, parseInt(scrollY || '0', 10) * -1);
-  }
+  const handleSuccessAddCloseClick = () => {
+    dispatch(setGuitarInCartState(false));
+  };
 
+  const [scrollValue, setScrollValue] = useState(0);
+
+  useEffect(() => {
+    const onScroll = (e: any) => {
+      setScrollValue(e.target.documentElement.scrollTop);
+    };
+
+    const throttledOnScroll = throttle(onScroll, 350);
+    window.addEventListener('scroll', throttledOnScroll);
+
+    return () => window.removeEventListener('scroll', throttledOnScroll);
+  }, [scrollValue]);
 
   if (!isGuitarsLoaded) {
     return <LoadingScreen text={'Loading failed.'} />;
@@ -227,14 +240,14 @@ function CatalogScreen(): JSX.Element {
                           >Подробнее
                           </Link>
                           <Link
-                            className="button button--red button--mini button--add-to-cart"
+                            className={guitarsInCart.some((item) => item.id === guitar.id) ? 'button button--red-border button--mini button--in-cart' : 'button button--red button--mini button--add-to-cart'}
                             aria-label="Корзина"
                             onClick={() => {
-                              handleAddProductToCartClick();
+                              handleProductBuyClick();
                               setGuitarIdForModalAdd(guitar.id);
                             }}
-                            to="##"
-                          >Купить
+                            to={guitarsInCart.some((item) => item.id === guitar.id) ? AppRoute.Cart : '##'}
+                          >{guitarsInCart.some((item) => item.id === guitar.id) ? 'В Корзине' : 'Купить'}
                           </Link>
                         </div>
                       </div>
@@ -245,9 +258,14 @@ function CatalogScreen(): JSX.Element {
             </div>
           </div>
           {isModalAddProductOpen &&
-          <ModalAddProductToCart
+          <ModalCartAdd
             guitar={guitars.find((item) => item.id === guitarIdForModalAdd)}
-            onModalCloseClick={handleAddProductToCartClick}
+            onModalCloseClick={handleAddProductToCartCloseClick}
+          />}
+
+          {isGuitarAddedInCart &&
+          <ModalSuccessAdd
+            onModalSuccessAddCloseClick={handleSuccessAddCloseClick}
           />}
         </main>
         <Footer />

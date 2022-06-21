@@ -42,18 +42,19 @@ function CatalogFilter(): JSX.Element {
 
   const getDisabledInputs = (element: any) => [
     ...element.querySelectorAll(
-      ('input[disabled]'),
+      ('input:checked'),
     ),
   ];
 
   const offCheckedDisableInput = (element: any) => getDisabledInputs(element).forEach((item: any) => {
-    if (item.checked) {
-      if (item.name.includes('strings')) {
-        processStringsUrlData(Number(item.value));
-      }
-      if (!item.name.includes('strings')) {
-        processTypeUrlData(item.name);
-      }
+    console.log(GuitarTypesStringsMatch.find((element) => element.type === item.name)?.availableStringsForType)
+    if (stringEnabled[item.value] && !stringsAvailableByType.includes(Number(item.value))) {
+      console.log(item.value)
+      processStringsUrlData(Number(item.value));
+    }
+    if (typeChecked[item.name] && !item.disabled) {
+      console.log(item.name)
+      processTypeUrlData(item.name);
     }
   });
 
@@ -101,6 +102,13 @@ function CatalogFilter(): JSX.Element {
 
   const handleTypeChange = (evt: any) => {
     processTypeUrlData(evt.target.name);
+    // getDisabledInputs(document.getElementById('catalog-filter-strings')).forEach((item: any) => {
+    //   console.log(item.name)
+    //   if (stringEnabled[item.value]) {
+    //     console.log(item.value)
+    //     processStringsUrlData(Number(item.value));
+    //   }
+    // })
     offCheckedDisableInput(document.getElementById('catalog-filter-strings'));
   };
 

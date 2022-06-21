@@ -20,8 +20,8 @@ export const getKeyboardFocusableElements = (element: any) => [
   ),
 ];
 
-export const trapFocusInsideModalWindow = () => {
-  const modal = document.getElementById('modal');
+export const trapFocusInsideModalWindow = (id: string) => {
+  const modal = document.getElementById(id);
 
   const focusableElementsInModal = getKeyboardFocusableElements(modal);
   const firstTabStop = focusableElementsInModal[0];

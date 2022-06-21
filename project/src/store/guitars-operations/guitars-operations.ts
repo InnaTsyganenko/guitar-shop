@@ -7,6 +7,8 @@ const initialState: GuitarsOperations = {
   pickedId: InitialStateValues.InitialPickedId,
   currentPageCatalog: DEFAULT_CATALOG_PAGE,
   isModalOpen: false,
+  guitarsInCart: [],
+  isGuitarAddedInCart: false,
 };
 
 export const guitarsOperations = createSlice({
@@ -22,7 +24,13 @@ export const guitarsOperations = createSlice({
     setModalWindowState: (state, action) => {
       state.isModalOpen = action.payload;
     },
+    setGuitarInCart: (state, action) => {
+      state.guitarsInCart = [...state.guitarsInCart, action.payload];
+    },
+    setGuitarInCartState: (state, action) => {
+      state.isGuitarAddedInCart = action.payload;
+    },
   },
 });
 
-export const { setCurrentPageCatalog, setGuitarId, setModalWindowState } = guitarsOperations.actions;
+export const { setCurrentPageCatalog, setGuitarId, setModalWindowState, setGuitarInCart, setGuitarInCartState } = guitarsOperations.actions;

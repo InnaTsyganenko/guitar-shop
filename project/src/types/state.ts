@@ -27,6 +27,8 @@ export type GuitarsOperations = {
   pickedId: PickedId,
   currentPageCatalog: CurrentPageCatalog,
   isModalOpen: boolean,
+  guitarsInCart: any[],
+  isGuitarAddedInCart: boolean,
 };
 
 export interface Validation {
