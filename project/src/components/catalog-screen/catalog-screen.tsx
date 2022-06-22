@@ -15,7 +15,7 @@ import Spinner from '../spinner/spinner';
 import { AppRoute, DEFAULT_CATALOG_PAGE, GUITARS_QUANTITY_FOR_DISPLAY } from '../../const';
 import { useAppSelector, useAppDispatch } from '../../hooks';
 import { getGuitars, getStatusLoadedGuitarsSortFIlter, getTotalCountGuitars } from '../../store/guitars-data/selectors';
-import { setCurrentPageCatalog, setGuitarId, setGuitarInCartState, setModalWindowState } from '../../store/guitars-operations/guitars-operations';
+import { setCurrentPageCatalog, setGuitarId, setGuitarInCartState } from '../../store/guitars-operations/guitars-operations';
 import {
   getSortType,
   getSortDirection,
@@ -31,7 +31,6 @@ import { getCurrentPageCatalog, getGuitarAddInCartStatus, getGuitarsInCart } fro
 import { resetSort, setFilterGuitarType, setFilterMaxPrice, setFilterMinPrice, setFilterStringCount, setLoadGuitarsSortFilter, setSortDirection, setSortType } from '../../store/guitars-data/guitars-data';
 import { useSearchParams } from 'react-router-dom';
 import ModalCartAdd from '../modal-cart-add/modal-cart-add';
-import { Guitars } from '../../types/guitars';
 import ModalSuccessAdd from '../modal-success-add/modal-success-add';
 import { throttle } from '../../utils/utils';
 
@@ -64,7 +63,6 @@ function CatalogScreen(): JSX.Element {
   const guitars = useAppSelector(getGuitars);
   const isGuitarsLoaded = useAppSelector(getStatusLoadedGuitars);
   const guitarsInCart = useAppSelector(getGuitarsInCart);
-  console.log(guitarsInCart);
 
   const FilterAndSortOptions = {
     sortType: selectedSortType,

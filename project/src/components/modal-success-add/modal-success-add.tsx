@@ -19,7 +19,11 @@ function ModalSuccessAdd({onModalSuccessAddCloseClick}: ModalSuccessAddProps): J
         <p className="modal__message">Товар успешно добавлен в корзину</p>
         <div className="modal__button-container modal__button-container--add">
           <Link className="button button--small modal__button" to={AppRoute.Cart} onClick={onModalSuccessAddCloseClick}>Перейти в корзину</Link>
-          <button className="button button--black-border button--small modal__button modal__button--right" onClick={onModalSuccessAddCloseClick}>Продолжить покупки</button>
+          <Link
+            className="button button--black-border button--small modal__button modal__button--right"
+            to={window.location.pathname === AppRoute.Catalog ? '##' : AppRoute.Catalog} onClick={onModalSuccessAddCloseClick}
+          >Продолжить покупки
+          </Link>
         </div>
         <ModalCloseButton onModalCloseClick={onModalSuccessAddCloseClick} />
       </div>

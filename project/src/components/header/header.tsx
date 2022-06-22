@@ -1,11 +1,12 @@
 import { Link } from 'react-router-dom';
 import { AppRoute } from '../../const';
 import { useAppSelector } from '../../hooks';
-import { getCurrentPageCatalog } from '../../store/guitars-operations/selectors';
+import { getCurrentPageCatalog, getGuitarsInCart } from '../../store/guitars-operations/selectors';
 import HeaderSearch from '../header-search/header-search';
 
 function Header(): JSX.Element {
   const currentPageCatalog = useAppSelector(getCurrentPageCatalog);
+  const guitarsInCart = useAppSelector(getGuitarsInCart);
 
   return (
     <header className="header" id="header">
@@ -35,7 +36,9 @@ function Header(): JSX.Element {
         <Link className="header__cart-link" to={AppRoute.Cart} aria-label="Корзина">
           <svg className="header__cart-icon" width="14" height="14" aria-hidden="true">
             <use xlinkHref="/img/sprite_auto.svg#icon-basket"></use>
-          </svg><span className="visually-hidden">Перейти в корзину</span><span className="header__cart-count">1</span>
+          </svg>
+          <span className="visually-hidden">Перейти в корзину</span>
+          {guitarsInCart.length > 0 ? <span className="header__cart-count">{guitarsInCart.length}</span> : ''}
         </Link>
       </div>
     </header>

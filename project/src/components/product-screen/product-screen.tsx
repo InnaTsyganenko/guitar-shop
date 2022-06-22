@@ -4,17 +4,24 @@ import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Rating from '../rating/rating';
 import ProductReviews from '../product-reviews/product-reviews';
 import Footer from '../footer/footer';
-import { useAppSelector } from '../../hooks';
-import { getPickedId } from '../../store/guitars-operations/selectors';
+import { useAppDispatch, useAppSelector } from '../../hooks';
+import { getGuitarAddInCartStatus, getPickedId } from '../../store/guitars-operations/selectors';
 import { useState } from 'react';
 import { fetchGuitarByIdAction } from '../../store/api-actions';
 import { getGuitarById, getStatusLoadedGuitar } from '../../store/guitars-data/selectors';
 import LoadingScreen from '../loading-screen/loading-screen';
 import { CardGuitarTabs, GuitarType } from '../../const';
 import { useApiGet, TApiResponse } from '../../hooks/use-api-get';
+import { setGuitarInCartState } from '../../store/guitars-operations/guitars-operations';
+import ModalCartAdd from '../modal-cart-add/modal-cart-add';
+import ModalSuccessAdd from '../modal-success-add/modal-success-add';
 
 function ProductScreen(): JSX.Element {
   const [activeTab, setActiveTab] = useState<string>(Object.keys(CardGuitarTabs)[0]);
+
+  const [isModalAddProductOpen, setModalAddProductOpened] = useState(false);
+
+  const dispatch = useAppDispatch();
 
   const pickedId = useAppSelector(getPickedId);
 
@@ -23,9 +30,23 @@ function ProductScreen(): JSX.Element {
   const guitar = useAppSelector(getGuitarById);
   const isGuitarLoaded = useAppSelector(getStatusLoadedGuitar);
 
+  const isGuitarAddedInCart: boolean = useAppSelector(getGuitarAddInCartStatus);
+
   const handleCardGuitarTabs = (evt: React.MouseEvent<HTMLAnchorElement, MouseEvent>, key: string) => {
     evt.preventDefault();
     setActiveTab(key);
+  };
+
+  const handleProductBuyClick = () => {
+    setModalAddProductOpened(true);
+  };
+
+  const handleAddProductToCartCloseClick = () => {
+    setModalAddProductOpened(false);
+  };
+
+  const handleSuccessAddCloseClick = () => {
+    dispatch(setGuitarInCartState(false));
   };
 
   if (!isGuitarLoaded) {
@@ -92,11 +113,25 @@ function ProductScreen(): JSX.Element {
               </div>
               <div className="product-container__price-wrapper">
                 <p className="product-container__price-info product-container__price-info--title">Цена:</p>
-                <p className="product-container__price-info product-container__price-info--value">{guitar.price} ₽</p><a className="button button--red button--big product-container__button" href="##" onClick={(evt) => evt.preventDefault()}>Добавить в корзину</a>
+                <p className="product-container__price-info product-container__price-info--value">{guitar.price} ₽</p>
+                <button className="button button--red button--big product-container__button"
+                  onClick={handleProductBuyClick}
+                >Добавить в корзину
+                </button>
               </div>
             </div>
             <ProductReviews currentGuitar={guitar} reviews={guitar.comments} />
           </div>
+          {isModalAddProductOpen &&
+          <ModalCartAdd
+            guitar={guitar}
+            onModalCloseClick={handleAddProductToCartCloseClick}
+          />}
+
+          {isGuitarAddedInCart &&
+          <ModalSuccessAdd
+            onModalSuccessAddCloseClick={handleSuccessAddCloseClick}
+          />}
         </main>
         <Footer />
       </Wrapper>
