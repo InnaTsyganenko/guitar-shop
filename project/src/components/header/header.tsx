@@ -38,7 +38,7 @@ function Header(): JSX.Element {
             <use xlinkHref="/img/sprite_auto.svg#icon-basket"></use>
           </svg>
           <span className="visually-hidden">Перейти в корзину</span>
-          {guitarsInCart.length > 0 ? <span className="header__cart-count">{guitarsInCart.length}</span> : ''}
+          {guitarsInCart.length > 0 ? <span className="header__cart-count">{guitarsInCart.map((item) => item.guitarQt).reduce((previousValue, currentValue) => previousValue + currentValue, 0)}</span> : ''}
         </Link>
       </div>
     </header>

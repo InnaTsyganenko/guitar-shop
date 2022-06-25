@@ -74,7 +74,7 @@ function CatalogScreen(): JSX.Element {
   };
 
   const adaptSearchParams = (params: any) => {
-    const adaptedMovie = {...params,
+    const adaptedParams = {...params,
       sort: params.sortType,
       order: params.sortOrder,
       price_gte: params.priceMin,
@@ -83,17 +83,17 @@ function CatalogScreen(): JSX.Element {
       string_qt: params.stringQt,
     };
 
-    delete adaptedMovie.sortType;
-    delete adaptedMovie.sortOrder;
-    delete adaptedMovie.priceMin;
-    delete adaptedMovie.priceMax;
-    delete adaptedMovie.guitarTypes;
-    delete adaptedMovie.stringQt;
+    delete adaptedParams.sortType;
+    delete adaptedParams.sortOrder;
+    delete adaptedParams.priceMin;
+    delete adaptedParams.priceMax;
+    delete adaptedParams.guitarTypes;
+    delete adaptedParams.stringQt;
 
-    Object.keys(adaptedMovie).map((item: any) => ((adaptedMovie[item] === '') || (adaptedMovie[item] === 0) || (adaptedMovie[item]?.length === 0)) ?
-      delete adaptedMovie[item] : null);
+    Object.keys(adaptedParams).map((item: any) => ((adaptedParams[item] === '') || (adaptedParams[item] === 0) || (adaptedParams[item]?.length === 0)) ?
+      delete adaptedParams[item] : null);
 
-    return adaptedMovie;
+    return adaptedParams;
   };
 
   const params = adaptSearchParams(FilterAndSortOptions);

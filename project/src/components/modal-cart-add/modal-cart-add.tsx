@@ -1,9 +1,11 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 import React, { PropsWithChildren } from 'react';
-import { useAppDispatch } from '../../hooks';
+import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Guitar } from '../../types/guitars';
 import ModalOverlay from '../modal-overlay/modal-overlay';
 import ModalCloseButton from '../modal-close-button/modal-close-button';
 import { setGuitarInCart, setGuitarInCartState } from '../../store/guitars-operations/guitars-operations';
+import { getGuitarsInCart } from '../../store/guitars-operations/selectors';
 
 type ModalCartAddProps = PropsWithChildren<{
   guitar?: Guitar;
@@ -14,8 +16,24 @@ function ModalCartAdd({guitar = {} as Guitar, onModalCloseClick}: ModalCartAddPr
 
   const dispatch = useAppDispatch();
 
+  const guitarsInCart = useAppSelector(getGuitarsInCart);
+
+  const adaptGuitarForCart = (params: any) => {
+    const adapted = {...params};
+
+    delete adapted.description;
+    delete adapted.rating;
+    delete adapted.comments;
+
+    if (guitarsInCart.some((item) => item.id === guitar.id)) {
+      return {...adapted, guitarQt: (guitarsInCart.find((item) => item.id === guitar.id)!.guitarQt) + 1};
+    } else {
+      return {...adapted, guitarQt: 1};
+    }
+  };
+
   const handleAddGuitarInCartButton = () => {
-    dispatch(setGuitarInCart(guitar));
+    dispatch(setGuitarInCart(adaptGuitarForCart(guitar)));
     dispatch(setGuitarInCartState(true));
     onModalCloseClick();
   };

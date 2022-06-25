@@ -31,9 +31,22 @@ export type CommentPost = {
   rating: number;
 };
 
+export type GuitarForCart = {
+  id: number;
+  guitarQt: number;
+  name: string;
+  vendorCode: string;
+  type: string;
+  previewImg: string;
+  stringCount: string;
+  price: number;
+};
+
 export type GuitarsTotalCount = number;
 
 export type Guitars = Guitar[];
+
+export type GuitarsForCart = GuitarForCart[];
 
 export type GuitarById = Guitar;
 
