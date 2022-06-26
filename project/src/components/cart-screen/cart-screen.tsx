@@ -6,13 +6,15 @@ import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getGuitarsInCart } from '../../store/guitars-operations/selectors';
 import { GuitarType } from '../../const';
 import { decreaseGuitarCartQt, deleteGuitarFromCart, increaseGuitarCartQt } from '../../store/guitars-operations/guitars-operations';
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 function CartScreen(): JSX.Element {
   const dispatch = useAppDispatch();
 
-  const totalCount = useRef<HTMLElement>(null);
-  const discount = useRef<HTMLElement>(null);
+  const [discount, setDiscount] = useState(0);
+
+  const totalCountRef = useRef<HTMLElement>(null);
+  const discountRef = useRef<HTMLElement>(null);
 
   const guitarsInCart = useAppSelector(getGuitarsInCart);
 
@@ -34,7 +36,7 @@ function CartScreen(): JSX.Element {
     }
   };
 
-  console.log(totalCount.current)
+  console.log(discount)
   return (
     <Wrapper>
       <Header />
@@ -99,13 +101,13 @@ function CartScreen(): JSX.Element {
               <div className="cart__total-info">
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">Всего:</span>
-                  <span className="cart__total-value" ref={totalCount}>{guitarsInCart.map((item) => item.price * item.guitarQt).reduce((previousValue, currentValue) => previousValue + currentValue, 0)} ₽</span>
+                  <span className="cart__total-value" ref={totalCountRef}>{guitarsInCart.map((item) => item.price * item.guitarQt).reduce((previousValue, currentValue) => previousValue + currentValue, 0)} ₽</span>
                 </p>
                 <p className="cart__total-item">
-                  <span className="cart__total-value-name" ref={discount}>Скидка:</span>
-                  <span className="cart__total-value cart__total-value--bonus">- 3000 ₽</span>
+                  <span className="cart__total-value-name">Скидка:</span>
+                  <span className={discount === 0 ? 'cart__total-value' : 'cart__total-value cart__total-value--bonus'} ref={discountRef}>{discount === 0 ? '0' : `-${discount}`} ₽</span>
                 </p>
-                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{totalCount.current?.ATTRIBUTE_NODE} ₽</span></p>
+                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{Number(totalCountRef.current?.innerText.match(/\d+/g)?.join('')) - Number(discountRef.current?.innerText.match(/\d+/g)?.join(''))} ₽</span></p>
                 <button className="button button--red button--big cart__order-button" onClick={(evt) => evt.preventDefault()}>Оформить заказ</button>
               </div> : ''}
           </div>
