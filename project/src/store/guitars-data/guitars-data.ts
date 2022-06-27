@@ -22,6 +22,7 @@ const initialState: GuitarsData = {
   filterMaxPrice: 0,
   filterGuitarTypes: [],
   filterStringCount: [],
+  discountFromCoupon: 0,
 };
 
 export const guitarsData = createSlice({
@@ -97,6 +98,9 @@ export const guitarsData = createSlice({
       state.filterGuitarTypes = initialState.filterGuitarTypes;
       state.filterStringCount = initialState.filterStringCount;
     },
+    setDiscountFromCoupon: (state, action) => {
+      state.discountFromCoupon = action.payload;
+    },
   },
 });
 
@@ -122,4 +126,5 @@ export const {
   resetFilters,
   setGuitarsMinPrice,
   setGuitarsMaxPrice,
+  setDiscountFromCoupon,
 } = guitarsData.actions;

@@ -21,6 +21,7 @@ export type GuitarsData = {
   filterMaxPrice: number,
   filterGuitarTypes: [],
   filterStringCount: [],
+  discountFromCoupon: number,
 };
 
 export type GuitarsOperations = {
@@ -57,6 +58,10 @@ export interface NewReview {
   disadvantage: string,
   comment: string,
   rating: number,
+}
+
+export interface CouponPost {
+  coupon: string,
 }
 
 export type State = ReturnType<typeof store.getState>;

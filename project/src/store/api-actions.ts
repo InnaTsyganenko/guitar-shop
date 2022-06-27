@@ -1,10 +1,10 @@
 import { AxiosInstance } from 'axios';
 import { createAsyncThunk } from '@reduxjs/toolkit';
-import { loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarLoadStatus, loadSearchResults, loadGuitarsSortFilter, setLoadGuitarsSortFilter, setGuitarsMinPrice, setGuitarsMaxPrice } from './guitars-data/guitars-data';
+import { loadGuitarById, setTotalCountGuitarsFromResponse, setIsNewCommentPush, setGuitarLoadStatus, loadSearchResults, loadGuitarsSortFilter, setLoadGuitarsSortFilter, setGuitarsMinPrice, setGuitarsMaxPrice, setDiscountFromCoupon } from './guitars-data/guitars-data';
 import { setModalWindowState } from './guitars-operations/guitars-operations';
 import { APIRoute } from '../const';
 import { AppDispatch, State } from '../types/state.js';
-import { Guitars, PickedId, GuitarById, CommentPost, Guitar } from '../types/guitars';
+import { Guitars, PickedId, GuitarById, CommentPost, Guitar, CouponPost } from '../types/guitars';
 import { errorHandle  } from '../services/error-handle';
 
 
@@ -87,6 +87,22 @@ export const fetchGuitarsBySearchAction = createAsyncThunk<void, string, {
       const filtredGuitars = response.data.filter((item: Guitar) => item.name);
       dispatch(loadSearchResults(filtredGuitars));
 
+    } catch (error) {
+      errorHandle(error);
+    }
+  },
+);
+
+export const pushCouponAction = createAsyncThunk<void, CouponPost, {
+  dispatch: AppDispatch,
+  state: State,
+  extra: AxiosInstance
+}>(
+  'DATA/pushComment',
+  async ({coupon}, {dispatch, extra: api}) => {
+    try {
+      const response = await api.post<GuitarById>(APIRoute.Coupons, {coupon});
+      dispatch(setDiscountFromCoupon(response.data));
     } catch (error) {
       errorHandle(error);
     }

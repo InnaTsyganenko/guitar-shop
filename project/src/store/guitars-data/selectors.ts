@@ -35,3 +35,5 @@ export const getFilterGuitarTypes = (state: State): [] => state[NameSpace.data]?
 export const getFilterStringCount = (state: State): [] => state[NameSpace.data]?.filterStringCount;
 
 export const getStatusLoadedGuitarsSortFIlter = (state: State): boolean => state[NameSpace.data].isGuitarsSortFilterLoaded;
+
+export const getDiscountFromCoupon = (state: State): number => state[NameSpace.data]?.discountFromCoupon;

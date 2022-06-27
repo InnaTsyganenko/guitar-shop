@@ -70,3 +70,7 @@ export type FilterAndSortOptions = {
   guitarTypes: [];
   stringQt: []
 };
+
+export type CouponPost = {
+  coupon: string;
+};
