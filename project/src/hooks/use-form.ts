@@ -1,3 +1,4 @@
+import { KeyboardEvent } from 'react';
 /* eslint-disable @typescript-eslint/no-unnecessary-type-constraint */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ChangeEvent, FormEvent, useState } from 'react';
@@ -20,6 +21,21 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
         ...data,
         [key]: value,
       });
+    };
+
+  const handlePaste = <S extends unknown>(
+    key: keyof T,
+    sanitizeFn?: (value: string) => S,
+  ) => (evt: any) => {
+      const paste: any = (evt.clipboardData)?.getData('text');
+      const newPaste = Array.from(paste).filter((item) => item !== ' ');
+      // evt.target.value = newPaste.map((item) => item).join('');
+      const value = newPaste.map((item) => item).join('');
+      setData({
+        ...data,
+        [key]: value,
+      });
+      evt.preventDefault();
     };
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
@@ -66,6 +82,7 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
   return {
     data,
     handleChange,
+    handlePaste,
     handleSubmit,
     errors,
   };

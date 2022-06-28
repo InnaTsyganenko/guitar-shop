@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { throttle } from '../utils/utils';
 
 export default function useScrollControl() {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -9,9 +8,7 @@ export default function useScrollControl() {
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
 
-    if (isModalOpen) {
-      throttle(document.body.style.overflow = 'hidden', 350);
-    }
+    document.body.style.overflow = 'hidden';
 
     return () => {
       document.body.style.overflow = originalStyle;

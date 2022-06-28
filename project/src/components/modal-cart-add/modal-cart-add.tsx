@@ -13,7 +13,6 @@ type ModalCartAddProps = PropsWithChildren<{
 }>;
 
 function ModalCartAdd({guitar = {} as Guitar, onModalCloseClick}: ModalCartAddProps): JSX.Element {
-
   const dispatch = useAppDispatch();
 
   const guitarsInCart = useAppSelector(getGuitarsInCart);
