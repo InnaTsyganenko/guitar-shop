@@ -4,18 +4,21 @@ import Footer from '../footer/footer';
 import Wrapper from '../wrapper/wrapper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getGuitarsInCart } from '../../store/guitars-operations/selectors';
-import { GuitarType } from '../../const';
+import { Discounts, GuitarType } from '../../const';
 import { decreaseGuitarCartQt, deleteGuitarFromCart, increaseGuitarCartQt } from '../../store/guitars-operations/guitars-operations';
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from '../../hooks/use-form';
 import { pushCouponAction } from '../../store/api-actions';
 import { CouponPost } from '../../types/state';
 import { getDiscountFromCoupon } from '../../store/guitars-data/selectors';
+import { setDiscountFromCoupon } from '../../store/guitars-data/guitars-data';
+import { database } from 'faker';
 
 function CartScreen(): JSX.Element {
   const dispatch = useAppDispatch();
 
   const totalCountRef = useRef<HTMLElement>(null);
+  const [totalCount, setTotalCount] = useState(0);
 
   const guitarsInCart = useAppSelector(getGuitarsInCart);
 
@@ -45,20 +48,42 @@ function CartScreen(): JSX.Element {
     validations: {
       coupon: {
         custom: {
-          isValid: (value) => value.length > 0,
+          isValid: (value) => Discounts.includes(value),
           message: 'неверный промокод',
         },
       },
     },
     onSubmit: () => {
+      console.log(couponPost.coupon)
       fetchCoupon(couponPost);
     },
   });
 
-  const discount = dispatch(getDiscountFromCoupon as any);
-  // const discount = 0;
+  const discount = useAppSelector(getDiscountFromCoupon);
 
-  console.log(discount)
+  const handleInputCouponKeyDown = (evt: any) => {
+    dispatch(setDiscountFromCoupon(0));
+    if (evt.key === ' ') {
+      evt.preventDefault();
+    }
+  };
+
+  const handleInputCouponPaste = (evt: any) => {
+    const paste: string = (evt.clipboardData).getData('text');
+    const newPaste = Array.from(paste).filter((item) => item !== ' ');
+    evt.target.value = newPaste.map((item) => item).join('');
+    dispatch(setDiscountFromCoupon(0));
+    evt.preventDefault();
+  };
+
+  const handleInputPriceFocus = (evt: any) => evt.target.select();
+
+  useEffect(() => {
+    setTotalCount(Number(totalCountRef.current?.innerText.match(/\d+/g)?.join('')));
+  }, [guitarsInCart]);
+
+console.log(couponPost)
+console.log(discount)
   return (
     <Wrapper>
       <Header />
@@ -115,12 +140,15 @@ function CartScreen(): JSX.Element {
                   <label className="visually-hidden">Промокод</label>
                   <input
                     type="text"
-                    placeholder="Введите промокод"
+                    placeholder={Discounts.includes(couponPost.coupon) ? couponPost.coupon : 'Введите промокод'}
                     id="coupon"
                     name="coupon"
+                    onFocus={handleInputPriceFocus}
+                    onKeyDown={handleInputCouponKeyDown}
+                    onPaste={handleInputCouponPaste}
                     onChange={handleChange('coupon')}
                   />
-                  <p className={errors.coupon === '' ? 'form-input__message form-input__message--success' : 'form-input__message form-input__message--error'}>{errors.coupon === '' ? 'Промокод принят' : errors.coupon}&nbsp;</p>
+                  <p className={discount !== 0 ? 'form-input__message form-input__message--success' : 'form-input__message form-input__message--error'}>{discount !== 0 ? 'Промокод принят' : errors.coupon}&nbsp;</p>
                 </div>
                 <button className="button button--big coupon__button" type="submit">Применить</button>
               </form>
@@ -133,9 +161,15 @@ function CartScreen(): JSX.Element {
                 </p>
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">Скидка:</span>
-                  <span className={discount === 0 ? 'cart__total-value' : 'cart__total-value cart__total-value--bonus'}>{discount === 0 ? '0' : `-${discount}`} ₽</span>
+                  <span className={discount === 0 ? 'cart__total-value' : 'cart__total-value cart__total-value--bonus'}>{discount === 0 ? 0 : `-${totalCount / 100 * discount}`} ₽</span>
                 </p>
-                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span><span className="cart__total-value cart__total-value--payment">{Number(totalCountRef.current?.innerText.match(/\d+/g)?.join('')) - Number(discount)} ₽</span></p>
+                <p className="cart__total-item"><span className="cart__total-value-name">К оплате:</span>
+                  <span className="cart__total-value cart__total-value--payment">
+                    {discount === 0
+                      ? totalCount
+                      : totalCount - (totalCount / 100 * discount)} ₽
+                  </span>
+                </p>
                 <button className="button button--red button--big cart__order-button" onClick={(evt) => evt.preventDefault()}>Оформить заказ</button>
               </div> : ''}
           </div>
