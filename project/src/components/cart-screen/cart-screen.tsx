@@ -5,7 +5,7 @@ import Wrapper from '../wrapper/wrapper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getGuitarsInCart } from '../../store/guitars-operations/selectors';
 import { AppRoute, Discounts, GuitarType } from '../../const';
-import { decreaseGuitarCartQt, deleteGuitarFromCart, increaseGuitarCartQt } from '../../store/guitars-operations/guitars-operations';
+import { decreaseGuitarCartQt, deleteGuitarFromCart, increaseGuitarCartQt, setGuitarInCart } from '../../store/guitars-operations/guitars-operations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from '../../hooks/use-form';
 import { pushCouponAction } from '../../store/api-actions';
@@ -40,6 +40,12 @@ function CartScreen(): JSX.Element {
     }
   };
 
+  const handleQuantityInput = (evt: { target: { value: any; }; }, id: number) => {
+    const findGuitar = guitarsInCart.find((item) => item.id === id);
+    const mutateGuitar = {...findGuitar, guitarQt: evt.target.value};
+    dispatch(setGuitarInCart(mutateGuitar));
+  };
+
   const fetchCoupon = useCallback(async (couponPost) => {
     await dispatch(pushCouponAction(couponPost));
   }, [dispatch]);
@@ -54,7 +60,6 @@ function CartScreen(): JSX.Element {
       },
     },
     onSubmit: () => {
-      console.log(couponPost.coupon)
       fetchCoupon(couponPost);
     },
   });
@@ -66,19 +71,6 @@ function CartScreen(): JSX.Element {
     if (evt.key === ' ') {
       evt.preventDefault();
     }
-  };
-
-  const handleInputCouponPaste = (evt: any) => {
-    dispatch(setDiscountFromCoupon(0));
-    console.log((evt.clipboardData).getData('text'))
-    if ((evt.clipboardData).getData('text').includes(' ')) {
-      evt.preventDefault();
-    }
-    const paste: string = (evt.clipboardData).getData('text');
-    const newPaste = Array.from(paste).filter((item) => item !== ' ');
-    dispatch(setDiscountFromCoupon(0));
-    evt.target.value = newPaste.map((item) => item).join('');
-    evt.preventDefault();
   };
 
   const handleInputPriceFocus = (evt: any) => evt.target.select();
@@ -126,7 +118,7 @@ function CartScreen(): JSX.Element {
                     min="1"
                     max="99"
                     value={guitar.guitarQt}
-                    onChange={(evt) => evt.preventDefault()}
+                    onChange={(evt) => handleQuantityInput(evt, guitar.id)}
                   />
                   <button className="quantity__button" aria-label="Увеличить количество" onClick={() => handleCartQuantityIncrease(guitar.id)}>
                     <svg width="8" height="8" aria-hidden="true">
@@ -139,31 +131,31 @@ function CartScreen(): JSX.Element {
             ))}
           </div>
           {guitarsInCart.length > 0 ?
-          <div className="cart__footer">
-            <div className="cart__coupon coupon">
-              <h2 className="title title--little coupon__title">Промокод на скидку</h2>
-              <p className="coupon__info">Введите свой промокод, если он у вас есть.</p>
-              <form className="coupon__form" id="coupon-form" method="post" action="#" onSubmit={handleSubmit}>
-                <div className="form-input coupon__input">
-                  <label className="visually-hidden">Промокод</label>
-                  <input
-                    type="text"
-                    placeholder="Введите промокод"
-                    id="coupon"
-                    name="coupon"
-                    onFocus={handleInputPriceFocus}
-                    onKeyDown={handleInputCouponKeyDown}
-                    onPaste={handlePaste('coupon')}
-                    onChange={handleChange('coupon')}
-                    autoComplete="off"
-                    value={couponPost.coupon !== undefined && couponPost.coupon.length > 0 ? couponPost.coupon : ''}
-                  />
-                  <p className={discount !== 0 ? 'form-input__message form-input__message--success' : 'form-input__message form-input__message--error'}>{discount !== 0 ? 'Промокод принят' : errors.coupon}&nbsp;</p>
-                </div>
-                <button className="button button--big coupon__button" type="submit">Применить</button>
-              </form>
-            </div>
-            <div className="cart__total-info">
+            <div className="cart__footer">
+              <div className="cart__coupon coupon">
+                <h2 className="title title--little coupon__title">Промокод на скидку</h2>
+                <p className="coupon__info">Введите свой промокод, если он у вас есть.</p>
+                <form className="coupon__form" id="coupon-form" method="post" action="#" onSubmit={handleSubmit}>
+                  <div className="form-input coupon__input">
+                    <label className="visually-hidden">Промокод</label>
+                    <input
+                      type="text"
+                      placeholder="Введите промокод"
+                      id="coupon"
+                      name="coupon"
+                      onFocus={handleInputPriceFocus}
+                      onKeyDown={handleInputCouponKeyDown}
+                      onPaste={handlePaste('coupon')}
+                      onChange={handleChange('coupon')}
+                      autoComplete="off"
+                      value={couponPost.coupon !== undefined && couponPost.coupon.length > 0 ? couponPost.coupon : ''}
+                    />
+                    <p className={discount !== 0 ? 'form-input__message form-input__message--success' : 'form-input__message form-input__message--error'}>{discount !== 0 ? 'Промокод принят' : errors.coupon}&nbsp;</p>
+                  </div>
+                  <button className="button button--big coupon__button" type="submit">Применить</button>
+                </form>
+              </div>
+              <div className="cart__total-info">
                 <p className="cart__total-item">
                   <span className="cart__total-value-name">Всего:</span>
                   <span className="cart__total-value" ref={totalCountRef}>{guitarsInCart.map((item) => item.price * item.guitarQt).reduce((previousValue, currentValue) => previousValue + currentValue, 0)} ₽</span>
@@ -181,8 +173,8 @@ function CartScreen(): JSX.Element {
                 </p>
                 <button className="button button--red button--big cart__order-button" onClick={(evt) => evt.preventDefault()}>Оформить заказ</button>
               </div>
-          </div> :
-          <p className="page-content__title title" style={{width:'500px'}}>Корзина пока что пуста. Можно перейти <Link className="link" style={{textDecoration:'underline'}} to={AppRoute.Catalog}>в Каталог</Link> и пополнить корзину.</p>}
+            </div> :
+            <p className="page-content__title title" style={{width:'500px'}}>Корзина пока что пуста. Можно перейти <Link className="link" style={{textDecoration:'underline'}} to={AppRoute.Catalog}>в Каталог</Link> и пополнить корзину.</p>}
         </div>
       </main>
       <Footer />

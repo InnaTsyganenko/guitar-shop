@@ -14,7 +14,7 @@ function ModalSuccessAdd({onModalSuccessAddCloseClick}: ModalSuccessAddProps): J
     <ModalOverlay onModalCloseClick={onModalSuccessAddCloseClick}>
       <div className="modal__content" id="modal-success-add">
         <svg className="modal__icon" width={26} height={20} aria-hidden="true">
-          <use xlinkHref="#icon-success" />
+          <use xlinkHref="/img/sprite_auto.svg#icon-success" />
         </svg>
         <p className="modal__message">Товар успешно добавлен в корзину</p>
         <div className="modal__button-container modal__button-container--add">
