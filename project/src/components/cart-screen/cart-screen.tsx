@@ -5,7 +5,7 @@ import Wrapper from '../wrapper/wrapper';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { getGuitarsInCart } from '../../store/guitars-operations/selectors';
 import { AppRoute, Discounts, GuitarType } from '../../const';
-import { decreaseGuitarCartQt, deleteGuitarFromCart, increaseGuitarCartQt, setGuitarInCart } from '../../store/guitars-operations/guitars-operations';
+import { decreaseGuitarCartQt, increaseGuitarCartQt, setGuitarInCart } from '../../store/guitars-operations/guitars-operations';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useForm } from '../../hooks/use-form';
 import { pushCouponAction } from '../../store/api-actions';
@@ -13,6 +13,7 @@ import { CouponPost } from '../../types/state';
 import { getDiscountFromCoupon } from '../../store/guitars-data/selectors';
 import { setDiscountFromCoupon } from '../../store/guitars-data/guitars-data';
 import { Link } from 'react-router-dom';
+import ModalCartDelete from '../modal-cart-delete/modal-cart-delete';
 
 function CartScreen(): JSX.Element {
   const dispatch = useAppDispatch();
@@ -20,9 +21,15 @@ function CartScreen(): JSX.Element {
   const totalCountRef = useRef<HTMLElement>(null);
   const [totalCount, setTotalCount] = useState(0);
 
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [guitarIdForDelete, setGuitarIdForDelete] = useState(0);
+
   const guitarsInCart = useAppSelector(getGuitarsInCart);
 
-  const handleCartDeleteButton = (id: number) => dispatch(deleteGuitarFromCart(id));
+  const handleCartDeleteButton = (id: number) => {
+    setIsDeleteModalOpen(true);
+    setGuitarIdForDelete(id);
+  };
 
   const handleCartQuantityIncrease = (id: number) => {
     if (guitarsInCart.find((item) => item.id === id)?.guitarQt === 99) {
@@ -34,16 +41,31 @@ function CartScreen(): JSX.Element {
 
   const handleCartQuantityDecrease = (id: number) => {
     if (guitarsInCart.find((item) => item.id === id)?.guitarQt === 1) {
-      dispatch(deleteGuitarFromCart(id));
+      setIsDeleteModalOpen(true);
+      setGuitarIdForDelete(id);
     } else {
       dispatch(decreaseGuitarCartQt(id));
     }
   };
 
-  const handleQuantityInput = (evt: { target: { value: any; }; }, id: number) => {
+  const handleQuantityInput = (evt: any, id: number) => {
+    if (Number(evt.target.value) > 99) {
+      evt.target.value = 99;
+    }
+
+    if (evt.target.value === '') {
+      evt.target.value = 1;
+      evt.target.select();
+    }
+
     const findGuitar = guitarsInCart.find((item) => item.id === id);
-    const mutateGuitar = {...findGuitar, guitarQt: evt.target.value};
+    const mutateGuitar = {...findGuitar, guitarQt: Number(evt.target.value)};
     dispatch(setGuitarInCart(mutateGuitar));
+
+    if (Number(evt.target.value) === 0) {
+      setIsDeleteModalOpen(true);
+      setGuitarIdForDelete(id);
+    }
   };
 
   const fetchCoupon = useCallback(async (couponPost) => {
@@ -83,6 +105,10 @@ function CartScreen(): JSX.Element {
     dispatch(setDiscountFromCoupon(0));
   }
 
+  const handleDeleteModalCloseClick = () => {
+    setIsDeleteModalOpen(false);
+  };
+
   return (
     <Wrapper>
       <Header />
@@ -118,6 +144,7 @@ function CartScreen(): JSX.Element {
                     min="1"
                     max="99"
                     value={guitar.guitarQt}
+                    onFocus={handleInputPriceFocus}
                     onChange={(evt) => handleQuantityInput(evt, guitar.id)}
                   />
                   <button className="quantity__button" aria-label="Увеличить количество" onClick={() => handleCartQuantityIncrease(guitar.id)}>
@@ -176,6 +203,11 @@ function CartScreen(): JSX.Element {
             </div> :
             <p className="page-content__title title" style={{width:'500px'}}>Корзина пока что пуста. Можно перейти <Link className="link" style={{textDecoration:'underline'}} to={AppRoute.Catalog}>в Каталог</Link> и пополнить корзину.</p>}
         </div>
+        {isDeleteModalOpen &&
+          <ModalCartDelete
+            guitar={guitarsInCart.find((guitar) => guitar.id === Number(guitarIdForDelete))}
+            onModalCloseClick={handleDeleteModalCloseClick}
+          />}
       </main>
       <Footer />
     </Wrapper>

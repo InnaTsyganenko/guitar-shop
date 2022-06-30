@@ -1,3 +1,4 @@
+import { GuitarForCart } from './../types/guitars';
 import { Guitar, Guitars, CommentGet, CommentPost } from '../types/guitars';
 
 const makeFakeCommentGet = (): CommentGet => ({
@@ -32,5 +33,16 @@ export const makeFakeGuitar = (): Guitar => ({
   price: 15000,
   comments: Array.from({length: 5}, makeFakeCommentGet),
 } as Guitar);
+
+export const makeFakeGuitarCart = (): GuitarForCart => ({
+  id: 1,
+  name: 'string',
+  vendorCode: 'string',
+  type: 'string',
+  guitarQt: 1,
+  stringCount: 'string',
+  previewImg: 'dtring',
+  price: 15000,
+} as GuitarForCart);
 
 export const makeFakeGuitars: Guitars = Array.from({length: 10}, makeFakeGuitar) as Guitars;
