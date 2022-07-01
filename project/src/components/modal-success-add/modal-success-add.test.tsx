@@ -4,21 +4,32 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import ModalSuccessAdd from './modal-success-add';
+import thunk from 'redux-thunk';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
-const mockStore = configureMockStore();
+const middlewares = [thunk];
+const mockStore = configureMockStore(middlewares);
+const history = createMemoryHistory();
 
 const store = mockStore({
-  GUITARS: {pickedId: 1, currentPageCatalog: 1},
+  DATA: {},
+  GUITARS: {
+    pickedId: 1,
+    currentPageCatalog: 1,
+    isModalOpen: true,
+    guitarsInCart: [],
+    isGuitarAddedInCart: true,
+  },
 });
 
-describe('Component: ModalReviewThanks', () => {
+describe('Component: ModalSuccessAdd', () => {
   it('should render correctly', () => {
-    const history = createMemoryHistory();
-
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ModalSuccessAdd onModalSuccessAddCloseClick={jest.fn()} />
+          <ModalOverlay onModalCloseClick={jest.fn()} >
+            <ModalSuccessAdd onModalSuccessAddCloseClick={jest.fn()}/>
+          </ModalOverlay>
         </HistoryRouter>
       </Provider>,
     );

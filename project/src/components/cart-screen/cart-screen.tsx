@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import Header from '../header/header';
 import Breadcrumbs from '../breadcrumbs/breadcrumbs';
 import Footer from '../footer/footer';
@@ -101,7 +102,7 @@ function CartScreen(): JSX.Element {
     setTotalCount(Number(totalCountRef.current?.innerText.match(/\d+/g)?.join('')));
   }, [guitarsInCart]);
 
-  if (guitarsInCart.length === 0) {
+  if (guitarsInCart?.length === 0) {
     dispatch(setDiscountFromCoupon(0));
   }
 
@@ -116,8 +117,8 @@ function CartScreen(): JSX.Element {
         <div className="container">
           <h1 className="title title--bigger page-content__title">Корзина</h1>
           <Breadcrumbs guitarId={0} guitarName={''} />
-          <div className="cart">
-            {guitarsInCart.map((guitar) => (
+          <div className="cart" data-testid="cart">
+            {guitarsInCart?.map((guitar) => (
               <div key={guitar.id} className="cart-item">
                 <button className="cart-item__close-button button-cross" type="button" aria-label="Удалить" onClick={() => handleCartDeleteButton(guitar.id)}><span className="button-cross__icon"></span><span className="cart-item__close-button-interactive-area"></span>
                 </button>
@@ -157,7 +158,7 @@ function CartScreen(): JSX.Element {
               </div>
             ))}
           </div>
-          {guitarsInCart.length > 0 ?
+          {guitarsInCart?.length > 0 ?
             <div className="cart__footer">
               <div className="cart__coupon coupon">
                 <h2 className="title title--little coupon__title">Промокод на скидку</h2>

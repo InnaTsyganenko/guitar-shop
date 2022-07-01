@@ -14,11 +14,11 @@ export function throttle(callee: any, timeout: any) {
   };
 }
 
-export const getKeyboardFocusableElements = (element: any) => [
+export const getKeyboardFocusableElements = (element: any) => element !== null ? [
   ...element.querySelectorAll(
     ('a[href], area[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), button:not([disabled]), iframe, object, embed, [tabindex="0"], [contenteditable]'),
   ),
-];
+] : [];
 
 export const trapFocusInsideModalWindow = (id: string) => {
   const modal = document.getElementById(id);
@@ -26,7 +26,10 @@ export const trapFocusInsideModalWindow = (id: string) => {
   const focusableElementsInModal = getKeyboardFocusableElements(modal);
   const firstTabStop = focusableElementsInModal[0];
   const lastTabStop = focusableElementsInModal[focusableElementsInModal.length - 1];
-  firstTabStop.focus();
+
+  if (firstTabStop !== undefined) {
+    firstTabStop.focus();
+  }
 
   const trapTabKey = (evt: KeyboardEvent) => {
     if (evt.key === 'Tab') {

@@ -48,8 +48,7 @@ describe('Application Routing', () => {
 
     render(fakeApp);
 
-    expect(screen.getByText(/Корзина/i)).toBeInTheDocument();
-    expect(screen.getByText(/Промокод на скидку/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/cart/i)).toBeInTheDocument();
   });
 
 

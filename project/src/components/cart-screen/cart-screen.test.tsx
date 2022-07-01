@@ -24,7 +24,6 @@ describe('Component: CartScreen', () => {
       </Provider>,
     );
 
-    expect(screen.getByText(/Промокод на скидку/i)).toBeInTheDocument();
-    expect(screen.getByText(/Оформить заказ/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/cart/i)).toBeInTheDocument();
   });
 });

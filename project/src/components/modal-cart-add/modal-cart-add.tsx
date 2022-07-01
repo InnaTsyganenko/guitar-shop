@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import React, { PropsWithChildren } from 'react';
+import { PropsWithChildren } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { Guitar } from '../../types/guitars';
 import ModalOverlay from '../modal-overlay/modal-overlay';
@@ -39,7 +40,7 @@ function ModalCartAdd({guitar = {} as Guitar, onModalCloseClick}: ModalCartAddPr
 
   return (
     <ModalOverlay onModalCloseClick={onModalCloseClick}>
-      <div className="modal__content" id="modal-cart-add">
+      <div className="modal__content" id="modal-cart-add" data-testid="modal-cart-add">
         <h2 className="modal__header title title--medium">Добавить товар в корзину</h2>
         <div className="modal__info"><img className="modal__img" src={`/${guitar.previewImg}`} width={67} height={137} alt={guitar.name} />
           <div className="modal__info-wrapper">

@@ -14,11 +14,6 @@ function ModalOverlay({onModalCloseClick, children}: ModalOverlayProps): JSX.Ele
   const { modalHandler } = useScrollControl();
   const dispatch = useAppDispatch();
 
-  useEffect(() => {
-    modalHandler();
-    trapFocusInsideModalWindow(children?.props.id);
-  },[]);
-
   const handleModalClose = useCallback(() => {
     onModalCloseClick();
     dispatch(setModalWindowState(false));
@@ -28,8 +23,15 @@ function ModalOverlay({onModalCloseClick, children}: ModalOverlayProps): JSX.Ele
     handleModalClose();
   });
 
+  useEffect(() => {
+    if (children !== undefined) {
+      modalHandler();
+      trapFocusInsideModalWindow(children?.props.id);
+    }
+  });
+
   return (
-    <div className={(children?.props.id === 'modal-success-review' || children?.props.id === 'modal-success-add')
+    <div data-testid="modal-overlay" className={(children?.props.id === 'modal-success-review' || children?.props.id === 'modal-success-add')
       ? 'modal is-active modal--success modal-for-ui-kit'
       : 'modal is-active modal-for-ui-kit'}
     >

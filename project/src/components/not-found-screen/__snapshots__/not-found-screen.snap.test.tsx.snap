@@ -3,7 +3,7 @@
 exports[`Component: NotFoundScreen should render correctly 1`] = `
 <div>
   <div
-    class="wrapper wrapper--no-scrollbar"
+    class="wrapper"
     data-testid="wrapper"
   >
     <main

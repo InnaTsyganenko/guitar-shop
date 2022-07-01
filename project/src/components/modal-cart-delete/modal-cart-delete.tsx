@@ -21,7 +21,7 @@ function ModalCartDelete({guitar = {} as GuitarForCart, onModalCloseClick}: Moda
 
   return (
     <ModalOverlay onModalCloseClick={onModalCloseClick}>
-      <div className="modal__content" id="modal-cart-delete">
+      <div className="modal__content" id="modal-cart-delete" data-testid="modal-cart-delete">
         <h2 className="modal__header title title--medium title--red">Удалить этот товар?</h2>
         <div className="modal__info">
           <img className="modal__img" src={`/${guitar.previewImg}`} width={67} height={137} alt={guitar.name} />

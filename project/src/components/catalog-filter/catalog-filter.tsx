@@ -21,6 +21,10 @@ function CatalogFilter(): JSX.Element {
   const filterMinPrice = useAppSelector(getFilterMinPrice);
   const filterMaxPrice = useAppSelector(getFilterMaxPrice);
 
+  const [minPrice, setMinPrice] = useState<string>('');
+  const [maxPrice, setMaxPrice] = useState<string>('');
+  const [minValue, setMinValue] = useState(guitarsMinPrice);
+
   const [stringsAvailableByType, setStringsAvailableByType] = useState<any>([]);
   const [typeChecked, setTypeChecked] = useState<any>({
     acoustic: false,
@@ -35,10 +39,6 @@ function CatalogFilter(): JSX.Element {
     7: false,
     12: false,
   });
-
-  const [minPrice, setMinPrice] = useState<any | number>();
-  const [maxPrice, setMaxPrice] = useState<any | number>();
-  const [minValue, setMinValue] = useState(guitarsMinPrice);
 
   const getDisabledInputs = (element: any) => [
     ...element.querySelectorAll(
@@ -109,19 +109,17 @@ function CatalogFilter(): JSX.Element {
 
   const handleInputPriceFocus = (evt: any) => evt.target.select();
 
-  const handleInputPriceChange = ({target:{id, value}}: any) => {
-    if (id === GuitarPrices[0].id) {
-      setMinPrice(value);
-      if ((value >= guitarsMinPrice) && (value <= guitarsMaxPrice)) {
-        setMinValue(value);
-      } else {
-        setMinValue(guitarsMinPrice);
-      }
+  const handleMinPriceChange = ({target:{value}}: any) => {
+    setMinPrice(value);
+    if ((value >= guitarsMinPrice) && (value <= guitarsMaxPrice)) {
+      setMinValue(value);
+    } else {
+      setMinValue(guitarsMinPrice);
     }
+  };
 
-    if (id === GuitarPrices[1].id) {
-      setMaxPrice(value);
-    }
+  const handleMaxPriceChange = ({target:{value}}: any) => {
+    setMaxPrice(value);
   };
 
   const handlePriceKeyUp = (evt: any) => {
@@ -133,18 +131,17 @@ function CatalogFilter(): JSX.Element {
   const processPriceUrlData = (value: any, id: any) => {
     if (id === GuitarPrices[0].id) {
       if ((value < guitarsMinPrice) || (value >= guitarsMaxPrice)) {
-        setMinPrice(guitarsMinPrice);
+        setMinPrice(guitarsMinPrice.toString());
         dispatch(setFilterMinPrice(guitarsMinPrice));
       } else if ((value >= guitarsMinPrice) && (value <= guitarsMaxPrice)) {
         setMinPrice(value);
         dispatch(setFilterMinPrice(Number(minPrice)));
       }
-
     }
 
     if (id === GuitarPrices[1].id) {
       if ((value < Number(minValue)) || (value >= guitarsMaxPrice)) {
-        setMaxPrice(guitarsMaxPrice);
+        setMaxPrice(guitarsMaxPrice.toString());
         dispatch(setFilterMaxPrice(guitarsMaxPrice));
       } else if ((value >= Number(minValue)) && (value <= guitarsMaxPrice)) {
         setMaxPrice(value);
@@ -153,7 +150,7 @@ function CatalogFilter(): JSX.Element {
     }
   };
 
-  const handleInputPriceInput = (evt: any) => {
+  const handleInputPriceSubmit = (evt: any) => {
     if (SymbolsBanForInputNumber.includes(evt.key)) {
       evt.preventDefault();
     }
@@ -193,16 +190,16 @@ function CatalogFilter(): JSX.Element {
     const searchParamsStrings = searchParams.getAll('string_qt');
     searchParamsStrings.forEach((item) => processStringsUrlData(Number(item)));
 
-    const searchParamsMinPrice = searchParams.get('price_gte');
+    const searchParamsMinPrice = searchParams?.get('price_gte') ?? '';
     setMinPrice(searchParamsMinPrice);
 
-    const searchParamsMaxPrice = searchParams.get('price_lte');
+    const searchParamsMaxPrice = searchParams.get('price_lte') ?? '';
     setMaxPrice(searchParamsMaxPrice);
 
-    if ((minPrice > guitarsMinPrice)
-    && (minPrice < guitarsMaxPrice)
-    && (maxPrice > guitarsMinPrice)
-    && (maxPrice < guitarsMaxPrice)) {
+    if ((Number(minPrice) > guitarsMinPrice)
+    && (Number(minPrice) < guitarsMaxPrice)
+    && (Number(maxPrice) > guitarsMinPrice)
+    && (Number(maxPrice) < guitarsMaxPrice)) {
       processPriceUrlData(Number(searchParamsMinPrice), 'priceMin');
       processPriceUrlData(Number(searchParamsMaxPrice), 'priceMax');
     }
@@ -222,15 +219,13 @@ function CatalogFilter(): JSX.Element {
               placeholder={guitarsMinPrice?.toString()}
               id='priceMin'
               name='от'
+              value={minPrice}
               onFocus={handleInputPriceFocus}
-              onChange={handleInputPriceChange}
-              onBlur={handleInputPriceInput}
-              onKeyDown={handleInputPriceInput}
+              onBlur={handleInputPriceSubmit}
+              onKeyDown={handleInputPriceSubmit}
               onKeyUp={handlePriceKeyUp}
               onPaste={handleInputPricePaste}
-              min={guitarsMinPrice}
-              max={guitarsMaxPrice}
-              value={minPrice}
+              onChange={handleMinPriceChange}
             />
           </div>
           <div className="form-input">
@@ -241,13 +236,11 @@ function CatalogFilter(): JSX.Element {
               id='priceMax'
               name='до'
               onFocus={handleInputPriceFocus}
-              onChange={handleInputPriceChange}
-              onBlur={handleInputPriceInput}
-              onKeyDown={handleInputPriceInput}
+              onChange={handleMaxPriceChange}
+              onBlur={handleInputPriceSubmit}
+              onKeyDown={handleInputPriceSubmit}
               onKeyUp={handlePriceKeyUp}
               onPaste={handleInputPricePaste}
-              min={guitarsMinPrice}
-              max={guitarsMaxPrice}
               value={maxPrice}
             />
           </div>

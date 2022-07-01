@@ -4,6 +4,7 @@ import { configureMockStore } from '@jedmao/redux-mock-store';
 import { createMemoryHistory } from 'history';
 import HistoryRouter from '../history-route/history-route';
 import ModalReviewThanks from './modal-review-thanks';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
 const mockStore = configureMockStore();
 
@@ -18,7 +19,9 @@ describe('Component: ModalReviewThanks', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ModalReviewThanks onModalThanksCloseClick={jest.fn()} />
+          <ModalOverlay onModalCloseClick={jest.fn()} >
+            <ModalReviewThanks onModalThanksCloseClick={jest.fn()} />
+          </ModalOverlay>
         </HistoryRouter>
       </Provider>,
     );

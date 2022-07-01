@@ -14,7 +14,7 @@ const store = mockStore({
   GUITARS: {pickedId: 1, currentPageCatalog: 1},
 });
 
-describe('Component: ModalReviewNew', () => {
+describe('Component: ModalCloseButton', () => {
   it('should render correctly', () => {
 
     render(

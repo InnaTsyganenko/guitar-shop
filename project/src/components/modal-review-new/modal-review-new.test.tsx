@@ -6,6 +6,7 @@ import HistoryRouter from '../history-route/history-route';
 import ModalReviewNew from './modal-review-new';
 import { makeFakeGuitar } from '../../utils/mock';
 import thunk from 'redux-thunk';
+import ModalOverlay from '../modal-overlay/modal-overlay';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -22,12 +23,14 @@ describe('Component: ModalReviewNew', () => {
     render(
       <Provider store={store}>
         <HistoryRouter history={history}>
-          <ModalReviewNew guitar={guitar} onModalCommentCloseClick={jest.fn()} />
+          <ModalOverlay onModalCloseClick={jest.fn()} >
+            <ModalReviewNew guitar={guitar} onModalCommentCloseClick={jest.fn()} />
+          </ModalOverlay>
         </HistoryRouter>
       </Provider>,
     );
 
-    expect(screen.getByText(/Оставить отзыв/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/modal-review-new/i)).toBeInTheDocument();
   });
 });
 
