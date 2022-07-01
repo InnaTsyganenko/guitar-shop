@@ -27,9 +27,7 @@ export const trapFocusInsideModalWindow = (id: string) => {
   const firstTabStop = focusableElementsInModal[0];
   const lastTabStop = focusableElementsInModal[focusableElementsInModal.length - 1];
 
-  if (firstTabStop !== undefined) {
-    firstTabStop.focus();
-  }
+  firstTabStop.focus();
 
   const trapTabKey = (evt: KeyboardEvent) => {
     if (evt.key === 'Tab') {
