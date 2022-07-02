@@ -59,7 +59,7 @@ function ModalReviewNew({guitar, onModalCommentCloseClick}: ModalReviewNewProps)
 
   return (
     <ModalOverlay onModalCloseClick={onModalCommentCloseClick}>
-      <div className="modal__content" id="modal-review-new">
+      <div className="modal__content" id="modal-review-new" data-testid="modal-review-new">
         <h2 className="modal__header modal__header--review title title--medium">Оставить отзыв</h2>
         <h3 className="modal__product-name title title--medium-20 title--uppercase">{guitar.name}</h3>
         <form

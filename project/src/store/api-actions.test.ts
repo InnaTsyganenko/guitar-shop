@@ -1,10 +1,10 @@
-import { makeFakeGuitars, makeFakeGuitar, makeFakeCommentPost } from './../utils/mock';
+import { makeFakeGuitars, makeFakeGuitar, makeFakeCommentPost, makeFakeCouponPost } from './../utils/mock';
 import {Action} from 'redux';
 import thunk, {ThunkDispatch} from 'redux-thunk';
 import MockAdapter from 'axios-mock-adapter';
 import {configureMockStore} from '@jedmao/redux-mock-store';
 import {createAPI} from '../services/api';
-import { fetchGuitarByIdAction, pushCommentAction } from './api-actions';
+import { fetchGuitarByIdAction, pushCommentAction, fetchGuitarsAction, pushCouponAction } from './api-actions';
 import {APIRoute} from '../const';
 import {State} from '../types/state';
 
@@ -30,7 +30,7 @@ describe('Async actions', () => {
       .onGet(APIRoute.Guitars)
       .reply(200, mockGuitars);
 
-    //await store.dispatch(fetchGuitarsAction());
+    await store.dispatch(fetchGuitarsAction(''));
 
     const actions = store.getActions().map(({type}) => type);
 
@@ -62,5 +62,19 @@ describe('Async actions', () => {
     const actions = store.getActions().map(({type}) => type);
 
     expect(actions).toContain('DATA/pushComment/pending');
+  });
+
+  it('should dispatch PushCoupon when POST /coupons', async () => {
+    const fakeCoupon = makeFakeCouponPost();
+
+    mockAPI
+      .onPost(APIRoute.Coupons)
+      .reply(200, fakeCoupon);
+
+    await store.dispatch(pushCouponAction(fakeCoupon));
+
+    const actions = store.getActions().map(({type}) => type);
+
+    expect(actions).toContain('DATA/pushCoupon/pending');
   });
 });

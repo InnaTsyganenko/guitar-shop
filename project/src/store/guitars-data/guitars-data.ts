@@ -68,7 +68,7 @@ export const guitarsData = createSlice({
       state.guitarsMaxPrice = action.payload;
     },
     setLoadGuitarsSortFilter: (state, action) => {
-      state.isGuitarsSortFilterLoaded= action.payload;
+      state.isGuitarsSortFilterLoaded = action.payload;
     },
     setSortType: (state, action) => {
       state.sortType = action.payload;

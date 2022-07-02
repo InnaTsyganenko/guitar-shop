@@ -11,7 +11,14 @@ const mockStore = configureMockStore(middlewares);
 const history = createMemoryHistory();
 
 const store = mockStore({
-  GUITARS: {pickedId: 1, currentPageCatalog: 1},
+  DATA: {},
+  GUITARS: {
+    pickedId: 1,
+    currentPageCatalog: 1,
+    isModalOpen: true,
+    guitarsInCart: [],
+    isGuitarAddedInCart: true,
+  },
 });
 
 describe('Component: ModalOverlay', () => {
@@ -25,7 +32,7 @@ describe('Component: ModalOverlay', () => {
       </Provider>,
     );
 
-    expect(screen.getByTestId(/modal-overlay/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/close-modal/i)).toBeInTheDocument();
   });
 });
 

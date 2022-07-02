@@ -15,7 +15,7 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
     key: keyof T,
     sanitizeFn?: (value: string) => S,
   ) => (evt: ChangeEvent<HTMLInputElement & HTMLTextAreaElement>) => {
-      const value = sanitizeFn ? sanitizeFn(evt.target.value) : evt.target.value;
+      const value = sanitizeFn ? sanitizeFn(evt.target.value.toLowerCase()) : evt.target.value.toLowerCase();
       setData({
         ...data,
         [key]: value,

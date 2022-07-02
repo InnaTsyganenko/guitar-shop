@@ -21,7 +21,7 @@ function ModalSuccessAdd({onModalSuccessAddCloseClick}: ModalSuccessAddProps): J
           <Link className="button button--small modal__button" to={AppRoute.Cart} onClick={onModalSuccessAddCloseClick}>Перейти в корзину</Link>
           <Link
             className="button button--black-border button--small modal__button modal__button--right"
-            to={window.location.pathname === AppRoute.Catalog ? '##' : AppRoute.Catalog} onClick={onModalSuccessAddCloseClick}
+            to={window.location.pathname.includes(AppRoute.Catalog) ? '##' : AppRoute.Catalog} onClick={onModalSuccessAddCloseClick}
           >Продолжить покупки
           </Link>
         </div>

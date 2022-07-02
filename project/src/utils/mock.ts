@@ -1,5 +1,5 @@
-import { GuitarForCart } from './../types/guitars';
-import { Guitar, Guitars, CommentGet, CommentPost } from '../types/guitars';
+import { GuitarForCart, GuitarsForCart } from './../types/guitars';
+import { Guitar, Guitars, CommentGet, CommentPost, CouponPost } from '../types/guitars';
 
 const makeFakeCommentGet = (): CommentGet => ({
   id: 'string',
@@ -46,3 +46,8 @@ export const makeFakeGuitarCart = (): GuitarForCart => ({
 } as GuitarForCart);
 
 export const makeFakeGuitars: Guitars = Array.from({length: 10}, makeFakeGuitar) as Guitars;
+export const makeFakeGuitarsInCart: GuitarsForCart = Array.from({length: 1}, makeFakeGuitarCart) as GuitarsForCart;
+
+export const makeFakeCouponPost = (): CouponPost => ({
+  coupon: 'coupon',
+} as CouponPost);

@@ -12,10 +12,18 @@ const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const history = createMemoryHistory();
 
-const guitar = makeFakeGuitar();
 const store = mockStore({
-  GUITARS: {pickedId: 1, currentPageCatalog: 1},
+  DATA: {},
+  GUITARS: {
+    pickedId: 1,
+    currentPageCatalog: 1,
+    isModalOpen: true,
+    guitarsInCart: [],
+    isGuitarAddedInCart: true,
+  },
 });
+
+const guitar = makeFakeGuitar();
 
 describe('Component: ModalReviewNew', () => {
   it('should render correctly', () => {

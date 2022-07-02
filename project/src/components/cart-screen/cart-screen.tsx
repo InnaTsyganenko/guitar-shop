@@ -77,7 +77,7 @@ function CartScreen(): JSX.Element {
     validations: {
       coupon: {
         custom: {
-          isValid: (value) => Discounts.includes(value),
+          isValid: (value) => Discounts.includes(value.toLowerCase()),
           message: 'неверный промокод',
         },
       },
@@ -122,7 +122,7 @@ function CartScreen(): JSX.Element {
               <div key={guitar.id} className="cart-item">
                 <button className="cart-item__close-button button-cross" type="button" aria-label="Удалить" onClick={() => handleCartDeleteButton(guitar.id)}><span className="button-cross__icon"></span><span className="cart-item__close-button-interactive-area"></span>
                 </button>
-                <div className="cart-item__image"><img src="/img/guitar-2.jpg" width="55" height="130" alt="ЭлектроГитара Честер bass" />
+                <div className="cart-item__image"><img src={`/${guitar.previewImg}`} width="55" height="130" alt="ЭлектроГитара Честер bass" />
                 </div>
                 <div className="product-info cart-item__info">
                   <p className="product-info__title">{GuitarType[guitar.type as keyof object]} {guitar.name}</p>

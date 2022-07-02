@@ -17,7 +17,6 @@ export const guitarsOperations = createSlice({
   reducers: {
     setCurrentPageCatalog: (state, action) => {
       state.currentPageCatalog = action.payload;
-      // state.guitarsInCart = [];
     },
     setGuitarId: (state, action) => {
       state.pickedId = action.payload;

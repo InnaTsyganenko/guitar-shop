@@ -24,14 +24,14 @@ function ModalOverlay({onModalCloseClick, children}: ModalOverlayProps): JSX.Ele
   });
 
   useEffect(() => {
-    if (children !== undefined) {
+    if (children?.props.id !== undefined) {
       modalHandler();
       trapFocusInsideModalWindow(children?.props.id);
     }
-  });
+  }, [children]);
 
   return (
-    <div data-testid="modal-overlay" className={(children?.props.id === 'modal-success-review' || children?.props.id === 'modal-success-add')
+    <div className={(children?.props.id === 'modal-success-review' || children?.props.id === 'modal-success-add')
       ? 'modal is-active modal--success modal-for-ui-kit'
       : 'modal is-active modal-for-ui-kit'}
     >
