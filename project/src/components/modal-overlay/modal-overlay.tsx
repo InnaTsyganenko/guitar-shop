@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { PropsWithChildren, useEffect, useCallback } from 'react';
 import { useAppDispatch } from '../../hooks';
 import { setModalWindowState } from '../../store/guitars-operations/guitars-operations';
