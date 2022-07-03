@@ -28,7 +28,7 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
   ) => (evt: any) => {
       const paste: any = (evt.clipboardData)?.getData('text');
       const newPaste = Array.from(paste).filter((item) => item !== ' ');
-      // evt.target.value = newPaste.map((item) => item).join('');
+
       const value = newPaste.map((item) => item).join('');
       setData({
         ...data,
