@@ -96,4 +96,17 @@ export const GuitarPrices = [
 
 export const optionsForReviewDate: object = { day: 'numeric', month: 'long' };
 
-export const Discounts = ['light-333', 'medium-444', 'height-555'];
+export const Discounts = [
+  {
+    discount:'light-333',
+    discountPercent: 15,
+  },
+  {
+    discount:'medium-444',
+    discountPercent: 25,
+  },
+  {
+    discount:'height-555',
+    discountPercent: 35,
+  },
+];

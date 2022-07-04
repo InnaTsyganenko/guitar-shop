@@ -77,7 +77,7 @@ function CartScreen(): JSX.Element {
     validations: {
       coupon: {
         custom: {
-          isValid: (value) => Discounts.includes(value.toLowerCase()),
+          isValid: (value) => Discounts.some((item) => item.discount === (value.toLowerCase())),
           message: 'неверный промокод',
         },
       },
@@ -176,7 +176,7 @@ function CartScreen(): JSX.Element {
                       onPaste={handlePaste('coupon')}
                       onChange={handleChange('coupon')}
                       autoComplete="off"
-                      value={couponPost.coupon !== undefined && couponPost.coupon.length > 0 ? couponPost.coupon : ''}
+                      value={discount !== 0 ? Discounts.find((item) => item.discountPercent === discount)?.discount : couponPost.coupon}
                     />
                     <p className={discount !== 0 ? 'form-input__message form-input__message--success' : 'form-input__message form-input__message--error'}>{discount !== 0 ? 'Промокод принят' : errors.coupon}&nbsp;</p>
                   </div>
