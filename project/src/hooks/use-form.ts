@@ -22,20 +22,19 @@ export const useForm = <T extends Record<keyof T, any> = Record<string, any>>(op
       });
     };
 
-  const handlePaste = <S extends unknown>(
+  const handlePaste = (
     key: keyof T,
-    sanitizeFn?: (value: string) => S,
   ) => (evt: any) => {
-      const paste: any = (evt.clipboardData)?.getData('text');
-      const newPaste = Array.from(paste).filter((item) => item !== ' ');
+    const paste: any = (evt.clipboardData)?.getData('text');
+    const newPaste = Array.from(paste).filter((item) => item !== ' ');
 
-      const value = newPaste.map((item) => item).join('');
-      setData({
-        ...data,
-        [key]: value,
-      });
-      evt.preventDefault();
-    };
+    const value = newPaste.map((item) => item).join('');
+    setData({
+      ...data,
+      [key]: value,
+    });
+    evt.preventDefault();
+  };
 
   const handleSubmit = async (evt: FormEvent<HTMLFormElement>) => {
     evt.preventDefault();
