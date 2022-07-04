@@ -216,7 +216,7 @@ function CatalogFilter(): JSX.Element {
             <label className="visually-hidden">Минимальная цена</label>
             <input
               type='number'
-              placeholder={guitarsMinPrice?.toString()}
+              placeholder={guitarsMinPrice?.toLocaleString('ru-RU')}
               id='priceMin'
               name='от'
               value={minPrice}
@@ -232,7 +232,7 @@ function CatalogFilter(): JSX.Element {
             <label className="visually-hidden">Максимальная цена</label>
             <input
               type='number'
-              placeholder={guitarsMaxPrice?.toString()}
+              placeholder={guitarsMaxPrice?.toLocaleString('ru-RU')}
               id='priceMax'
               name='до'
               onFocus={handleInputPriceFocus}

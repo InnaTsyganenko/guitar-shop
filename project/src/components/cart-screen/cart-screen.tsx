@@ -129,7 +129,7 @@ function CartScreen(): JSX.Element {
                   <p className="product-info__info">Артикул: {guitar.vendorCode}</p>
                   <p className="product-info__info">{GuitarType[guitar.type as keyof object]}, {guitar.stringCount} струнная</p>
                 </div>
-                <div className="cart-item__price">{guitar.price} ₽</div>
+                <div className="cart-item__price">{guitar.price.toLocaleString('ru-RU')} ₽</div>
                 <div className="quantity cart-item__quantity">
                   <button className="quantity__button" aria-label="Уменьшить количество" onClick={() => handleCartQuantityDecrease(guitar.id)}>
                     <svg width="8" height="8" aria-hidden="true">
@@ -154,7 +154,7 @@ function CartScreen(): JSX.Element {
                     </svg>
                   </button>
                 </div>
-                <div className="cart-item__price-total">{guitar.price * guitar.guitarQt} ₽</div>
+                <div className="cart-item__price-total">{(guitar.price * guitar.guitarQt).toLocaleString('ru-RU')} ₽</div>
               </div>
             ))}
           </div>

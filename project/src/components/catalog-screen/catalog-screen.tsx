@@ -225,7 +225,7 @@ function CatalogScreen(): JSX.Element {
                             />
                           </div>
                           <p className="product-card__title">{guitar.name}</p>
-                          <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price} ₽
+                          <p className="product-card__price"><span className="visually-hidden">Цена:</span>{guitar.price.toLocaleString('ru-RU')} ₽
                           </p>
                         </div>
                         <div className="product-card__buttons">
