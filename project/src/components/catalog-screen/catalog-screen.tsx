@@ -75,8 +75,8 @@ function CatalogScreen(): JSX.Element {
 
   const adaptSearchParams = (params: any) => {
     const adaptedParams = {...params,
-      sort: params.sortType,
-      order: params.sortOrder,
+      _sort: params.sortType,
+      _order: params.sortOrder,
       price_gte: params.priceMin,
       price_lte: params.priceMax,
       type: params.guitarTypes,
@@ -142,12 +142,12 @@ function CatalogScreen(): JSX.Element {
   };
 
 
-  if (searchParams.get('sort') && !loading) {
-    dispatch(setSortType(searchParams.get('sort')));
+  if (searchParams.get('_sort') && !loading) {
+    dispatch(setSortType(searchParams.get('_sort')));
   }
 
-  if (searchParams.get('order') && !loading) {
-    dispatch(setSortDirection(searchParams.get('order')));
+  if (searchParams.get('_order') && !loading) {
+    dispatch(setSortDirection(searchParams.get('_order')));
   }
 
   if (searchParams.get('price_gte') && !loading) {
