@@ -109,8 +109,6 @@ function CartScreen(): JSX.Element {
   const handleDeleteModalCloseClick = () => {
     setIsDeleteModalOpen(false);
   };
-  const a = true;
-  console.log(discount)
 
   return (
     <Wrapper>

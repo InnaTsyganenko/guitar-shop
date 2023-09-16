@@ -182,9 +182,6 @@ function CatalogScreen(): JSX.Element {
 
   const [scrollValue, setScrollValue] = useState(0);
 
-
-  const abcc = [];
-  console.log(scrollValue)
   useEffect(() => {
     const onScroll = (e: any) => {
       setScrollValue(e.target.documentElement.scrollTop);
